@@ -25,5 +25,7 @@
         "psr-0": { "Knp\\Bundle\\RadBundle": "" }
     },
 
-    "target-dir": "Knp/Bundle/RadBundle"
+    "target-dir": "Knp/Bundle/RadBundle",
+
+    "bin": ["bin/generate-rad-project"]
 }
