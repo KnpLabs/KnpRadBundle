@@ -27,5 +27,5 @@
 
     "target-dir": "Knp/Bundle/RadBundle",
 
-    "bin": ["bin/generate-rad-project"]
+    "bin": ["Knp/Bundle/RadBundle/bin/generate-rad-project"]
 }
