@@ -7,13 +7,15 @@ if (2 != $argc) {
     die('Provide project name as argument (f.e.: "Knp\Rad", "Knp/Rad" or "KnpRad").'."\n");
 }
 
-if (file_exists($vendor = __DIR__.'/../../vendor')) {
-    $projectPath = realpath(__DIR__.'/../..');
-} elseif (file_exists($vendor = __DIR__.'/../vendor')) {
-    $projectPath = realpath(__DIR__.'/..');
+$vendorPath  = realpath(__DIR__.'/../../../../../../../vendor');
+
+if (!$vendorPath) {
+    die('Install dependencies with Composer first');
 }
 
-require $vendor.'/.composer/autoload.php';
+$projectPath = realpath($vendorPath.'/..');
+
+require $vendorPath.'/.composer/autoload.php';
 
 $projectName     = str_replace('/', '\\', $argv[1]);
 $applicationPath = $projectPath.'/src/'.str_replace('\\', '/', $projectName);
