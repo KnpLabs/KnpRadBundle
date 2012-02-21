@@ -10,7 +10,7 @@ if (2 != $argc) {
 $vendorPath  = realpath(__DIR__.'/../../../../../../../vendor');
 
 if (!$vendorPath) {
-    die('Install dependencies with Composer first');
+    die('Install dependencies with Composer first'."\n");
 }
 
 $projectPath = realpath($vendorPath.'/..');
