@@ -1,0 +1,3 @@
+    StofDoctrineExtensionsBundle default configuration just have been added
+    for you. Don't forget to configure your database properly and enable
+    all extensions you may need  in <comment>config/bundles/stof_doctrine_extensions.yml</comment>

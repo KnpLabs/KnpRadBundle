@@ -1,0 +1,27 @@
+# StofDoctrineExtensions provides model behaviors for Doctrine2
+# Docs: http://bit.ly/doctrine2-extensions
+# Config: http://bit.ly/extension-config-ref
+
+all:
+    default_locale: %locale%
+    # if Doctrine2 ORM is used, you must enable extensions
+    # which you require for any manager to be used
+
+    # orm:
+    #   default:
+    #       tree: true
+    #       timestampable: false # not needed: listeners are not enabled by default
+    #   other_entity_manager:
+    #       sluggable: true
+    
+    # if Doctrine2 ODM MongoDB is used
+    # mongodb:
+    #   default:
+    #       translatable: true
+    
+    # if for some reasons you need to override listener classes:
+    # class:
+    #   tree:           RadApp\Listener\DoctrineTreeListener
+    #   timestampable:  RadApp\Listener\DoctrineTimestampableListener
+
+# nothing specific to configure for other environments

@@ -1,0 +1,16 @@
+# Profiler toolbar for your pages
+# Config: http://bit.ly/webprof-ref
+
+dev:
+    toolbar: true
+    # Turn this on if you'd like Symfony to ask you before redirecting
+    # (e.g. after a form submit) while developing.
+    intercept_redirects: false
+
+    # If your toolbar to long and not fits to the screen,
+    # use the non-verbose version:
+    # verbose: false
+
+test:
+    toolbar: false
+    intercept_redirects: false

@@ -1,0 +1,60 @@
+# Assetic is an asset manager for your application
+# Docs: http://bit.ly/assetic-doc
+# Config: http://bit.ly/assetic-ref
+
+all:
+    read_from:      %kernel.web_dir%
+    use_controller: false
+
+    # Use kernel.yml to configure this parameters
+    java: %bin_java%
+    node: %bin_node%
+    ruby: %bin_ruby%
+    sass: %bin_sass%
+
+    # Enable filters for your project.
+    # Filters could be used to preprocess or minify
+    # your assets. All files with *.less, *.scss, *.sass,
+    # *.coffee extensions would be preprocessed
+    # automatically for you in current configuration.
+    # See: http://bit.ly/asseticbundle-doc
+    filters:
+        # This filter rewrites urls inside your css files
+        # to match project structure. You might want to use
+        # it in dev environment, where use_controller is
+        # enabled
+        cssrewrite: ~
+
+        # YUI compressor for your stylesheets.
+        # You can apply it manually to minify
+        # result CSS on your pages
+        # See: http://yhoo.it/yui-compressor
+        yui_css: { jar: %bin_yui% }
+
+        # Less filter. Will be automatically
+        # applied to *.less files
+        # See: http://lesscss.org/
+        less: { apply_to: "\.less$" }
+
+        # Sass filter. Will be automatically
+        # applied to *.scss or *.sass files
+        # See: http://sass-lang.com/
+        scss: { apply_to: "\.scss$" }
+        sass: { apply_to: "\.sass$" }
+
+        # CoffeeScript filter. Will be automatically
+        # applied to *.coffee files
+        # See: http://coffeescript.org/
+        coffee:
+            bin:       %bin_coffee%
+            apply_to:  "\.coffee$"
+
+dev:
+    # This tells Symfony to process your assets through a control
+    # in the this environment. This is the easiest setting,
+    # but see http://bit.ly/assetic-controllers
+    # if you think your pages are loading slowly while developing.
+    use_controller: true
+
+test:
+    use_controller: true

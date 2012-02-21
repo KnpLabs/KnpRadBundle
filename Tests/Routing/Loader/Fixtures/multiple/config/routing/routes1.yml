@@ -1,0 +1,3 @@
+article_show:
+    pattern:   /articles/{slug}
+    defaults:  { _controller: AcmeBlogBundle:Article:show }

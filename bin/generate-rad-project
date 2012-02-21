@@ -1,0 +1,39 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Filesystem\Filesystem;
+
+if (2 != $argc) {
+    die('Provide project name as argument (f.e.: "Knp\Rad", "Knp/Rad" or "KnpRad").'."\n");
+}
+
+if (file_exists($vendor = __DIR__.'/../../vendor')) {
+    $projectPath = realpath(__DIR__.'/../..');
+} elseif (file_exists($vendor = __DIR__.'/../vendor')) {
+    $projectPath = realpath(__DIR__.'/..');
+}
+
+require $vendor.'/.composer/autoload.php';
+
+$projectName     = str_replace('/', '\\', $argv[1]);
+$applicationPath = $projectPath.'/src/'.str_replace('\\', '/', $projectName);
+
+$bundleRefl   = new \ReflectionClass('Knp\\Bundle\\RadBundle\\KnpRadBundle');
+$skeletonPath = dirname($bundleRefl->getFilename()).'/Resources/skeleton';
+
+$fs = new Filesystem();
+$fs->mirror($skeletonPath.'/project', $projectPath);
+
+$kernel = file_get_contents($projectPath.'/config/kernel.yml');
+$kernel = str_replace('{{ project }}', $projectName, $kernel);
+file_put_contents($projectPath.'/config/kernel.yml', $kernel);
+
+$fs->mirror($skeletonPath.'/application', $applicationPath);
+$fs->chmod(array(
+    $projectPath.'/bin/configs',
+    $projectPath.'/bin/vendors',
+    $projectPath.'/sf',
+    $projectPath.'/sft'
+), 0744);
+
+die('Project '.$projectName.' successfully generated. Do not forget to run bin/configs'."\n");

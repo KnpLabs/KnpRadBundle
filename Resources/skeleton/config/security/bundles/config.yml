@@ -1,0 +1,61 @@
+# Provides all the security configuration for your application
+# Docs: http://bit.ly/sf2-security
+# Config: http://bit.ly/sf2-security-ref
+
+all:
+    encoders:
+        # Unless you just use the few hard-coded users below, you'll
+        # likely have your own User class. If you do, this will change
+        # to the fully-qualified namespace to your class.
+        Symfony\Component\Security\Core\User\User: plaintext
+        # Acme\UserBundle\Entity\User: sha512
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        # By default, your users are stored right here in this file.
+        # You might remove this and replace it with an entry that loads
+        # users from the database or somewhere else.
+        # FOSUserBundle: http://bit.ly/fosuserbundle or http://bit.ly/KnpU-FOS
+        # docs: http://symfony.com/doc/current/cookbook/security/entity_provider.html
+        in_memory:
+            users:
+                user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+
+        # database_users:
+        #   entity:   { class: UserBundle:User, property: username }
+
+    firewalls:
+        secured_area:
+            pattern:    ^/
+            form_login:
+                # You'll need to create a login form (using a route normal
+                # route and controller) at /login and submit it to /login_check.
+                # see: http://bit.ly/sf2-login-form or use FOSUserBundle
+                check_path: /login_check
+                login_path: /login
+            logout:
+                path:   /logout
+                target: /
+            # This allows anonymous users. To restrict access to certain
+            # areas, use access_control below.
+            anonymous: ~
+            # Allows you to add ?_switch_user=foo on any URL to switch
+            # to "foo" user (you must have ROLE_ALLOWED_TO_SWITCH).
+            switch_user: ~
+
+    access_control:
+        # Leave this on top. Gurantees that our dev tools and assets are never blocked
+        - { path: ^/(_(profiler|wdt)|css|images|js)/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # To actually restrict access to pages, try add one of these.
+        # Try it by going to a page that matches the path.
+        # When you do, you'll see that, by default, you're redirected
+        # to /login (where you'll build your login form)
+        # You can also restrict access directly in your controller
+        # docs: http://bit.ly/sf2-authorization
+        #- { path: ^/admin, roles: ROLE_ADMIN }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        #- { path: ^/_internal, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }

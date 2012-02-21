@@ -1,0 +1,7 @@
+# put your application
+# DIC parameters here
+parameters: ~
+
+# put your application
+# service definitions here
+services: ~

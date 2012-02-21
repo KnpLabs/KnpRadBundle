@@ -1,0 +1,61 @@
+# This is the namespace of your "App" bundle in the src/ directory
+# For example, if this is "KnpRad", then you will have a "src/KnpRad/" directory
+# But if this is "Knp\Rad", then you will have code in "src/Knp/Rad" directory
+project: {{ project }}
+
+all:
+    # List of activated bundles (plugins/modules)
+    bundles:
+        - Symfony\Bundle\FrameworkBundle\FrameworkBundle
+        - Symfony\Bundle\SecurityBundle\SecurityBundle
+        - Symfony\Bundle\TwigBundle\TwigBundle
+        - Symfony\Bundle\MonologBundle\MonologBundle
+        - Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle
+        - Symfony\Bundle\AsseticBundle\AsseticBundle
+        - Symfony\Bundle\DoctrineBundle\DoctrineBundle
+        - Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle
+
+    # Parameters are like variables that can be references later in any
+    # configuration file as: %locale%.
+    # See: http://bit.ly/sf2-parameter
+    parameters:
+        locale:  en
+        secret:  ThisTokenIsNotSoSecretChangeIt
+
+        database_enabled:   false
+        database_driver:    pdo_mysql
+        database_host:      localhost
+        database_port:      ~
+        database_name:      symfony
+        database_user:      root
+        database_password:  ~
+
+        mailer_transport:  smtp
+        mailer_host:       localhost
+        mailer_user:       ~
+        mailer_password:   ~
+
+        # This parameters will be used by some bundles
+        # (like monolog) to send emails
+        email_server:       project@example.com
+        email_developer:    developer@example.com
+        email_errors_from:  %email_server%
+        email_errors_to:    %email_developer%
+
+        # This parameters will be used by some bundles
+        # to locate or/and run third-party binaries or
+        # libraries
+        bin_java:    /usr/bin/java
+        bin_node:    /usr/bin/node
+        bin_ruby:    /usr/bin/ruby
+        bin_sass:    /usr/bin/sass
+        bin_coffee:  /usr/bin/coffee
+        bin_yui:     /usr/bin/yuicompressor.jar
+
+dev:
+    bundles:
+        - Symfony\Bundle\WebProfilerBundle\WebProfilerBundle
+
+test:
+    bundles:
+        - Symfony\Bundle\WebProfilerBundle\WebProfilerBundle

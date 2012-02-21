@@ -1,0 +1,8 @@
+{% if newFile %}
+services:
+{% endif %}
+    # Service for the {{ name }} twig extension
+    {{ bundle_alias|lower }}.twig.{{ name|lower }}_extension:
+        class:  {{ fqcn }}
+        tags:
+            - { name: twig.extension }

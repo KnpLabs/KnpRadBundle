@@ -1,0 +1,7 @@
+blog_show:
+    pattern:   /blog/{slug}
+    defaults:  { _controller: AcmeBlogBundle:Blog:show }
+
+blog_edit:
+    pattern:   /blog/{slug}/edit
+    defaults:  { _controller: AcmeBlogBundle:Blog:edit }

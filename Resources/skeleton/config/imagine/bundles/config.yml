@@ -1,0 +1,15 @@
+# Imagine will provide image manipulation functionality to your Symfony 2 based projects
+# Docs: http://bit.ly/imagine-docs
+# Config: http://bit.ly/imagine-refs
+
+all:
+    # Use kernel.yml to configure this parameters
+    # This declaration will tell ImagineBundle to prepare image processor 'thumbnail', 
+    # that will resize images to 50px width, constraining proportions, 
+    # and then crop the bottom to 50px height, and resave the image in '/uploads/thumbs' directory.
+    thumbnail:
+        commands:
+            - { name: save, arguments: '/web/uploads/%user_id%/images/' }
+            - { name: resize, arguments: [50, true] }
+            - { name: crop, arguments: [0, 0, 50, 50] }
+            - { name: save, arguments: '/web/uploads/%user_id%/thumbnails/' }

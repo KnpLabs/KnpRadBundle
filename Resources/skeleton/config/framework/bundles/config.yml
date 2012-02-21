@@ -1,0 +1,43 @@
+# Main Symfony2 configuration section
+# Docs: http://symfony.com/
+# Config: http://bit.ly/framework-ref
+
+all:
+    # Turn on Edge Side Includes if you want to cache
+    # small blocks of content on your pages separately
+    # About ESI: http://bit.ly/esi-wiki
+    # Docs: http://bit.ly/sf2-cache
+    # esi:             ~
+    translator:      { fallback: %locale% }
+    secret:          %secret%
+    charset:         UTF-8
+    form:            true
+    csrf_protection: true
+    validation:      { enable_annotations: true }
+    # Templating subsystem configuration
+    # See: http://bit.ly/sf2-templating-ref
+    templating:
+        engines: ['twig']
+        # assets_version: v2
+        # assets_base_urls:
+        #    - //somecdn.com/
+    session:
+        default_locale: %locale%
+        auto_start:     true
+
+    profiler: { only_exceptions: false }
+
+    # Next line makes exceptions auto-link to your editor
+    # See: http://bit.ly/sf2-ide
+    # ide: textmate # could alsobe "macvim" or custom "txmt://open?url=file://%%f&line=%%l"
+
+prod:
+    router: { resource: "%kernel.config_dir%/routing/prod.yml" }
+
+dev:
+    router: { resource: "%kernel.config_dir%/routing/dev.yml" }
+
+test:
+    router:  { resource: "%kernel.config_dir%/routing/test.yml" }
+    test:    ~
+    session: { storage_id: session.storage.filesystem }

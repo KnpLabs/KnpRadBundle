@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Knp\Bundle\RadBundle\HttpKernel\RadKernel;
+use Knp\Bundle\RadBundle\DependencyInjection\Extension\ConfigurationDumper;
+
+$loader = require(__DIR__.'/../vendor/.composer/autoload.php');
+$kernel = RadKernel::createAppKernel($loader, 'dev', true);
+$kernel->loadClassCache();
+$output = new ConsoleOutput();
+
+foreach ($kernel->registerBundles() as $bundle) {
+    if (!$extension = $bundle->getContainerExtension()) {
+        continue;
+    }
+
+    $dumper = new ConfigurationDumper($extension, $kernel->getConfigDir());
+    if (!$dumper->isAlreadyDumped()) {
+        $output->writeLn($dumper->dump());
+        $output->writeLn('');
+    }
+}

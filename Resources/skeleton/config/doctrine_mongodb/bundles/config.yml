@@ -1,0 +1,49 @@
+# Doctrine MongoDB ODM provides M for your VC
+# Docs: http://bit.ly/doctrine2-odm-docs
+# Config: http://bit.ly/doctrine2-odm-ref
+
+all:
+    # default database name to use for connections
+    default_database: %database_name%
+    # Mongo database connection
+    connections:
+        # configure default connection
+        default:
+            # connection string
+            server: mongodb://localhost:27017
+            options:
+                connect: true
+                # username: ~
+                # password: ~
+
+        # you can add more connections if needed
+        #   api:
+        #       server: mongodb://myhost.com:27017
+    
+    # ODM configuration
+    document_managers:
+        # default document manager, which automatically maps to default connection
+        default:
+            # connection: connection_name_to_use
+            # database: database_name_to_use
+            auto_mapping: true
+            mappings:
+                # RaD project application mapping
+                App:
+                    mapping:    %database_enabled%
+                    is_bundle:  false
+                    type:       annotation
+                    dir:        %kernel.project_dir%/Document
+                    prefix:     %kernel.project_name%
+
+test:
+    # Use config/kernel.yml to configure database name.
+    # In test environment, _test suffix will be assigned to
+    # it automatically
+    default_database: %database_name%_test
+
+prod:
+    document_managers:
+        default:
+            # Use apc for caching in production
+            metadata_cache_driver: apc

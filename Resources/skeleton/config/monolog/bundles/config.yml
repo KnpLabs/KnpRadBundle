@@ -1,0 +1,44 @@
+# Monolog is logging layer of your application
+# Docs: http://bit.ly/monolog-doc
+# Config: http://bit.ly/monolog-ref
+
+prod:
+    handlers:
+        main:
+            type:         fingers_crossed
+            action_level: error
+            handler:      nested
+        nested:
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%.log
+            level: debug
+
+        # If you want to send emails with errors
+        # information, ucomment next lines and fill
+        # email_errors_* parameters in kernel.yml
+        # See: http://bit.ly/monolog-email-doc
+        # mail:
+        #     type:         fingers_crossed
+        #     action_level: critical
+        #     handler:      buffered
+        # buffered:
+        #     type:    buffer
+        #     handler: swift
+        # swift:
+        #     type:       swift_mailer
+        #     from_email: %email_errors_from%
+        #     to_email:   %email_errors_to%
+        #     subject:    %kernel.project_name% error occured!
+        #     level:      debug
+
+dev:
+    handlers:
+        main:
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%.log
+            level: debug
+
+        # See: http://www.firephp.org/
+        firephp:
+            type:  firephp
+            level: info

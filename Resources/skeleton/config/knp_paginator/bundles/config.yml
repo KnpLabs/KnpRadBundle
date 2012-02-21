@@ -1,0 +1,13 @@
+# Knp Paginator provides pagination to your project
+# Docs: http://bit.ly/knp-paginator
+
+all:
+    # default page range used in sliding pagination
+    # page_range: 5
+    
+    # to override templates you can use the following options
+    # template:
+    #   pagination: Pagination:my_sliding.html.twig
+    #   sortable: Pagination:my_sortable_link.html.twig
+
+# nothing specific to configure for other environments

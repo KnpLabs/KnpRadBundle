@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+<?php
+
+// if you don't want to setup permissions the proper way, just uncomment the following PHP line
+// read http://symfony.com/doc/current/book/installation.html#configuration-and-setup for more information
+//umask(0000);
+
+set_time_limit(0);
+
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Knp\Bundle\RadBundle\HttpKernel\RadKernel;
+
+$loader = require(__DIR__.'/vendor/.composer/autoload.php');
+$input  = new ArgvInput();
+$kernel = RadKernel::createAppKernel($loader, 'test', false);
+
+$application = new Application($kernel);
+$application->run();

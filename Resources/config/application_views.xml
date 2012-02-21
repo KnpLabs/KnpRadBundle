@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_rad.view.listener.class">Knp\Bundle\RadBundle\EventListener\ViewListener</parameter>
+    </parameters>
+
+    <services>
+        <service id="knp_rad.view.listener" class="%knp_rad.view.listener.class%">
+            <argument>%kernel.project_name%</argument>
+            <argument type="service" id="templating" />
+            <argument>twig</argument>
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
+        </service>
+    </services>
+
+</container>

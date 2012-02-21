@@ -1,0 +1,19 @@
+# Swiftmailer is the mailing servicefor your application
+# Docs: http://bit.ly/swiftmailer-doc
+# Config: http://bit.ly/swiftmailer-ref
+
+all:
+    # Use kernel.yml to configure this parameters
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    username:  %mailer_user%
+    password:  %mailer_password%
+    # sender_address: %email_server%
+
+dev:
+    # If you want *all* mails to be sent to a single address (instead
+    # of the actual recipient) while developing, use this.
+    # delivery_address: %email_developer%
+
+test:
+    disable_delivery: true

@@ -1,0 +1,22 @@
+# Twig is view layer for your application
+# Docs: http://twig.sensiolabs.org/documentation
+# Config: http://bit.ly/twig-ref
+
+all:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+
+    # Resources to render forms
+    form:
+        resources:
+            # Use Twitter Bootstrap2 supported forms layout by default:
+            - KnpRadBundle::form_bootstrap_layout.html.twig
+
+    # If you want to provide default variables for your templates,
+    # define them here:
+    # globals:
+    #     foo: bar
+
+    # If you want to use different controller for exceptions,
+    # define it here:
+    # exception_controller: Symfony\Bundle\TwigBundle\Controller\ExceptionController::showAction

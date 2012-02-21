@@ -1,0 +1,186 @@
+{# Widgets #}
+
+{% block form_widget %}
+{% spaceless %}
+    {{ block('field_rows') }}
+    {{ form_rest(form) }}
+{% endspaceless %}
+{% endblock form_widget %}
+
+{% block choice_widget %}
+{% spaceless %}
+    {% if expanded %}
+    {% for child in form %}
+        <label for="{{ child.all.id }}" class="{% if 'radio' in child.all.types %}radio{% else %}checkbox{% endif %}">
+            {{ form_widget(child) }}
+            {{ child.all.label|trans }}
+        </label>
+    {% endfor %}
+    {% else %}
+    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {% if empty_value is not none %}
+            <option value="">{{ empty_value|trans }}</option>
+        {% endif %}
+        {% if preferred_choices|length > 0 %}
+            {% set options = preferred_choices %}
+            {{ block('widget_choice_options') }}
+            {% if choices|length > 0 and separator is not none %}
+                <option disabled="disabled">{{ separator }}</option>
+            {% endif %}
+        {% endif %}
+        {% set options = choices %}
+        {{ block('widget_choice_options') }}
+    </select>
+    {% endif %}
+{% endspaceless %}
+{% endblock choice_widget %}
+
+{% block money_widget %}
+{% spaceless %}
+    {% if money_pattern == '{{ widget }}' %}
+
+        {{ block('field_widget')|raw }}
+
+    {% else %}
+        {% if '{{ widget }} ' in money_pattern %}
+
+            <div class="input-append">
+                {{ (money_pattern|replace({'{{ widget }} ': block('field_widget') ~ '<span class="add-on">' }) ~ '</span>')|raw }}
+            </div>
+
+        {% else %}
+
+            <div class="input-prepend">
+                {{ ('<span class="add-on">' ~ money_pattern|replace({' {{ widget }}': '</span>' ~ block('field_widget')  }))|raw }}
+            </div>
+
+        {% endif %}
+    {% endif %}
+{% endspaceless %}
+{% endblock money_widget %}
+
+{% block percent_widget %}
+{% spaceless %}
+    <div class="input-append">
+        {% set type = type|default('text') %}
+        {{ block('field_widget') }}
+        <span class="add-on">%</span>
+    </div>
+{% endspaceless %}
+{% endblock percent_widget %}
+
+{% block search_widget %}
+{% spaceless %}
+    {% set type = type|default('search') %}
+    {% set attr = attr|merge({'class': attr.class|default('') ~ ' search-query'}) %}
+    {{ block('field_widget') }}
+{% endspaceless %}
+{% endblock search_widget %}
+
+{% block email_widget %}
+{% spaceless %}
+    {% set type = type|default('email') %}
+    {{ block('field_widget') }}
+{% endspaceless %}
+{% endblock email_widget %}
+
+{% block datetime_widget %}
+{% spaceless %}
+    {% if widget == 'single_text' %}
+        {{ block('field_widget') }}
+    {% else %}
+        <div {{ block('widget_container_attributes') }}>
+            {{ form_errors(form.date) }}
+            {{ form_widget(form.date) }}
+            /
+            {{ form_errors(form.time) }}
+            {{ form_widget(form.time) }}
+        </div>
+    {% endif %}
+{% endspaceless %}
+{% endblock datetime_widget %}
+
+{% block date_widget %}
+{% spaceless %}
+    {% if widget == 'single_text' %}
+        {{ block('field_widget') }}
+    {% else %}
+        {{ date_pattern|replace({
+            '{{ year }}':  form_widget(form.year, {'attr': {'class': 'span1'}}) ~ '&nbsp;',
+            '{{ month }}': form_widget(form.month, {'attr': {'class': 'input-small'}}) ~ '&nbsp;',
+            '{{ day }}':   form_widget(form.day, {'attr': {'class': 'span1'}}) ~ '&nbsp;',
+        })|raw }}
+    {% endif %}
+{% endspaceless %}
+{% endblock date_widget %}
+
+{% block time_widget %}
+{% spaceless %}
+    {% if widget == 'single_text' %}
+        {{ block('field_widget') }}
+    {% else %}
+        {{ form_widget(form.hour, { 'attr': { 'class': 'span1' } }) }} : {{ form_widget(form.minute, { 'attr': { 'class': 'span1' } }) }}{% if with_seconds %}:{{ form_widget(form.second, { 'attr': { 'class': 'span1' } }) }}{% endif %}
+    {% endif %}
+{% endspaceless %}
+{% endblock time_widget %}
+
+{# Labels #}
+
+{% block generic_label %}
+{% spaceless %}
+    {% set attr = attr|merge({'class': attr.class|default('') ~ ' control-label'}) %}
+    {% if required %}
+        {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
+    {% endif %}
+    <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>{{ label|trans }}</label>
+{% endspaceless %}
+{% endblock %}
+
+{# Rows #}
+
+{% block field_row %}
+{% spaceless %}
+    <div class="control-group {% if form.all.errors|length %}error{% endif %}">
+        {{ form_label(form, label|default(null)) }}
+        <div class="controls">
+            {{ form_widget(form) }}
+            
+            {% if form.all.errors|length %}
+                <span class="help-inline">{{ form_errors(form) }}</span>
+            {% endif %}
+
+            {% if attr.hint is defined %}
+                <p class="help-block">
+                    {{ attr.hint|trans }}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock field_row %}
+
+{# Misc #}
+
+{% block field_errors %}
+{% spaceless %}
+    {% if errors|length > 0 %}
+        {% for error in errors %}
+            {{ error.messageTemplate|trans(error.messageParameters, 'validators') }}
+            {%- if not loop.last %},{% endif %}
+        {% endfor %}
+    {% endif %}
+{% endspaceless %}
+{% endblock field_errors %}
+
+{# Support #}
+
+{% block field_rows %}
+{% spaceless %}
+    {{ form_errors(form) }}
+    {% for child in form %}
+        {% if 'hidden' not in child.all.types %}
+            {{ form_row(child) }}
+        {% endif %}
+    {% endfor %}
+{% endspaceless %}
+{% endblock field_rows %}

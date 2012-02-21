@@ -1,0 +1,37 @@
+<?php
+
+namespace {{ namespace }};
+
+/**
+ * {{ name }} extension for twig.
+ */
+class {{ class }} extends \Twig_Extension
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilters()
+    {
+        return array(
+            // 'foo' => new \Twig_Filter_Method($this, 'getFoo'),
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFunctions()
+    {
+        return array(
+            // 'foo' => new \Twig_Function_Method($this, 'getFoo'),
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return '{{ name }}';
+    }
+}

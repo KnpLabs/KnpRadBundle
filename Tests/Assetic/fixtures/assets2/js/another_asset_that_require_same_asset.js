@@ -1,0 +1,2 @@
+
+//= require some_asset

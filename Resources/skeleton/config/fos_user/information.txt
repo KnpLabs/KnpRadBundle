@@ -1,0 +1,4 @@
+    FOSUserBundle default configuration just have been added
+    for you.
+
+    <error>You HAVE TO create a user class and configure it in config/bundles/fos_user.yml (line 10 ).</error>

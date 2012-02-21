@@ -1,0 +1,42 @@
+all:
+    db_driver:      orm # other valid values are 'mongodb', 'couchdb', 'propel'
+
+    # you HAVE to provide the firewall's name thas is configured in config/bundles/security.yml
+    firewall_name:  secured_area
+
+    # You HAVE to implement your own User class
+    # docs: http://bit.ly/FosUserDocs
+    # Read "Step 4: Create your User class"
+    user_class:     ~
+
+    # This extra section is about overriding default resources used in FOSUserBundle
+    # All of these values are listed here:
+    #     http://bit.ly/FosUserDocRef
+
+    # Override registration workflow resources
+    #registration:
+    #    form:
+             # override the form type id of registration screens
+    #        type: app_user_registration
+    #    confirmation:
+             # deactivate the user confirmation process
+    #        enabled: false
+
+    # Override profile display/edit resources
+    #profile:
+    #    form:
+             # override the form type id of profile screens
+    #        type: app_user_profile
+             # override the form handler service id of profile screens
+    #        handler: app.form.handler.profile
+
+    # Override password resetting workflow resources
+    #resetting:
+    #    email:
+             # override the template name used to render the resetting email
+    #        template: 'App:Resetting:email.html.twig'
+
+    # Override internal services
+    #service:
+         # override the default service id used to send emails
+    #    mailer: app.user.mailer

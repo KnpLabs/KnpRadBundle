@@ -1,0 +1,4 @@
+    DoctrineBundle default configuration just have been added
+    for you. Don't forget to fill <comment>database_</comment> parameters in your
+    kernel.yml or kernel.custom.yml (don't forget to enable application entites
+    mapping with <comment>database_enabled</comment> option)

@@ -1,0 +1,3 @@
+article_edit:
+    pattern:   /articles/{slug}/edit
+    defaults:  { _controller: AcmeBlogBundle:Article:edit }

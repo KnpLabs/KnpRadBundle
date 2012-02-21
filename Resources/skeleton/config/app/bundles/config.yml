@@ -1,0 +1,8 @@
+# All your application-wide configuration should live here.
+# Every parameter here will be automatically transformed into
+# an "app.%s" parameter inside the service container.
+
+all:  ~
+dev:  ~
+test: ~
+prod: ~
