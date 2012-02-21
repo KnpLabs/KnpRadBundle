@@ -1,0 +1,9 @@
+# Admingenerator for Symfony2, parse generator.yml files to build classes
+# Docs: http://bit.ly/AdmingeneratorGeneratorBundle-doc
+
+all:
+    # Use kernel.yml to configure this parameters
+dev:
+    # Overwrite generated files in this environment
+    admingenerator_generator:
+        overwrite_if_exists: true
