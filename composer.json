@@ -1,10 +1,10 @@
 {
-    "name": "knplabs/rad-bundle",
-    "type": "symfony-bundle",
+    "name":        "knplabs/rad-bundle",
+    "type":        "symfony-bundle",
     "description": "This Bundle provides RAD development flow for Symfony2.",
-    "keywords": ["rad"],
-    "homepage": "http://rad.knplabs.com",
-    "license": "MIT",
+    "keywords":    ["rad"],
+    "homepage":    "http://rad.knplabs.com",
+    "license":     "MIT",
     "authors": [
         {
             "name":     "Knplabs",
