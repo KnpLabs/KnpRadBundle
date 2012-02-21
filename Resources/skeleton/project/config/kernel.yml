@@ -12,7 +12,6 @@ all:
         - Symfony\Bundle\MonologBundle\MonologBundle
         - Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle
         - Symfony\Bundle\AsseticBundle\AsseticBundle
-        - Symfony\Bundle\DoctrineBundle\DoctrineBundle
         - Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle
 
     # Parameters are like variables that can be references later in any
