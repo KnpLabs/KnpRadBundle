@@ -132,6 +132,16 @@ class RadKernel extends Kernel
     }
 
     /**
+     * Returns configuration directory.
+     *
+     * @return string
+     */
+    public function getConfigDir()
+    {
+        return $this->getRootDir();
+    }
+
+    /**
      * Returns project directory.
      *
      * @return string
