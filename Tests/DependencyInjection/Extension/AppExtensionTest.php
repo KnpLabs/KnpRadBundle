@@ -44,18 +44,13 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadSingleServiceResource()
     {
-        $extension = $this->createExtension(__DIR__.'/fixtures/single');
+        $extension = $this->createExtension(__DIR__.'/fixtures');
         $configs   = array();
-
-        $this->xmlLoader
-            ->expects($this->once())
-            ->method('load')
-            ->with(__DIR__.'/fixtures/single/config/services.xml');
 
         $this->ymlLoader
             ->expects($this->once())
             ->method('load')
-            ->with(__DIR__.'/fixtures/single/config/services.yml');
+            ->with('services.yml');
 
         $extension->load($configs, $this->container);
     }
@@ -65,15 +60,10 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
         $extension = $this->getMockBuilder(
             'Knp\Bundle\RadBundle\DependencyInjection\Extension\AppExtension'
         )
-            ->setMethods(array('getXmlFileLoader', 'getYamlFileLoader'))
+            ->setMethods(array('getYamlFileLoader'))
             ->setConstructorArgs(array($path))
             ->getMock();
 
-        $extension
-            ->expects($this->any())
-            ->method('getXmlFileLoader')
-            ->with($this->container)
-            ->will($this->returnValue($this->xmlLoader));
         $extension
             ->expects($this->any())
             ->method('getYamlFileLoader')

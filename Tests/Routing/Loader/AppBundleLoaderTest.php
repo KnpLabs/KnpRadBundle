@@ -38,7 +38,7 @@ class AppBundleLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadSingleRouteFile()
     {
-        $this->bundle->path = __DIR__.'/Fixtures/single';
+        $this->bundle->path = __DIR__.'/Fixtures';
         $collection = $this->loader->load('.')->all();
 
         $this->assertCount(2, $collection);
