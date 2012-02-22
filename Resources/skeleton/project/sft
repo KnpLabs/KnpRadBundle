@@ -8,11 +8,9 @@
 set_time_limit(0);
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArgvInput;
 use Knp\Bundle\RadBundle\HttpKernel\RadKernel;
 
 $loader = require(__DIR__.'/vendor/.composer/autoload.php');
-$input  = new ArgvInput();
 $kernel = RadKernel::createAppKernel($loader, 'test', false);
 
 $application = new Application($kernel);
