@@ -293,7 +293,7 @@ class RadKernel extends Kernel
                 'kernel.project_root' => $this->getProjectRootDir(),
                 'kernel.project_name' => $this->getConfiguration()->getProjectName(),
                 'kernel.project_dir'  => $this->getProjectDir(),
-                'kernel.config_dir'   => $this->getProjectRootDir(),
+                'kernel.config_dir'   => $this->getConfigDir(),
                 'kernel.web_dir'      => $this->getWebDir(),
             ),
             parent::getKernelParameters()
