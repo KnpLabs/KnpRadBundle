@@ -15,7 +15,7 @@ all:
             # Put additional paths here in order
             # in which you want pipelined assets should
             # be searched
-            - %kernel.project_dir%/public
+            - %kernel.project_dir%/Resources/public
             - %kernel.root_dir%/vendor/assets
 
         # By default, pipeline will search for assets inside
