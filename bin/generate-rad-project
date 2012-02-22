@@ -19,6 +19,7 @@ require $vendorPath.'/.composer/autoload.php';
 
 $projectName     = str_replace('/', '\\', $argv[1]);
 $applicationPath = $projectPath.'/src/'.str_replace('\\', '/', $projectName);
+$phpUnitPath = './src/'.str_replace('\\', '/', $projectName);
 
 $bundleRefl   = new \ReflectionClass('Knp\\Bundle\\RadBundle\\KnpRadBundle');
 $skeletonPath = dirname($bundleRefl->getFilename()).'/Resources/skeleton';
@@ -29,6 +30,10 @@ $fs->mirror($skeletonPath.'/project', $projectPath);
 $kernel = file_get_contents($projectPath.'/config/kernel.yml');
 $kernel = str_replace('{{ project }}', $projectName, $kernel);
 file_put_contents($projectPath.'/config/kernel.yml', $kernel);
+
+$phpunit = file_get_contents($projectPath.'/phpunit.xml.dist');
+$phpunit = str_replace('{{ project }}', $phpUnitPath, $phpunit);
+file_put_contents($projectPath.'/phpunit.xml.dist', $phpunit);
 
 $fs->mirror($skeletonPath.'/application', $applicationPath);
 $fs->chmod(array(
