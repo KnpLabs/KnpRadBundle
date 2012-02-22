@@ -97,7 +97,7 @@ class GenerateControllerCommand extends ContainerAwareCommand
             $output->writeLn('  method <info>already exists</info>');
         }
 
-        $viewPath = sprintf('%s/views/%s/%s.html.twig',
+        $viewPath = sprintf('%s/Resources/views/%s/%s.html.twig',
             $bundle->getPath(), str_replace('\\', '/', $controller), $action
         );
 
