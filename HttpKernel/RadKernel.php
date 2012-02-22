@@ -101,7 +101,7 @@ class RadKernel extends Kernel
         };
 
         $loader->add(null, self::$projectRootDir.'/src');
-        if (file_exists($custom = self::$projectRootDir.'/config/autoload.php')) {
+        if (file_exists($custom = self::$projectRootDir.'/app/autoload.php')) {
             require($custom);
         } else {
             $autoloadIntl(self::$projectRootDir);
@@ -116,9 +116,19 @@ class RadKernel extends Kernel
      *
      * @return string
      */
-    public function getRootDir()
+    public function getProjectRootDir()
     {
         return self::$projectRootDir;
+    }
+
+    /**
+     * Returns configuration root directory (app folder).
+     *
+     * @return string
+     */
+    public function getRootDir()
+    {
+        return $this->getProjectRootDir().'/app';
     }
 
     /**
@@ -129,7 +139,7 @@ class RadKernel extends Kernel
     public function getProjectDir()
     {
         return sprintf('%s/src/%s',
-            $this->getRootDir(),
+            $this->getProjectRootDir(),
             str_replace('\\', '/', $this->configuration->getProjectName())
         );
     }
@@ -141,17 +151,7 @@ class RadKernel extends Kernel
      */
     public function getWebDir()
     {
-        return $this->getRootDir().'/web';
-    }
-
-    /**
-     * Returns configs directory.
-     *
-     * @return string
-     */
-    public function getConfigDir()
-    {
-        return $this->getRootDir().'/config';
+        return $this->getProjectRootDir().'/web';
     }
 
     /**
@@ -161,7 +161,7 @@ class RadKernel extends Kernel
      */
     public function getLogDir()
     {
-        return $this->getRootDir().'/logs';
+        return $this->getProjectRootDir().'/logs';
     }
 
     /**
@@ -171,7 +171,7 @@ class RadKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return $this->getRootDir().'/cache/'.$this->environment;
+        return $this->getProjectRootDir().'/cache/'.$this->environment;
     }
 
     /**
@@ -194,7 +194,7 @@ class RadKernel extends Kernel
         // Add KnpRadBundle and AppBundle automatically
         $bundles[] = new KnpRadBundle($this);
         $bundles[] = new AppBundle(
-            $this->configuration->getProjectName(), $this->getRootDir().'/src'
+            $this->configuration->getProjectName(), $this->getProjectRootDir().'/src'
         );
 
         return $bundles;
@@ -207,7 +207,7 @@ class RadKernel extends Kernel
     {
         $configs = Finder::create()
             ->name('*.yml')
-            ->in($this->getConfigDir().'/bundles');
+            ->in($this->getConfigDir().'/config');
 
         foreach ($configs as $file) {
             $this->loadConfigFile($file, basename($file, '.yml'), $loader);
@@ -280,9 +280,10 @@ class RadKernel extends Kernel
     {
         return array_merge(
             array(
+                'kernel.project_root' => $this->getProjectRootDir(),
                 'kernel.project_name' => $this->getConfiguration()->getProjectName(),
                 'kernel.project_dir'  => $this->getProjectDir(),
-                'kernel.config_dir'   => $this->getConfigDir(),
+                'kernel.config_dir'   => $this->getProjectRootDir(),
                 'kernel.web_dir'      => $this->getWebDir(),
             ),
             parent::getKernelParameters()
