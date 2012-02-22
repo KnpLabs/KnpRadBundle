@@ -5,7 +5,6 @@ namespace Knp\Bundle\RadBundle\Tests\DependencyInjection\Extension;
 class AppExtensionTest extends \PHPUnit_Framework_TestCase
 {
     private $container;
-    private $xmlLoader;
     private $ymlLoader;
 
     protected function setUp()
@@ -14,12 +13,8 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
             'Symfony\Component\DependencyInjection\ContainerBuilder'
         )->disableOriginalConstructor()->getMock();
 
-        $this->xmlLoader = $this->getMockBuilder(
-            'Symfony\Component\DependencyInjection\Loader\XmlFileLoader'
-        )->disableOriginalConstructor()->getMock();
-
         $this->ymlLoader = $this->getMockBuilder(
-            'Symfony\Component\DependencyInjection\Loader\XmlFileLoader'
+            'Symfony\Component\DependencyInjection\Loader\YamlFileLoader'
         )->disableOriginalConstructor()->getMock();
     }
 
@@ -39,10 +34,6 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
             array('key1' => 'val1'),
             array('key.number.2' => 'val2')
         );
-
-        $this->xmlLoader
-            ->expects($this->exactly(0))
-            ->method('load');
 
         $this->ymlLoader
             ->expects($this->exactly(0))

@@ -12,7 +12,6 @@
 namespace Knp\Bundle\RadBundle\DependencyInjection\Extension;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -45,12 +44,8 @@ class AppExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $xmlLoader = $this->getXmlFileLoader($container);
         $ymlLoader = $this->getYamlFileLoader($container);
 
-        if (file_exists($services = $this->path.'/config/services.xml')) {
-            $xmlLoader->load($services);
-        }
         if (file_exists($this->path.'/Resources/config/services.yml')) {
             $ymlLoader->load('services.yml');
         }
