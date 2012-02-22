@@ -13,6 +13,7 @@ namespace Knp\Bundle\RadBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Bundle\AsseticBundle\DependencyInjection\Compiler\TemplateResourcesPass;
 use Symfony\Bundle\AsseticBundle\DependencyInjection\Compiler\AssetManagerPass;
 
 use Knp\Bundle\RadBundle\DependencyInjection\Compiler\AsseticPipelinePass;
@@ -27,6 +28,7 @@ class KnpRadBundle extends Bundle
      */
     public function build(ContainerBuilder $container)
     {
+        $container->addCompilerPass(new TemplateResourcesPass);
         $container->addCompilerPass(new AsseticPipelinePass);
         $container->addCompilerPass(new AssetManagerPass);
     }
