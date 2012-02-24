@@ -6,3 +6,4 @@ dev:
     # Overwrite generated files in this environment
     admingenerator_generator:
         overwrite_if_exists: true
+        

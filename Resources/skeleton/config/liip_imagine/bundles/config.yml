@@ -6,8 +6,8 @@
 all:
     # Use kernel.yml to configure this parameters
     liip_imagine:
-        web_root:     %kernel.root_dir%/../web
-        data_root:    %liip_imagine.web_root%
+        web_root:     %kernel.root_dir%/web
+        data_root:    %kernel.root_dir%/web
         cache_prefix: /media/cache
         cache:        true
         data_loader:       ~
@@ -23,7 +23,3 @@ all:
                 quality: 75
                 filters:
                     thumbnail: { size: [120, 90], mode: outbound }
-
-dev:
-    web_profiler:
-        intercept_redirects: false

@@ -5,7 +5,7 @@
 all:
     # Use kernel.yml to configure this parameters
     avalanche_imagine:
-        web_root:     %kernel.root_dir%/../web
+        web_root:     %kernel.root_dir%/web
         cache_prefix: media/cache
         driver:       gd
 
@@ -16,3 +16,4 @@ all:
             my_thumb:
                 type:    thumbnail
                 options: { size: [120, 90], mode: outbound }
+                

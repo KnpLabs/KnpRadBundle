@@ -3,8 +3,8 @@
 
 all:
     # Use kernel.yml to configure this parameters
-    knp_menu:
-        twig:  # use "twig: false" to disable the Twig extension and the TwigRenderer
-            template: knp_menu.html.twig
-        templating: false # if true, enables the helper for PHP templates
-        default_renderer: twig # The renderer to use, list is also available by default
+    # knp_menu:
+    #     twig:  # use "twig: false" to disable the Twig extension and the TwigRenderer
+    #         template: knp_menu.html.twig
+    #     templating: false # if true, enables the helper for PHP templates
+    #     default_renderer: twig # The renderer to use, list is also available by default
