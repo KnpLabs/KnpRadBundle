@@ -15,7 +15,8 @@
 
     <testsuites>
         <testsuite name="Knp Rad intro suite">
-            <directory suffix="Test.php">src/KnpRad/</directory>
+            <!-- Note the Test.php suffix -->
+            <directory suffix="Test.php">src/</directory>
         </testsuite>
     </testsuites>
 
