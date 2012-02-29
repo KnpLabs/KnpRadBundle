@@ -51,7 +51,7 @@ class AppBundleLoader extends YamlFileLoader
         $collection = new RouteCollection();
 
         foreach ($this->kernel->getBundle('App', false) as $bundle) {
-            if (file_exists($routing = $bundle->getPath().'/config/routing.yml')) {
+            if (file_exists($routing = $bundle->getPath().'/Resources/config/routing.yml')) {
                 $collection->addCollection(parent::load($routing));
                 $collection->addResource(new FileResource($routing));
             }

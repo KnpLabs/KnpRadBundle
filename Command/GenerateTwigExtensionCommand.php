@@ -57,7 +57,7 @@ class GenerateTwigExtensionCommand extends ContainerAwareCommand
         }
 
         // generate the service definition
-        $servicesPath = sprintf('%s/config/services.yml', $bundle->getPath());
+        $servicesPath = sprintf('%s/Resources/config/services.yml', $bundle->getPath());
 
         $output->writeLn(sprintf("\n".'- <comment>app.twig.%s_extension</comment> service:',
             strtolower($name)

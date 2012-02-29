@@ -97,7 +97,7 @@ class GenerateControllerCommand extends ContainerAwareCommand
             $output->writeLn('  method <info>already exists</info>');
         }
 
-        $viewPath = sprintf('%s/views/%s/%s.html.twig',
+        $viewPath = sprintf('%s/Resources/views/%s/%s.html.twig',
             $bundle->getPath(), str_replace('\\', '/', $controller), $action
         );
 
@@ -113,7 +113,7 @@ class GenerateControllerCommand extends ContainerAwareCommand
             $output->writeLn('  view <info>already exists</info>');
         }
 
-        $routingPath = sprintf('%s/config/routing.yml', $bundle->getPath());
+        $routingPath = sprintf('%s/Resources/config/routing.yml', $bundle->getPath());
         $routeName   = $this->underscore($name).'_'.$this->underscore($action);
         $routePath   = '/'.$this->underscore($name).'/'.$this->underscore($action);
         $controller  = 'App:'.str_replace('/', '\\', $controller).':'.$action;
