@@ -82,7 +82,10 @@ class RadKernel extends Kernel
         if (null === self::$projectRootDir) {
             self::$projectRootDir = realpath(__DIR__.'/../../../../../../..');
         }
-
+        
+        $autoloadAnnotations = function() use($loader) {
+            AnnotationRegistry::registerLoader(array($loader, 'loadClass'));
+        };
         $autoloadIntl = function($rootDir) use($loader) {
             if (!function_exists('intl_get_error_code')) {
                 require_once $rootDir.
@@ -104,6 +107,7 @@ class RadKernel extends Kernel
         if (file_exists($custom = self::$projectRootDir.'/config/autoload.php')) {
             require($custom);
         } else {
+            $autoloadAnnotations();
             $autoloadIntl(self::$projectRootDir);
             $autoloadSwift(self::$projectRootDir);
         }
