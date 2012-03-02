@@ -52,7 +52,7 @@ if (in_array('--configs', $argv)) {
 }
 
 // Update assets
-system(sprintf('%s %s assets:install', $interpreter, escapeshellarg($rootDir.'/sf')));
+system(sprintf('%s %s assets:install', $interpreter, escapeshellarg($rootDir.'/console')));
 
 // Remove the cache
-system(sprintf('%s %s cache:clear --no-warmup', $interpreter, escapeshellarg($rootDir.'/sf')));
+system(sprintf('%s %s cache:clear --no-warmup', $interpreter, escapeshellarg($rootDir.'/console')));

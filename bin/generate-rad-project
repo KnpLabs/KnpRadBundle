@@ -34,8 +34,8 @@ $fs->mirror($skeletonPath.'/application', $applicationPath);
 $fs->chmod(array(
     $projectPath.'/bin/configs',
     $projectPath.'/bin/vendors',
-    $projectPath.'/sf',
-    $projectPath.'/sft'
+    $projectPath.'/console',
+    $projectPath.'/tconsole'
 ), 0744);
 
 die('Project '.$projectName.' successfully generated. Do not forget to run bin/configs'."\n");
