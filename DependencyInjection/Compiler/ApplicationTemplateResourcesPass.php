@@ -20,27 +20,21 @@ use Symfony\Bundle\AsseticBundle\DependencyInjection\Compiler\TemplateResourcesP
  *
  * @author Konstantin Kudryashov <ever.zet@gmail.com>
  */
-class AsseticTemplateResourcesPass extends BasePass
+class ApplicationTemplateResourcesPass extends BasePass
 {
-    /**
-     * Patches kernel parameters.
-     *
-     * @param ContainerBuilder $container Container instance
-     */
-    public function process(ContainerBuilder $container)
-    {
-        if (!$container->getParameter('knp_rad.application_structure')) {
-            return;
-        }
-
-        parent::process($container);
-    }
-
     /**
      * {@inheritdoc}
      */
     protected function setBundleDirectoryResources(ContainerBuilder $container, $engine, $bundleDirName, $bundleName)
     {
+        if ('App' === $bundleName) {
+            parent::setBundleDirectoryResources(
+                $container,
+                $engine,
+                $container->getParameter('kernel.project_dir'),
+                $bundleName
+            );
+        }
     }
 
     /**
@@ -48,11 +42,5 @@ class AsseticTemplateResourcesPass extends BasePass
      */
     protected function setAppDirectoryResources(ContainerBuilder $container, $engine)
     {
-        $container->setDefinition(
-            'assetic.'.$engine.'_directory_resource.kernel',
-            new DirectoryResourceDefinition('', $engine, array(
-                $container->getParameter('kernel.project_dir').'/views'
-            ))
-        );
     }
 }

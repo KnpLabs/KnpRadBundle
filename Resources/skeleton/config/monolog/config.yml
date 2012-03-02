@@ -42,3 +42,10 @@ dev:
         firephp:
             type:  firephp
             level: info
+
+test:
+    handlers:
+        main:
+            type:  stream
+            path:  %kernel.logs_dir%/%kernel.environment%.log
+            level: debug

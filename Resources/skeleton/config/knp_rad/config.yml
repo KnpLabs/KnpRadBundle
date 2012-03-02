@@ -8,7 +8,6 @@ all:
     application_routing:     true
     application_shortaction: true
     application_views:       true
-    application_structure:   true
 
     assetic_pipeline:
         enabled:  true
@@ -16,8 +15,8 @@ all:
             # Put additional paths here in order
             # in which you want pipelined assets should
             # be searched
-            - %kernel.project_dir%/public
-            - %kernel.root_dir%/vendor/assets
+            - %kernel.project_dir%/Resources/public
+            - %kernel.project_root%/vendor/assets
 
         # By default, pipeline will search for assets inside
         # every bundle too (paths section have higher priority though)

@@ -104,7 +104,7 @@ class KernelConfiguration
     {
         if (null === $this->projectName) {
             throw new \InvalidArgumentException(
-                'Specify your `project` name inside config/project.yml or config/project.local.yml'
+                'Specify your `project` name inside app/kernel.yml or app/kernel.custom.yml'
             );
         }
 

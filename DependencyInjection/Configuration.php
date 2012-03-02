@@ -52,9 +52,6 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('application_views')
                     ->defaultFalse()
                 ->end()
-                ->booleanNode('application_structure')
-                    ->defaultFalse()
-                ->end()
             ->end()
         ;
 

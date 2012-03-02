@@ -32,6 +32,9 @@ class AssetsInstallCommand extends BaseCommand
     protected function configure()
     {
         $this
+            ->setDefinition(array(
+                new InputArgument('target', InputArgument::OPTIONAL, 'The target directory (usually "web")', 'web'),
+            ))
             ->addOption('symlink', null, InputOption::VALUE_NONE, 'Symlinks the assets instead of copying it')
             ->addOption('relative', null, InputOption::VALUE_NONE, 'Make relative symlinks')
             ->setDescription('Installs bundles web assets under a public web directory')
@@ -57,49 +60,5 @@ EOT
             )
             ->setName('assets:install')
         ;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $targetArg = rtrim($this->getContainer()->getParameter('kernel.web_dir'), '/');
-
-        if (!is_dir($targetArg)) {
-            throw new \InvalidArgumentException(sprintf('The target directory "%s" does not exist.', $input->getArgument('target')));
-        }
-
-        if (!function_exists('symlink') && $input->getOption('symlink')) {
-            throw new \InvalidArgumentException('The symlink() function is not available on your system. You need to install the assets without the --symlink option.');
-        }
-
-        $filesystem = $this->getContainer()->get('filesystem');
-
-        // Create the bundles directory otherwise symlink will fail.
-        $filesystem->mkdir($targetArg.'/bundles/', 0777);
-
-        foreach ($this->getContainer()->get('kernel')->getBundles() as $bundle) {
-            $originDir = $bundle->getPath().'/Resources/public';
-            if ($bundle instanceof AppBundle) {
-                $originDir = $bundle->getPath().'/public';
-            }
-
-            if (is_dir($originDir)) {
-                $targetDir = $targetArg.'/bundles/'.preg_replace('/bundle$/', '', strtolower($bundle->getName()));
-
-                $output->writeln(sprintf('Installing assets for <comment>%s</comment> into <comment>%s</comment>', $bundle->getNamespace(), $targetDir));
-
-                $filesystem->remove($targetDir);
-
-                if ($input->getOption('symlink')) {
-                    $filesystem->symlink($originDir, $targetDir);
-                } else {
-                    $filesystem->mkdir($targetDir, 0777);
-                    // We use a custom iterator to ignore VCS files
-                    $filesystem->mirror($originDir, $targetDir, Finder::create()->in($originDir));
-                }
-            }
-        }
     }
 }

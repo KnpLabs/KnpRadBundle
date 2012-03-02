@@ -73,7 +73,5 @@ class KnpRadExtension extends Extension
         }
 
         $loader->load('assetic_coffee_fix.xml');
-
-        $container->setParameter('knp_rad.application_structure', $config['application_structure']);
     }
 }
