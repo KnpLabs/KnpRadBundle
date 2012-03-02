@@ -1,7 +1,7 @@
 all:
     db_driver:      orm # other valid values are 'mongodb', 'couchdb', 'propel'
 
-    # you HAVE to provide the firewall's name thas is configured in config/bundles/security.yml
+    # you HAVE to provide the firewall's name thas is configured in app/config/security.yml
     firewall_name:  secured_area
 
     # You HAVE to implement your own User class

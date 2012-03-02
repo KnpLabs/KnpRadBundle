@@ -26,16 +26,16 @@ $skeletonPath = dirname($bundleRefl->getFilename()).'/Resources/skeleton';
 $fs = new Filesystem();
 $fs->mirror($skeletonPath.'/project', $projectPath);
 
-$kernel = file_get_contents($projectPath.'/config/kernel.yml');
+$kernel = file_get_contents($projectPath.'/app/kernel.yml');
 $kernel = str_replace('{{ project }}', $projectName, $kernel);
-file_put_contents($projectPath.'/config/kernel.yml', $kernel);
+file_put_contents($projectPath.'/app/kernel.yml', $kernel);
 
 $fs->mirror($skeletonPath.'/application', $applicationPath);
 $fs->chmod(array(
     $projectPath.'/bin/configs',
     $projectPath.'/bin/vendors',
-    $projectPath.'/sf',
-    $projectPath.'/sft'
+    $projectPath.'/console',
+    $projectPath.'/tconsole'
 ), 0744);
 
 die('Project '.$projectName.' successfully generated. Do not forget to run bin/configs'."\n");

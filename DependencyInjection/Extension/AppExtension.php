@@ -12,7 +12,6 @@
 namespace Knp\Bundle\RadBundle\DependencyInjection\Extension;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Definition\Processor;
@@ -45,14 +44,10 @@ class AppExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $xmlLoader = $this->getXmlFileLoader($container);
         $ymlLoader = $this->getYamlFileLoader($container);
 
-        if (file_exists($services = $this->path.'/config/services.xml')) {
-            $xmlLoader->load($services);
-        }
-        if (file_exists($services = $this->path.'/config/services.yml')) {
-            $ymlLoader->load($services);
+        if (file_exists($this->path.'/Resources/config/services.yml')) {
+            $ymlLoader->load('services.yml');
         }
 
         foreach ($configs as $config) {
@@ -73,22 +68,12 @@ class AppExtension extends Extension
     }
 
     /**
-     * Returns new container XmlFileLoader.
-     *
-     * @return XmlFileLoader
-     */
-    protected function getXmlFileLoader(ContainerBuilder $container)
-    {
-        return new XmlFileLoader($container, new FileLocator($this->path.'/config'));
-    }
-
-    /**
      * Returns new container YamlFileLoader.
      *
      * @return YamlFileLoader
      */
     protected function getYamlFileLoader(ContainerBuilder $container)
     {
-        return new YamlFileLoader($container, new FileLocator($this->path.'/config'));
+        return new YamlFileLoader($container, new FileLocator($this->path.'/Resources/config'));
     }
 }

@@ -5,7 +5,6 @@ namespace Knp\Bundle\RadBundle\Tests\DependencyInjection\Extension;
 class AppExtensionTest extends \PHPUnit_Framework_TestCase
 {
     private $container;
-    private $xmlLoader;
     private $ymlLoader;
 
     protected function setUp()
@@ -14,12 +13,8 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
             'Symfony\Component\DependencyInjection\ContainerBuilder'
         )->disableOriginalConstructor()->getMock();
 
-        $this->xmlLoader = $this->getMockBuilder(
-            'Symfony\Component\DependencyInjection\Loader\XmlFileLoader'
-        )->disableOriginalConstructor()->getMock();
-
         $this->ymlLoader = $this->getMockBuilder(
-            'Symfony\Component\DependencyInjection\Loader\XmlFileLoader'
+            'Symfony\Component\DependencyInjection\Loader\YamlFileLoader'
         )->disableOriginalConstructor()->getMock();
     }
 
@@ -40,10 +35,6 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
             array('key.number.2' => 'val2')
         );
 
-        $this->xmlLoader
-            ->expects($this->exactly(0))
-            ->method('load');
-
         $this->ymlLoader
             ->expects($this->exactly(0))
             ->method('load');
@@ -53,18 +44,13 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadSingleServiceResource()
     {
-        $extension = $this->createExtension(__DIR__.'/fixtures/single');
+        $extension = $this->createExtension(__DIR__.'/fixtures');
         $configs   = array();
-
-        $this->xmlLoader
-            ->expects($this->once())
-            ->method('load')
-            ->with(__DIR__.'/fixtures/single/config/services.xml');
 
         $this->ymlLoader
             ->expects($this->once())
             ->method('load')
-            ->with(__DIR__.'/fixtures/single/config/services.yml');
+            ->with('services.yml');
 
         $extension->load($configs, $this->container);
     }
@@ -74,15 +60,10 @@ class AppExtensionTest extends \PHPUnit_Framework_TestCase
         $extension = $this->getMockBuilder(
             'Knp\Bundle\RadBundle\DependencyInjection\Extension\AppExtension'
         )
-            ->setMethods(array('getXmlFileLoader', 'getYamlFileLoader'))
+            ->setMethods(array('getYamlFileLoader'))
             ->setConstructorArgs(array($path))
             ->getMock();
 
-        $extension
-            ->expects($this->any())
-            ->method('getXmlFileLoader')
-            ->with($this->container)
-            ->will($this->returnValue($this->xmlLoader));
         $extension
             ->expects($this->any())
             ->method('getYamlFileLoader')

@@ -31,14 +31,14 @@ class ConfigurationDumper
 
     public function isAlreadyDumped()
     {
-        return file_exists($this->configPath.'/bundles/'.$this->getAlias().'.yml');
+        return file_exists($this->configPath.'/config/'.$this->getAlias().'.yml');
     }
 
     public function dump()
     {
         $output = sprintf('<comment>%s:</comment>', $this->getAlias())."\n";
 
-        if (!file_exists($dir = $this->configPath.'/bundles')) {
+        if (!file_exists($dir = $this->configPath.'/config')) {
             mkdir($dir, 0777, true);
         }
         if (!file_exists($dir = $this->configPath.'/routing')) {
@@ -56,9 +56,9 @@ class ConfigurationDumper
 
     public function dumpProvidedConfig()
     {
-        $configPath = $this->configPath.'/bundles/'.$this->getAlias().'.yml';
+        $configPath = $this->configPath.'/config/'.$this->getAlias().'.yml';
         file_put_contents($configPath, "\n".file_get_contents(
-            $this->templatesPath.'/bundles/config.yml'
+            $this->templatesPath.'/config.yml'
         ), FILE_APPEND);
 
         $output = sprintf('  <info>+config</info> %s',
@@ -87,7 +87,7 @@ class ConfigurationDumper
 
     public function dumpEmptyConfig()
     {
-        $path = $this->configPath.'/bundles/'.$this->getAlias().'.yml';
+        $path = $this->configPath.'/config/'.$this->getAlias().'.yml';
 
         file_put_contents($path, <<<YAML
 all:  ~

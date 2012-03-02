@@ -15,11 +15,8 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Bundle\AsseticBundle\DependencyInjection\Compiler\AssetManagerPass;
 
-use Knp\Bundle\RadBundle\DependencyInjection\Compiler\TranslationsLocatorPass;
-use Knp\Bundle\RadBundle\DependencyInjection\Compiler\AsseticTemplateResourcesPass;
+use Knp\Bundle\RadBundle\DependencyInjection\Compiler\ApplicationTemplateResourcesPass;
 use Knp\Bundle\RadBundle\DependencyInjection\Compiler\AsseticPipelinePass;
-use Knp\Bundle\RadBundle\DependencyInjection\Compiler\RegisterDoctrineMappingDriverPass;
-use Knp\Bundle\RadBundle\DependencyInjection\Compiler\ApplicationStructurePass;
 
 /**
  * RadBundle for Symfony2.
@@ -31,10 +28,8 @@ class KnpRadBundle extends Bundle
      */
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new AsseticTemplateResourcesPass);
+        $container->addCompilerPass(new ApplicationTemplateResourcesPass);
         $container->addCompilerPass(new AsseticPipelinePass);
         $container->addCompilerPass(new AssetManagerPass);
-        $container->addCompilerPass(new TranslationsLocatorPass);
-        $container->addCompilerPass(new ApplicationStructurePass);
     }
 }
