@@ -92,7 +92,7 @@ class Controller extends BaseController
     /**
      * Ensures the user is granted or throws an AccessDeniedException
      *
-     * @exemple
+     * @example
      *
      *      $this->isGrantedOr403('EDIT', $article);
      *
@@ -350,7 +350,7 @@ class Controller extends BaseController
     /**
      * Adds some dynamic shortcuts
      *
-     * @exemple
+     * @example
      *
      *  // find a post by id
      *  $entity = $this->findPostEntity(123);
