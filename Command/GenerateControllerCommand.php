@@ -41,7 +41,7 @@ class GenerateControllerCommand extends ContainerAwareCommand
         }
 
         $class     = sprintf('%sController', str_replace('/', '\\', $controller));
-        $subns     = dirname(str_replace('\\', '/', $class));
+        $subns     = str_replace('/', '\\', dirname(str_replace('\\', '/', $class)));
         $namespace = sprintf('%s\Controller%s',
             $bundle->getNamespace(), '.' !== $subns ? '\\'.$subns : ''
         );
