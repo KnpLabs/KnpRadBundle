@@ -1,0 +1,25 @@
+# LiipImagineBundle is a fork of AvalancheImagineBundle which provides easy image manipulation support for Symfony2. 
+# The goal of the fork is to make the code more extensible and as a result applicable for more use cases.
+# Docs: http://bit.ly/imagine-docs
+# Config: http://bit.ly/LiipImagineBundle-ref
+
+all:
+    # Use kernel.yml to configure this parameters
+    liip_imagine:
+        web_root:     %kernel.root_dir%/web
+        data_root:    %kernel.root_dir%/web
+        cache_prefix: /media/cache
+        cache:        true
+        data_loader:       ~
+        controller_action: ~
+        driver:       gd
+        formats:      []
+        
+        # Configure a set of filters and then applying those filters to images inside a template. 
+        # So, start by creating some sort of filter that you need to apply somewhere in your application. 
+        # For example, suppose you want to thumbnail an image to a size of 120x90 pixels
+        filter_sets:
+            my_thumb:
+                quality: 75
+                filters:
+                    thumbnail: { size: [120, 90], mode: outbound }

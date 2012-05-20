@@ -1,0 +1,19 @@
+# AvalancheImagineBundle will provide image manipulation functionality to your Symfony 2 based projects
+# Docs: http://bit.ly/imagine-docs
+# Config: http://bit.ly/AvalancheImagineBundle-ref
+
+all:
+    # Use kernel.yml to configure this parameters
+    avalanche_imagine:
+        web_root:     %kernel.root_dir%/web
+        cache_prefix: media/cache
+        driver:       gd
+
+        # Configure a set of filters and then applying those filters to images inside a template. 
+        # So, start by creating some sort of filter that you need to apply somewhere in your application. 
+        # For example, suppose you want to thumbnail an image to a size of 120x90 pixels
+        filters:
+            my_thumb:
+                type:    thumbnail
+                options: { size: [120, 90], mode: outbound }
+                
