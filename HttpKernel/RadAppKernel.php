@@ -12,7 +12,7 @@
 use Knp\Bundle\RadBundle\HttpKernel\RadKernel;
 
 /**
- * Main applicatoin kernel of RadBundle.
+ * Main application kernel of RadBundle.
  */
 class RadAppKernel extends  RadKernel
 {
