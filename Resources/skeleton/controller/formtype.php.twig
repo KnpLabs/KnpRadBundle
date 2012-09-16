@@ -1,0 +1,46 @@
+<?php
+
+namespace {{ namespace }};
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\Form\FormInterface;
+
+/**
+ * {{ name }} form type
+ */
+
+class {{ class }} extends AbstractType
+{
+    public function buildForm(FormBuilder $builder, array $options)
+    {
+{% if fields|length > 0 %}
+        $builder
+{% for field in fields %}
+            ->add('{{ field }}')
+{% endfor %}
+        ;
+{% else %}
+       /**
+        * $builder
+        *     ->add('field')
+        * ;
+        */
+{% endif %}
+    }
+
+    public function getDefaultOptions(array $options)
+    {
+        return array_merge(array(
+            // 'data_class' => '',
+            ),
+            $options
+        );
+    }
+
+    public function getName()
+    {
+        return '{{ name }}';
+    }
+}
