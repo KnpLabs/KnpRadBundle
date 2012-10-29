@@ -49,7 +49,15 @@ class ConventionalLoader extends FileLoader
                 sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'new'),
                 new Route('/new',
                     array('_controller' => $shortname.':new'),
-                    array('_method' => 'GET|POST')
+                    array('_method' => 'GET')
+                )
+            );
+
+            $controllerCollection->add(
+                sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'create'),
+                new Route('/',
+                    array('_controller' => $shortname.':new'),
+                    array('_method' => 'POST')
                 )
             );
 
@@ -65,7 +73,15 @@ class ConventionalLoader extends FileLoader
                 sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'edit'),
                 new Route('/{id}/edit',
                     array('_controller' => $shortname.':edit'),
-                    array('_method' => 'GET|PUT', 'id' => '\\d+')
+                    array('_method' => 'GET', 'id' => '\\d+')
+                )
+            );
+
+            $controllerCollection->add(
+                sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'update'),
+                new Route('/{id}',
+                    array('_controller' => $shortname.':edit'),
+                    array('_method' => 'PUT', 'id' => '\\d+')
                 )
             );
 
