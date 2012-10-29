@@ -35,69 +35,84 @@ class ConventionalLoader extends FileLoader
         foreach ($config as $shortname => $mapping) {
             list($bundle, $class) = explode(':', $shortname, 2);
 
-            $prefix = $mapping ?: '/'.strtolower($class);
+            if (is_string($mapping)) {
+                $prefix = $mapping;
+            } elseif (is_array($mapping) && isset($mapping['prefix'])) {
+                $prefix = $mapping['prefix'];
+            } else {
+                $prefix = '/'.strtolower($class);
+            }
+
+            $defaultCollectionRoutes = $this->getDefaultCollectionRoutes($bundle, $class);
+            $defaultResourceRoutes   = $this->getDefaultResourceRoutes($bundle, $class);
+
+            $collectionRoutes = array();
+            if (!is_array($mapping) || !isset($mapping['collections'])) {
+                $collectionRoutes = $defaultCollectionRoutes;
+            }
+            $resourceRoutes = array();
+            if (!is_array($mapping) || !isset($mapping['resources'])) {
+                $resourceRoutes = $defaultResourceRoutes;
+            }
 
             $controllerCollection = new RouteCollection();
-
-            $controllerCollection->add(
-                sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'index'),
-                new Route('/',
-                    array('_controller' => $shortname.':index'),
-                    array('_method' => 'GET')
-                )
-            );
-
-            $controllerCollection->add(
-                sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'new'),
-                new Route('/new',
-                    array('_controller' => $shortname.':new'),
-                    array('_method' => 'GET')
-                )
-            );
-
-            $controllerCollection->add(
-                sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'create'),
-                new Route('/',
-                    array('_controller' => $shortname.':new'),
-                    array('_method' => 'POST')
-                )
-            );
-
-            $controllerCollection->add(
-                sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'show'),
-                new Route('/{id}',
-                    array('_controller' => $shortname.':show'),
-                    array('_method' => 'GET', 'id' => '\\d+')
-                )
-            );
-
-            $controllerCollection->add(
-                sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'edit'),
-                new Route('/{id}/edit',
-                    array('_controller' => $shortname.':edit'),
-                    array('_method' => 'GET', 'id' => '\\d+')
-                )
-            );
-
-            $controllerCollection->add(
-                sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'update'),
-                new Route('/{id}',
-                    array('_controller' => $shortname.':edit'),
-                    array('_method' => 'PUT', 'id' => '\\d+')
-                )
-            );
-
-            $controllerCollection->add(
-                sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), 'delete'),
-                new Route('/{id}',
-                    array('_controller' => $shortname.':delete'),
-                    array('_method' => 'DELETE', 'id' => '\\d+')
-                )
-            );
+            foreach ($collectionRoutes as $name => $route) {
+                $controllerCollection->add($name, $route);
+            }
+            foreach ($resourceRoutes as $name => $route) {
+                $controllerCollection->add($name, $route);
+            }
 
             $collection->addCollection($controllerCollection, $prefix);
         }
 
         return $collection;
+    }
+
+    public function getDefaultCollectionRoutes($bundle, $class)
+    {
+        return array(
+            sprintf('%s_%s_index', lcfirst($bundle), lcfirst($class)) => new Route(
+                '/',
+                array('_controller' => sprintf('%s:%s:index', $bundle, $class)),
+                array('_method' => 'GET')
+            ),
+            sprintf('%s_%s_new', lcfirst($bundle), lcfirst($class)) => new Route(
+                '/new',
+                array('_controller' => sprintf('%s:%s:new', $bundle, $class)),
+                array('_method' => 'GET')
+            ),
+            sprintf('%s_%s_create', lcfirst($bundle), lcfirst($class)) => new Route(
+                '/',
+                array('_controller' => sprintf('%s:%s:new', $bundle, $class)),
+                array('_method' => 'POST')
+            ),
+        );
+    }
+
+    public function getDefaultResourceRoutes($bundle, $class)
+    {
+        return array(
+            sprintf('%s_%s_show', lcfirst($bundle), lcfirst($class)) => new Route(
+                '/{id}',
+                array('_controller' => sprintf('%s:%s:show', $bundle, $class)),
+                array('_method' => 'GET', 'id' => '\\d+')
+            ),
+            sprintf('%s_%s_edit', lcfirst($bundle), lcfirst($class)) => new Route(
+                '/{id}/edit',
+                array('_controller' => sprintf('%s:%s:edit', $bundle, $class)),
+                array('_method' => 'GET', 'id' => '\\d+')
+            ),
+            sprintf('%s_%s_update', lcfirst($bundle), lcfirst($class)) => new Route(
+                '/{id}',
+                array('_controller' => sprintf('%s:%s:edit', $bundle, $class)),
+                array('_method' => 'PUT', 'id' => '\\d+')
+            ),
+            sprintf('%s_%s_delete', lcfirst($bundle), lcfirst($class)) => new Route(
+                '/{id}',
+                array('_controller' => sprintf('%s:%s:delete', $bundle, $class)),
+                array('_method' => 'DELETE', 'id' => '\\d+')
+            ),
+        );
     }
 }
