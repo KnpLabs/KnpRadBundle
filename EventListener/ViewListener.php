@@ -45,6 +45,7 @@ class ViewListener
         list($class, $method) = explode('::', $attributes->get('_controller'));
 
         $group = preg_replace(array('#^.*\\Controller\\\\#', '#Controller$#'), '', $class);
+        $group = str_replace('\\', '/', $group);
         $view  = preg_replace('/Action$/', '', $method);
 
         $event->setResponse($this->templating->renderResponse(
