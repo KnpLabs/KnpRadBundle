@@ -35,6 +35,8 @@ class ConventionalLoader extends FileLoader
         foreach ($config as $shortname => $mapping) {
             list($bundle, $class) = explode(':', $shortname, 2);
 
+            $prefix = $mapping ?: '/'.strtolower($class);
+
             $controllerCollection = new RouteCollection();
 
             $controllerCollection->add(
@@ -93,7 +95,7 @@ class ConventionalLoader extends FileLoader
                 )
             );
 
-            $collection->addCollection($controllerCollection, '/'.strtolower($class));
+            $collection->addCollection($controllerCollection, $prefix);
         }
 
         return $collection;
