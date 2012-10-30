@@ -65,6 +65,13 @@ class ConventionalLoader extends FileLoader
                         continue;
                     }
 
+                    if ('pattern' === $key) {
+                        throw new \InvalidArgumentException(
+                            'The `pattern` is only supported for actions, if you want to prefix '.
+                            'all the routes of the controller, use `prefix` instead.'
+                        );
+                    }
+
                     throw new \InvalidArgumentException(sprintf(
                         '`%s` parameter is not supported by `%s` controller route. Use one of [%s].',
                         $key, $shortname, implode(', ', self::$supportedControllerKeys)
