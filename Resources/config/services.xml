@@ -7,10 +7,10 @@
     <parameters>
         <parameter key="knp_rad.view.listener.class">Knp\RadBundle\EventListener\ViewListener</parameter>
         <parameter key="knp_rad.form.manager.class">Knp\RadBundle\Form\FormManager</parameter>
+        <parameter key="knp_rad.routing.loader.class">Knp\RadBundle\Routing\Loader\ConventionalLoader</parameter>
     </parameters>
 
     <services>
-
         <service id="knp_rad.view.listener" class="%knp_rad.view.listener.class%">
             <argument type="service" id="templating" />
             <argument>twig</argument>
@@ -21,6 +21,10 @@
             <argument type="service" id="form.factory" />
         </service>
 
+        <service id="knp_rad.routing.loader" class="%knp_rad.routing.loader.class%" public="false">
+            <argument type="service" id="file_locator" />
+            <tag name="routing.loader" />
+        </service>
     </services>
 
 </container>
