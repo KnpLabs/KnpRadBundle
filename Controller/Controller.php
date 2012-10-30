@@ -32,7 +32,7 @@ class Controller extends BaseController
     protected function getRepository($entity)
     {
 
-        return is_object($entity) 
+        return is_object($entity)
             ? $this->getEntityManager()->getRepository(get_class($entity))
             : $this->getEntityManager()->getRepository($entity)
         ;
