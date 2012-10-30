@@ -27,7 +27,7 @@ class ConventionalLoader extends FileLoader
 
     public function supports($resource, $type = null)
     {
-        return 'conventional' === $type;
+        return 'rad_convention' === $type;
     }
 
     public function load($file, $type = null)
