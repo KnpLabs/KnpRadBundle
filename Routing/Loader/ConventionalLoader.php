@@ -10,6 +10,12 @@ use Symfony\Component\Config\FileLocatorInterface;
 
 class ConventionalLoader extends FileLoader
 {
+    private static $supportedControllerKeys = array(
+        'prefix', 'defaults', 'requirements', 'collections', 'resources'
+    );
+    private static $supportedActionKeys = array(
+        'pattern', 'defaults', 'requirements'
+    );
     private $yaml;
 
     public function __construct(FileLocatorInterface $locator, YamlParser $yaml = null)
@@ -33,23 +39,49 @@ class ConventionalLoader extends FileLoader
         $collection->addResource(new FileResource($file));
 
         foreach ($config as $shortname => $mapping) {
-            list($bundle, $class) = explode(':', $shortname, 2);
+            $parts = explode(':', $shortname);
 
-            if (is_string($mapping)) {
-                $prefix = $mapping;
-            } elseif (is_array($mapping) && isset($mapping['prefix'])) {
-                $prefix = $mapping['prefix'];
-            } else {
-                $prefix = '/'.strtolower($class);
+            if (3 === count($parts)) {
+                list($bundle, $class, $action) = $parts;
+
+                $routeName = $this->getRouteName($bundle, $class, $action);
+                $route     = $this->getCustomCollectionRoute($bundle, $class, $action);
+
+                $this->overrideRouteParams($shortname, $route, $mapping);
+                $collection->add($routeName, $route);
+
+                continue;
             }
 
+            if (2 != count($parts)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'You should use `Bundle:Controller` or `Bundle:Controller:Action` notation as route. `%s` given.', $shortname
+                ));
+            }
+
+            if (is_array($mapping)) {
+                foreach ($mapping as $key => $val) {
+                    if (in_array($key, self::$supportedControllerKeys)) {
+                        continue;
+                    }
+
+                    throw new \InvalidArgumentException(sprintf(
+                        '`%s` parameter is not supported by `%s` controller route. Use one of [%s].',
+                        $key, $shortname, implode(', ', self::$supportedControllerKeys)
+                    ));
+                }
+            }
+
+            list($bundle, $class) = $parts;
+
+            $prefix                 = $this->getPatternPrefix($class, $mapping);
             $collectionDefaults     = $this->getDefaultsFromMapping($mapping, 'collections');
             $collectionRequirements = $this->getRequirementsFromMapping($mapping, 'collections');
             $resourceDefaults       = $this->getDefaultsFromMapping($mapping, 'resources');
             $resourceRequirements   = $this->getRequirementsFromMapping($mapping, 'resources');
 
-            $collectionRoutes = $this->getCollectionRoutesFromMapping($mapping, $bundle, $class);
-            $resourceRoutes   = $this->getResourceRoutesFromMapping($mapping, $bundle, $class);
+            $collectionRoutes = $this->getCollectionRoutesFromMapping($shortname, $mapping, $bundle, $class);
+            $resourceRoutes   = $this->getResourceRoutesFromMapping($shortname, $mapping, $bundle, $class);
 
             $controllerCollection = new RouteCollection();
             foreach ($collectionRoutes as $name => $route) {
@@ -114,7 +146,7 @@ class ConventionalLoader extends FileLoader
         return $requirements;
     }
 
-    private function getCollectionRoutesFromMapping($mapping, $bundle, $class)
+    private function getCollectionRoutesFromMapping($shortname, $mapping, $bundle, $class)
     {
         $defaults = $this->getDefaultCollectionRoutes($bundle, $class);
         if (!is_array($mapping) || !isset($mapping['collections'])) {
@@ -143,7 +175,7 @@ class ConventionalLoader extends FileLoader
                 $route = $this->getCustomCollectionRoute($bundle, $class, $action);
             }
 
-            $this->overrideRouteParams($route, $params);
+            $this->overrideRouteParams($shortname, $route, $params);
 
             $routes[$routeName] = $route;
         }
@@ -151,7 +183,7 @@ class ConventionalLoader extends FileLoader
         return $routes;
     }
 
-    private function getResourceRoutesFromMapping($mapping, $bundle, $class)
+    private function getResourceRoutesFromMapping($shortname, $mapping, $bundle, $class)
     {
         $defaults = $this->getDefaultResourceRoutes($bundle, $class);
         if (!is_array($mapping) || !isset($mapping['resources'])) {
@@ -180,7 +212,7 @@ class ConventionalLoader extends FileLoader
                 $route = $this->getCustomResourceRoute($bundle, $class, $action);
             }
 
-            $this->overrideRouteParams($route, $params);
+            $this->overrideRouteParams($shortname, $route, $params);
 
             $routes[$routeName] = $route;
         }
@@ -188,8 +220,21 @@ class ConventionalLoader extends FileLoader
         return $routes;
     }
 
-    private function overrideRouteParams(Route $route, $params)
+    private function overrideRouteParams($shortname, Route $route, $params)
     {
+        if (is_array($params)) {
+            foreach ($params as $key => $val) {
+                if (in_array($key, self::$supportedActionKeys)) {
+                    continue;
+                }
+
+                throw new \InvalidArgumentException(sprintf(
+                    '`%s` parameter is not supported by `%s` action route. Use one of [%s].',
+                    $key, $shortname, implode(', ', self::$supportedActionKeys)
+                ));
+            }
+        }
+
         if (is_string($params)) {
             $route->setPattern($params);
         }
@@ -273,8 +318,21 @@ class ConventionalLoader extends FileLoader
         );
     }
 
+    private function getPatternPrefix($class, $mapping)
+    {
+        if (is_string($mapping)) {
+            return $mapping;
+        } elseif (is_array($mapping) && isset($mapping['prefix'])) {
+            return $mapping['prefix'];
+        }
+
+        return '/'.strtolower(str_replace('\\', '/', $class));
+    }
+
     private function getRouteName($bundle, $class, $action)
     {
-        return sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), lcfirst($action));
+        $group = implode('_', array_map('lcfirst', explode('\\', $class)));
+
+        return sprintf('%s_%s_%s', lcfirst($bundle), $group, lcfirst($action));
     }
 }
