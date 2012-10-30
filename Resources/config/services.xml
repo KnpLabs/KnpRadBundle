@@ -6,14 +6,21 @@
 
     <parameters>
         <parameter key="knp_rad.view.listener.class">Knp\RadBundle\EventListener\ViewListener</parameter>
+        <parameter key="knp_rad.form.manager.class">Knp\RadBundle\Form\FormManager</parameter>
     </parameters>
 
     <services>
+
         <service id="knp_rad.view.listener" class="%knp_rad.view.listener.class%">
             <argument type="service" id="templating" />
             <argument>twig</argument>
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
         </service>
+
+        <service id="knp_rad.form.manager" class="%knp_rad.form.manager.class%">
+            <argument type="service" id="form.factory" />
+        </service>
+
     </services>
 
 </container>
