@@ -57,21 +57,15 @@ class Controller extends BaseController
 
         $result = null;
 
-        if ( is_object($entity) && $this->getEntityManager()->contains($entity) ){
-
+        if (is_object($entity) && $this->getEntityManager()->contains($entity)) {
             $result = $this->getEntityManager()->refresh($entity);
-
-        }elseif ( is_string($entity) ) {
-
+        } elseif (is_string($entity)) {
             $repository = $this->getRepository($entity);
             $result = $repository->findOneBy($criterias);
-
         }
 
-        if ( null !== $result ){
-
+        if (null !== $result){
             return $result;
-
         }
 
         throw $this->createNotFoundException('Resource not found');

@@ -2,6 +2,8 @@
 
 namespace Knp\RadBundle\Form;
 
+use Symfony\Component\Form\AbstractType;
+
 class FormManager
 {
     private $factory;
@@ -11,15 +13,21 @@ class FormManager
         $this->factory = $factory;
     }
 
-    public function createFormFor($data, array $options = array())
+    public function createFormFor($data, array $options = array(), AbstractType $type = null)
     {
-        return $this->factory->create($this->computeFormType($data), $data, $options);
+        if (null !== $type) {
+            $formType = $type;
+        } else {
+            $formType = $this->getDefaultFormType($data);
+        }
+
+        return $this->factory->create($formType, $data, $options);
     }
 
     /**
      * @throw \InvalidArgumentException when $entity is null
      */
-    private function computeFormType($entity)
+    private function getDefaultFormType($entity)
     {
         if (!is_object($entity)) {
             throw new \InvalidArgumentException(sprintf('Expected object, got %s', gettype($entity)));
