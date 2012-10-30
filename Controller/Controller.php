@@ -16,4 +16,14 @@ class Controller extends BaseController
     {
         return new AccessDeniedException($message, $previous);
     }
+
+    protected function getRepository()
+    {
+        return $this->getEntityManager()->getRepository('App\Entity\Cheese');
+    }
+
+    protected function getEntityManager()
+    {
+        return $this->getDoctrine()->getEntityManager();
+    }
 }
