@@ -11,9 +11,9 @@ class FormManager
         $this->factory = $factory;
     }
 
-    public function createFormFor($entity, $data = null, array $options = array())
+    public function createFormFor($data, array $options = array())
     {
-        return $this->factory->create($this->computeFormType($entity), $data, $options);
+        return $this->factory->create($this->computeFormType($data), $data, $options);
     }
 
     /**
