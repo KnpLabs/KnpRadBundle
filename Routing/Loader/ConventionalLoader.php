@@ -49,13 +49,29 @@ class ConventionalLoader extends FileLoader
             $collectionRoutes = array();
             if (!is_array($mapping) || !isset($mapping['collections'])) {
                 $collectionRoutes = $defaultCollectionRoutes;
+            } elseif (isset($mapping['collections'])) {
+                foreach ($mapping['collections'] as $action) {
+                    $route = $this->getRouteName($bundle, $class, $action);
+                    $collectionRoutes[$route] = isset($defaultCollectionRoutes[$route])
+                        ? $defaultCollectionRoutes[$route]
+                        : $this->getCustomCollectionRoute($bundle, $class, $action);
+                }
             }
+
             $resourceRoutes = array();
             if (!is_array($mapping) || !isset($mapping['resources'])) {
                 $resourceRoutes = $defaultResourceRoutes;
+            } elseif (isset($mapping['resources'])) {
+                foreach ($mapping['resources'] as $action) {
+                    $route = $this->getRouteName($bundle, $class, $action);
+                    $resourceRoutes[$route] = isset($defaultResourceRoutes[$route])
+                        ? $defaultResourceRoutes[$route]
+                        : $this->getCustomResourceRoute($bundle, $class, $action);
+                }
             }
 
             $controllerCollection = new RouteCollection();
+
             foreach ($collectionRoutes as $name => $route) {
                 $controllerCollection->add($name, $route);
             }
@@ -69,20 +85,20 @@ class ConventionalLoader extends FileLoader
         return $collection;
     }
 
-    public function getDefaultCollectionRoutes($bundle, $class)
+    private function getDefaultCollectionRoutes($bundle, $class)
     {
         return array(
-            sprintf('%s_%s_index', lcfirst($bundle), lcfirst($class)) => new Route(
+            $this->getRouteName($bundle, $class, 'index') => new Route(
                 '/',
                 array('_controller' => sprintf('%s:%s:index', $bundle, $class)),
                 array('_method' => 'GET')
             ),
-            sprintf('%s_%s_new', lcfirst($bundle), lcfirst($class)) => new Route(
+            $this->getRouteName($bundle, $class, 'new') => new Route(
                 '/new',
                 array('_controller' => sprintf('%s:%s:new', $bundle, $class)),
                 array('_method' => 'GET')
             ),
-            sprintf('%s_%s_create', lcfirst($bundle), lcfirst($class)) => new Route(
+            $this->getRouteName($bundle, $class, 'create') => new Route(
                 '/',
                 array('_controller' => sprintf('%s:%s:new', $bundle, $class)),
                 array('_method' => 'POST')
@@ -90,29 +106,52 @@ class ConventionalLoader extends FileLoader
         );
     }
 
-    public function getDefaultResourceRoutes($bundle, $class)
+    private function getCustomCollectionRoute($bundle, $class, $action)
+    {
+        return new Route(
+            '/'.$action,
+            array('_controller' => sprintf('%s:%s:%s', $bundle, $class, $action)),
+            array('_method' => 'GET')
+        );
+    }
+
+    private function getDefaultResourceRoutes($bundle, $class)
     {
         return array(
-            sprintf('%s_%s_show', lcfirst($bundle), lcfirst($class)) => new Route(
+            $this->getRouteName($bundle, $class, 'show') => new Route(
                 '/{id}',
                 array('_controller' => sprintf('%s:%s:show', $bundle, $class)),
                 array('_method' => 'GET', 'id' => '\\d+')
             ),
-            sprintf('%s_%s_edit', lcfirst($bundle), lcfirst($class)) => new Route(
+            $this->getRouteName($bundle, $class, 'edit') => new Route(
                 '/{id}/edit',
                 array('_controller' => sprintf('%s:%s:edit', $bundle, $class)),
                 array('_method' => 'GET', 'id' => '\\d+')
             ),
-            sprintf('%s_%s_update', lcfirst($bundle), lcfirst($class)) => new Route(
+            $this->getRouteName($bundle, $class, 'update') => new Route(
                 '/{id}',
                 array('_controller' => sprintf('%s:%s:edit', $bundle, $class)),
                 array('_method' => 'PUT', 'id' => '\\d+')
             ),
-            sprintf('%s_%s_delete', lcfirst($bundle), lcfirst($class)) => new Route(
+            $this->getRouteName($bundle, $class, 'delete') => new Route(
                 '/{id}',
                 array('_controller' => sprintf('%s:%s:delete', $bundle, $class)),
                 array('_method' => 'DELETE', 'id' => '\\d+')
             ),
         );
+    }
+
+    private function getCustomResourceRoute($bundle, $class, $action)
+    {
+        return new Route(
+            '/{id}/'.$action,
+            array('_controller' => sprintf('%s:%s:%s', $bundle, $class, $action)),
+            array('_method' => 'PUT', 'id' => '\\d+')
+        );
+    }
+
+    private function getRouteName($bundle, $class, $action)
+    {
+        return sprintf('%s_%s_%s', lcfirst($bundle), lcfirst($class), lcfirst($action));
     }
 }
