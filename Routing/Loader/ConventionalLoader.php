@@ -43,14 +43,63 @@ class ConventionalLoader extends FileLoader
                 $prefix = '/'.strtolower($class);
             }
 
+            $collectionDefaults = array();
+            $collectionRequirements = array();
+            $resourceDefaults = array();
+            $resourceRequirements = array();
+            if (is_array($mapping)) {
+                if (isset($mapping['defaults'])) {
+                    $collectionDefaults = $mapping['defaults'];
+                    $resourceDefaults   = $mapping['defaults'];
+                }
+                if (isset($mapping['requirements'])) {
+                    $collectionRequirements = $mapping['requirements'];
+                    $resourceRequirements   = $mapping['requirements'];
+                }
+
+                if (isset($mapping['collections']) && is_array($mapping['collections'])) {
+                    if (isset($mapping['collections']['defaults'])) {
+                        $collectionDefaults = array_merge(
+                            $collectionDefaults, $mapping['collections']['defaults']
+                        );
+                        unset($mapping['collections']['defaults']);
+                    }
+                    if (isset($mapping['collections']['requirements'])) {
+                        $collectionRequirements = array_merge(
+                            $collectionRequirements, $mapping['collections']['requirements']
+                        );
+                        unset($mapping['collections']['requirements']);
+                    }
+                }
+
+                if (isset($mapping['resources']) && is_array($mapping['resources'])) {
+                    if (isset($mapping['resources']['defaults'])) {
+                        $resourceDefaults = array_merge(
+                            $resourceDefaults, $mapping['resources']['defaults']
+                        );
+                        unset($mapping['resources']['defaults']);
+                    }
+                    if (isset($mapping['resources']['requirements'])) {
+                        $resourceRequirements = array_merge(
+                            $resourceRequirements, $mapping['resources']['requirements']
+                        );
+                        unset($mapping['resources']['requirements']);
+                    }
+                }
+            }
+
             $collectionRoutes = $this->getCollectionRoutesFromMapping($mapping, $bundle, $class);
             $resourceRoutes   = $this->getResourceRoutesFromMapping($mapping, $bundle, $class);
 
             $controllerCollection = new RouteCollection();
             foreach ($collectionRoutes as $name => $route) {
+                $route->setDefaults(array_merge($collectionDefaults, $route->getDefaults()));
+                $route->setRequirements(array_merge($collectionRequirements, $route->getRequirements()));
                 $controllerCollection->add($name, $route);
             }
             foreach ($resourceRoutes as $name => $route) {
+                $route->setDefaults(array_merge($resourceDefaults, $route->getDefaults()));
+                $route->setRequirements(array_merge($resourceRequirements, $route->getRequirements()));
                 $controllerCollection->add($name, $route);
             }
             $collection->addCollection($controllerCollection, $prefix);
