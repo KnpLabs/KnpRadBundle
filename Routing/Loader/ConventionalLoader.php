@@ -43,96 +43,108 @@ class ConventionalLoader extends FileLoader
                 $prefix = '/'.strtolower($class);
             }
 
-            $defaultCollectionRoutes = $this->getDefaultCollectionRoutes($bundle, $class);
-            $defaultResourceRoutes   = $this->getDefaultResourceRoutes($bundle, $class);
-
-            $collectionRoutes = array();
-            if (!is_array($mapping) || !isset($mapping['collections'])) {
-                $collectionRoutes = $defaultCollectionRoutes;
-            } elseif (isset($mapping['collections'])) {
-                foreach ($mapping['collections'] as $action => $params) {
-                    if (is_integer($action)) {
-                        $action = $params;
-                        $params = null;
-                    }
-
-                    $routeName = $this->getRouteName($bundle, $class, $action);
-                    $route = isset($defaultCollectionRoutes[$routeName])
-                        ? $defaultCollectionRoutes[$routeName]
-                        : $this->getCustomCollectionRoute($bundle, $class, $action);
-
-                    if (is_string($params)) {
-                        $route->setPattern($params);
-                    }
-
-                    if (is_array($params)) {
-                        if (isset($params['pattern'])) {
-                            $route->setPattern($params['pattern']);
-                        }
-                        if (isset($params['defaults'])) {
-                            $route->setDefaults(array_merge(
-                                $route->getDefaults(), $params['defaults']
-                            ));
-                        }
-                        if (isset($params['requirements'])) {
-                            $route->setRequirements($params['requirements']);
-                        }
-                    }
-
-                    $collectionRoutes[$routeName] = $route;
-                }
-            }
-
-            $resourceRoutes = array();
-            if (!is_array($mapping) || !isset($mapping['resources'])) {
-                $resourceRoutes = $defaultResourceRoutes;
-            } elseif (isset($mapping['resources'])) {
-                foreach ($mapping['resources'] as $action => $params) {
-                    if (is_integer($action)) {
-                        $action = $params;
-                        $params = null;
-                    }
-
-                    $routeName = $this->getRouteName($bundle, $class, $action);
-                    $route = isset($defaultResourceRoutes[$routeName])
-                        ? $defaultResourceRoutes[$routeName]
-                        : $this->getCustomResourceRoute($bundle, $class, $action);
-
-                    if (is_string($params)) {
-                        $route->setPattern($params);
-                    }
-
-                    if (is_array($params)) {
-                        if (isset($params['pattern'])) {
-                            $route->setPattern($params['pattern']);
-                        }
-                        if (isset($params['defaults'])) {
-                            $route->setDefaults(array_merge(
-                                $route->getDefaults(), $params['defaults']
-                            ));
-                        }
-                        if (isset($params['requirements'])) {
-                            $route->setRequirements($params['requirements']);
-                        }
-                    }
-
-                    $resourceRoutes[$routeName] = $route;
-                }
-            }
+            $collectionRoutes = $this->getCollectionRoutesFromMapping($mapping, $bundle, $class);
+            $resourceRoutes   = $this->getResourceRoutesFromMapping($mapping, $bundle, $class);
 
             $controllerCollection = new RouteCollection();
-
             foreach ($collectionRoutes as $name => $route) {
                 $controllerCollection->add($name, $route);
             }
             foreach ($resourceRoutes as $name => $route) {
                 $controllerCollection->add($name, $route);
             }
-
             $collection->addCollection($controllerCollection, $prefix);
         }
 
         return $collection;
+    }
+
+    private function getCollectionRoutesFromMapping($mapping, $bundle, $class)
+    {
+        $defaults = $this->getDefaultCollectionRoutes($bundle, $class);
+        if (!is_array($mapping) || !isset($mapping['collections'])) {
+            return $defaults;
+        }
+
+        $collections = $mapping['collections'];
+        if (0 == count($collections)) {
+            return $defaults;
+        }
+
+        $routes = array();
+        foreach ($collections as $action => $params) {
+            if (is_integer($action)) {
+                $action = $params;
+                $params = null;
+            }
+
+            $routeName = $this->getRouteName($bundle, $class, $action);
+            if (isset($defaults[$routeName])) {
+                $route = $defaults[$routeName];
+            } else {
+                $route = $this->getCustomCollectionRoute($bundle, $class, $action);
+            }
+
+            $this->overrideRouteParams($route, $params);
+
+            $routes[$routeName] = $route;
+        }
+
+        return $routes;
+    }
+
+    private function getResourceRoutesFromMapping($mapping, $bundle, $class)
+    {
+        $defaults = $this->getDefaultResourceRoutes($bundle, $class);
+        if (!is_array($mapping) || !isset($mapping['resources'])) {
+            return $defaults;
+        }
+
+        $resources = $mapping['resources'];
+        if (0 == count($resources)) {
+            return $defaults;
+        }
+
+        $routes = array();
+        foreach ($resources as $action => $params) {
+            if (is_integer($action)) {
+                $action = $params;
+                $params = null;
+            }
+
+            $routeName = $this->getRouteName($bundle, $class, $action);
+            if (isset($defaults[$routeName])) {
+                $route = $defaults[$routeName];
+            } else {
+                $route = $this->getCustomResourceRoute($bundle, $class, $action);
+            }
+
+            $this->overrideRouteParams($route, $params);
+
+            $routes[$routeName] = $route;
+        }
+
+        return $routes;
+    }
+
+    private function overrideRouteParams(Route $route, $params)
+    {
+        if (is_string($params)) {
+            $route->setPattern($params);
+        }
+        if (is_array($params)) {
+            if (isset($params['pattern'])) {
+                $route->setPattern($params['pattern']);
+            }
+            if (isset($params['defaults'])) {
+                $route->setDefaults(array_merge(
+                    $route->getDefaults(), $params['defaults']
+                ));
+            }
+            if (isset($params['requirements'])) {
+                $route->setRequirements($params['requirements']);
+            }
+        }
     }
 
     private function getDefaultCollectionRoutes($bundle, $class)
