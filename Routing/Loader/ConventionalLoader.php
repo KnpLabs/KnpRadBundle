@@ -65,6 +65,20 @@ class ConventionalLoader extends FileLoader
                         $route->setPattern($params);
                     }
 
+                    if (is_array($params)) {
+                        if (isset($params['pattern'])) {
+                            $route->setPattern($params['pattern']);
+                        }
+                        if (isset($params['defaults'])) {
+                            $route->setDefaults(array_merge(
+                                $route->getDefaults(), $params['defaults']
+                            ));
+                        }
+                        if (isset($params['requirements'])) {
+                            $route->setRequirements($params['requirements']);
+                        }
+                    }
+
                     $collectionRoutes[$routeName] = $route;
                 }
             }
@@ -86,6 +100,20 @@ class ConventionalLoader extends FileLoader
 
                     if (is_string($params)) {
                         $route->setPattern($params);
+                    }
+
+                    if (is_array($params)) {
+                        if (isset($params['pattern'])) {
+                            $route->setPattern($params['pattern']);
+                        }
+                        if (isset($params['defaults'])) {
+                            $route->setDefaults(array_merge(
+                                $route->getDefaults(), $params['defaults']
+                            ));
+                        }
+                        if (isset($params['requirements'])) {
+                            $route->setRequirements($params['requirements']);
+                        }
                     }
 
                     $resourceRoutes[$routeName] = $route;
