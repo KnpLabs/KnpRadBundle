@@ -50,11 +50,22 @@ class ConventionalLoader extends FileLoader
             if (!is_array($mapping) || !isset($mapping['collections'])) {
                 $collectionRoutes = $defaultCollectionRoutes;
             } elseif (isset($mapping['collections'])) {
-                foreach ($mapping['collections'] as $action) {
-                    $route = $this->getRouteName($bundle, $class, $action);
-                    $collectionRoutes[$route] = isset($defaultCollectionRoutes[$route])
-                        ? $defaultCollectionRoutes[$route]
+                foreach ($mapping['collections'] as $action => $params) {
+                    if (is_integer($action)) {
+                        $action = $params;
+                        $params = null;
+                    }
+
+                    $routeName = $this->getRouteName($bundle, $class, $action);
+                    $route = isset($defaultCollectionRoutes[$routeName])
+                        ? $defaultCollectionRoutes[$routeName]
                         : $this->getCustomCollectionRoute($bundle, $class, $action);
+
+                    if (is_string($params)) {
+                        $route->setPattern($params);
+                    }
+
+                    $collectionRoutes[$routeName] = $route;
                 }
             }
 
@@ -62,11 +73,22 @@ class ConventionalLoader extends FileLoader
             if (!is_array($mapping) || !isset($mapping['resources'])) {
                 $resourceRoutes = $defaultResourceRoutes;
             } elseif (isset($mapping['resources'])) {
-                foreach ($mapping['resources'] as $action) {
-                    $route = $this->getRouteName($bundle, $class, $action);
-                    $resourceRoutes[$route] = isset($defaultResourceRoutes[$route])
-                        ? $defaultResourceRoutes[$route]
+                foreach ($mapping['resources'] as $action => $params) {
+                    if (is_integer($action)) {
+                        $action = $params;
+                        $params = null;
+                    }
+
+                    $routeName = $this->getRouteName($bundle, $class, $action);
+                    $route = isset($defaultResourceRoutes[$routeName])
+                        ? $defaultResourceRoutes[$routeName]
                         : $this->getCustomResourceRoute($bundle, $class, $action);
+
+                    if (is_string($params)) {
+                        $route->setPattern($params);
+                    }
+
+                    $resourceRoutes[$routeName] = $route;
                 }
             }
 
