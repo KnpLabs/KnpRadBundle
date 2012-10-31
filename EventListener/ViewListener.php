@@ -46,7 +46,11 @@ class ViewListener
             return;
         }
 
-        $controller = $this->parser->parse($attributes->get('_controller'));
+        $controller = $attributes->get('_controller');
+        if (3 == count(explode(':', $controller))) {
+            $controller = $this->parser->parse($controller);
+        }
+
         list($class, $method) = explode('::', $controller, 2);
 
         $group = preg_replace(array('#^.*\\Controller\\\\#', '#Controller$#'), '', $class);
