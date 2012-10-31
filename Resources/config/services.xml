@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="knp_rad.view.listener.class">Knp\RadBundle\EventListener\ViewListener</parameter>
         <parameter key="knp_rad.form.manager.class">Knp\RadBundle\Form\FormManager</parameter>
+        <parameter key="knp_rad.form.default_creator.class">Knp\RadBundle\Form\DefaultFormCreator</parameter>
         <parameter key="knp_rad.routing.loader.class">Knp\RadBundle\Routing\Loader\ConventionalLoader</parameter>
     </parameters>
 
@@ -18,8 +19,13 @@
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
         </service>
 
+        <service id="knp_rad.form.default_creator" class="%knp_rad.form.default_creator.class%">
+            <argument type="service" id="form.factory" />
+        </service>
+
         <service id="knp_rad.form.manager" class="%knp_rad.form.manager.class%">
             <argument type="service" id="form.factory" />
+            <argument type="service" id="knp_rad.form.default_creator" />
         </service>
 
         <service id="knp_rad.routing.loader" class="%knp_rad.routing.loader.class%" public="false">

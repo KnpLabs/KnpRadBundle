@@ -3,52 +3,48 @@
 namespace Knp\RadBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class FormManager
 {
     private $factory;
+    private $formCreator;
 
-    public function __construct($factory)
+    public function __construct(FormFactoryInterface $factory, DefaultFormCreator $formCreator)
     {
-        $this->factory = $factory;
+        $this->factory     = $factory;
+        $this->formCreator = $formCreator;
     }
 
-    public function createFormFor($data, array $options = array(), AbstractType $type = null)
+    public function createFormFor($data, $name = null, array $options = array())
     {
-        if (null !== $type) {
-            $formType = $type;
-        } else {
-            $formType = $this->getDefaultFormType($data);
+        if (null !== $name) {
+            // if a FormType is provided, we use it
+            //TODO Check that FormType provided is compatible with $data class
+            return $this->factory->create($this->getFormType($data, $name), $data, $options);
         }
 
+        // We look for a corresponding FormType
+        if (null === $formType = $this->getDefaultFormType($data)) {
+            // if no form type is found, we create one by looking $data properties
+
+            return $this->formCreator->buildFormForObject($data, $options);
+        }
+
+        // If one is found, we use it
         return $this->factory->create($formType, $data, $options);
     }
 
-    /**
-     * @throw \InvalidArgumentException when $entity is null
-     */
-    private function getDefaultFormType($entity)
+    private function getFormType($entity, $name = null)
     {
-        if (!is_object($entity)) {
-            throw new \InvalidArgumentException(sprintf('Expected object, got %s', gettype($entity)));
-        }
-
-        $class = get_class($entity);
-        $formClass = $this->getFormType($class);
-
-        return new $formClass();
-    }
-
-    private function getFormType($entityClass)
-    {
+        $entityClass = is_object($entity) ? get_class($entity) : $entity;
         $arr = explode('\\', $entityClass);
-        $formClass = sprintf('App\Form\%sType', end($arr));
-
+        $formClass = sprintf('App\Form\%s%sType', ucfirst($name), end($arr));
         if (!class_exists($formClass)) {
-            if (false !== $parentClass = get_parent_class($entityClass)) {
+            if (false !== $parentClass = get_parent_class($entity)) {
                 $formClass = $this->getFormType($parentClass);
             } else {
-                throw new \Exception(sprintf('Couldn\'t find a form type associated with %s', $entityClass));
+                return;
             }
         }
 
