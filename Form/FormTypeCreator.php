@@ -14,13 +14,13 @@ class FormTypeCreator implements FormCreatorInterface
         $formClass = $this->getFormType($object, $purpose);
 
         if (null !== $formClass) {
-            return new $formClass();
+            return $this->fetcher->newInstance($formClass, array($object, $options));
         }
     }
 
     private function getFormType($object, $purpose = null)
     {
-        $objectClass = is_object($object) ? get_class($object) : $object;
+        $objectClass = is_object($object) ? $this->fetcher->getClass($object) : $object;
         $arr         = explode('\\', $objectClass);
         $formClass   = sprintf('App\Form\%s%sType', ucfirst($purpose), end($arr));
 
