@@ -1,3 +1,17 @@
-{% block datatable %}
-
-{% endblock %}
+<table class="table">
+    <thead>
+        {% for id, title in elements|toHeadersArray(fields) %}
+        <th id="header-{{ id }}">{{ title }}</th>
+        {% endfor %}
+    </thead>
+    <tbody>
+        {% for element in elements %}
+            <tr>
+            {% set element = element|toArray %}
+            {% for id, title in elements|toHeadersArray(fields) %}
+                <td>{% if element[id] is defined %}{{ element[id] }}{% endif %}</td>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

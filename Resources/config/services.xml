@@ -34,6 +34,7 @@
             <tag name="routing.loader" />
         </service>
         <service id="knp_rad.twig.datatable" class="%knp_rad.twig.datatable.class%">
+            <argument type="service" id="service_container" />
             <tag name="twig.extension" />
         </service>
     </services>
