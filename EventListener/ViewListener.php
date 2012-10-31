@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser;
 
 /**
  * Adds Response event listener to render no-Response
@@ -14,17 +15,20 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 class ViewListener
 {
     private $templating;
+    private $parser;
     private $engine;
 
     /**
      * Initializes listener.
      *
-     * @param EngineInterface $templating  Templating engine
-     * @param string          $engine      Default engine name
+     * @param EngineInterface      $templating  Templating engine
+     * @param ControllerNameParser $parser      Controller name parser
+     * @param string               $engine      Default engine name
      */
-    public function __construct(EngineInterface $templating, $engine)
+    public function __construct(EngineInterface $templating, ControllerNameParser $parser, $engine)
     {
         $this->templating = $templating;
+        $this->parser     = $parser;
         $this->engine     = $engine;
     }
 
@@ -38,11 +42,12 @@ class ViewListener
         $request    = $event->getRequest();
         $attributes = $request->attributes;
 
-        if (false === strpos($attributes->get('_controller'), '::')) {
+        if (!$attributes->has('_controller')) {
             return;
         }
 
-        list($class, $method) = explode('::', $attributes->get('_controller'));
+        $controller = $this->parser->parse($attributes->get('_controller'));
+        list($class, $method) = explode('::', $controller, 2);
 
         $group = preg_replace(array('#^.*\\Controller\\\\#', '#Controller$#'), '', $class);
         $group = str_replace('\\', '/', $group);

@@ -13,6 +13,7 @@
     <services>
         <service id="knp_rad.view.listener" class="%knp_rad.view.listener.class%">
             <argument type="service" id="templating" />
+            <argument type="service" id="controller_name_converter" />
             <argument>twig</argument>
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
         </service>
