@@ -81,4 +81,9 @@ class Controller extends BaseController
         $this->get('session')->set($name, $value);
     }
 
+    public function setFlash($type, $message)
+    {
+        $this->get('session')->setFlash($type, $message);
+    }
+
 }
