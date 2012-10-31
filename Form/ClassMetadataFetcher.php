@@ -32,4 +32,16 @@ class ClassMetadataFetcher
             return $parent->getName();
         }
     }
+
+    public function getMethods($object)
+    {
+        return array_map(function ($method) {
+            return $method->getName();
+        }, $this->reflect($object)->getMethods());
+    }
+
+    public function hasMethod($object, $methodName)
+    {
+        return $this->reflect($object)->hasMethod($methodName);
+    }
 }
