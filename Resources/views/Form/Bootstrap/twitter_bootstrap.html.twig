@@ -255,8 +255,8 @@
 {% block form_row %}
 {% spaceless %}
     <div>
-        {{ form_label(form) }}
         {{ form_errors(form) }}
+        {{ form_label(form) }}
         {{ form_widget(form) }}
     </div>
 {% endspaceless %}
@@ -277,15 +277,15 @@
 {% block form_errors %}
 {% spaceless %}
     {% if errors|length > 0 %}
-    <ul>
+    <div class="alert alert-error">
         {% for error in errors %}
-            <li>{{
+            {{
                 error.messagePluralization is null
                     ? error.messageTemplate|trans(error.messageParameters, 'validators')
                     : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
-            }}</li>
+            }}
         {% endfor %}
-    </ul>
+    </div>
     {% endif %}
 {% endspaceless %}
 {% endblock form_errors %}

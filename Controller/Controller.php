@@ -81,8 +81,12 @@ class Controller extends BaseController
         $this->get('session')->set($name, $value);
     }
 
-    public function setFlash($type, $message)
+    public function setFlash($type, $message, $title = null)
     {
+        $message = null === $title
+            ? $message
+            : sprintf('<h4>%s</h4>%s', $title, $message);
+        ;
         $this->get('session')->setFlash($type, $message);
     }
 
