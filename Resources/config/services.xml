@@ -9,6 +9,7 @@
         <parameter key="knp_rad.form.manager.class">Knp\RadBundle\Form\FormManager</parameter>
         <parameter key="knp_rad.form.default_creator.class">Knp\RadBundle\Form\DefaultFormCreator</parameter>
         <parameter key="knp_rad.routing.loader.class">Knp\RadBundle\Routing\Loader\ConventionalLoader</parameter>
+        <parameter key="knp_rad.twig.datatable.class">Knp\RadBundle\Twig\DataTableTwigExtension</parameter>
     </parameters>
 
     <services>
@@ -31,6 +32,9 @@
         <service id="knp_rad.routing.loader" class="%knp_rad.routing.loader.class%" public="false">
             <argument type="service" id="file_locator" />
             <tag name="routing.loader" />
+        </service>
+        <service id="knp_rad.twig.datatable" class="%knp_rad.twig.datatable.class%">
+            <tag name="twig.extension" />
         </service>
     </services>
 
