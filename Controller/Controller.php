@@ -71,4 +71,19 @@ class Controller extends BaseController
         throw $this->createNotFoundException('Resource not found');
     }
 
+    public function getSession($name, $default = null)
+    {
+        return $this->get('session')->get($name, $default);
+    }
+
+    public function setSession($name, $value)
+    {
+        $this->get('session')->set($name, $value);
+    }
+
+    public function setFlash($type, $message)
+    {
+        $this->get('session')->setFlash($type, $message);
+    }
+
 }
