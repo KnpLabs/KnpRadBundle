@@ -47,7 +47,7 @@ class ViewListener
         }
 
         $controller = $attributes->get('_controller');
-        if (3 == count(explode(':', $controller))) {
+        if (false === strpos($controller, '::')) {
             $controller = $this->parser->parse($controller);
         }
 
