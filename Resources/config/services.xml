@@ -20,13 +20,8 @@
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
         </service>
 
-        <service id="knp_rad.form.default_creator" class="%knp_rad.form.default_creator.class%">
-            <argument type="service" id="form.factory" />
-        </service>
-
         <service id="knp_rad.form.manager" class="%knp_rad.form.manager.class%">
             <argument type="service" id="form.factory" />
-            <argument type="service" id="knp_rad.form.default_creator" />
         </service>
 
         <service id="knp_rad.routing.loader" class="%knp_rad.routing.loader.class%" public="false">
