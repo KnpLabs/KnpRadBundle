@@ -15,7 +15,8 @@ class DataTableTwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'bootstrap_datatable' => new \Twig_Function_Method($this, 'getDataTableRender', array('is_safe' => array('html'))),
+            'bootstrap_datatable'       => new \Twig_Function_Method($this, 'getDataTableRender', array('is_safe' => array('html'))),
+            'bootstrap_datatable_row'   => new \Twig_Function_Method($this, 'getDataTableRowRender', array('is_safe' => array('html'))),
         );
     }
 
@@ -35,6 +36,18 @@ class DataTableTwigExtension extends \Twig_Extension
             ->render(
                 'KnpRadBundle:Twig:datatable.html.twig',
                 array('elements' => $elements, 'fields' => $fields)
+            )
+        ;
+    }
+
+    public function getDataTableRowRender($element, $headers, $fields = array())
+    {
+        return $this
+            ->container
+            ->get('templating')
+            ->render(
+                'KnpRadBundle:Twig:datatable_row.html.twig',
+                array('element' => $element, 'headers' => $headers, 'fields' => $fields)
             )
         ;
     }
@@ -86,7 +99,7 @@ class DataTableTwigExtension extends \Twig_Extension
 
     }
 
-    public function toArrayFilter($el)
+    public function toArrayFilter($el, $fields = array ())
     {
 
         $values = array();
@@ -105,10 +118,12 @@ class DataTableTwigExtension extends \Twig_Extension
             foreach ($methods as $method) {
                 preg_match('#get(?P<name>.*)#', $method->name, $matches);
 
-                $value = $el->{$method->name}();
                 $name = strtolower($matches['name']);
-                if (!is_object($value) && !is_array($value)) {
-                    $values[$name] = $value;
+                if (0 === count($fields) || array_key_exists($name, $fields)) {
+                    $value = $el->{$method->name}();
+                    if (!is_object($value) && !is_array($value)) {
+                        $values[$name] = $value;
+                    }
                 }
             }
 

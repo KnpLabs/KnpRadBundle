@@ -1,0 +1,8 @@
+<tr>
+{% set element = element|toArray(fields) %}
+{% for id, title in headers %}
+    <td>
+        {% if element[id] is defined %}{{ element[id] }}{% endif %}
+    </td>
+{% endfor %}
+</tr>

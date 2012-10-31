@@ -6,12 +6,7 @@
     </thead>
     <tbody>
         {% for element in elements %}
-            <tr>
-            {% set element = element|toArray %}
-            {% for id, title in elements|toHeadersArray(fields) %}
-                <td>{% if element[id] is defined %}{{ element[id] }}{% endif %}</td>
-            {% endfor %}
-            </tr>
+            {{ bootstrap_datatable_row(element, elements|toHeadersArray(fields), fields) }}
         {% endfor %}
     </tbody>
 </table>
