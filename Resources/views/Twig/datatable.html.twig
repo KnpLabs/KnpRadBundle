@@ -1,12 +1,10 @@
-<table class="table">
-    <thead>
-        {% for id, title in elements|toHeadersArray(options) %}
-        <th id="header-{{ id }}">{{ title }}</th>
-        {% endfor %}
-    </thead>
-    <tbody>
-        {% for element in elements %}
-            {{ bootstrap_datatable_row(element, elements|toHeadersArray(options), options) }}
-        {% endfor %}
-    </tbody>
-</table>
+<thead>
+    {% for id, title in elements|toHeadersArray(options) %}
+    <th id="header-{{ id }}">{{ title }}</th>
+    {% endfor %}
+</thead>
+<tbody>
+    {% for element in elements %}
+        {{ bootstrap_datatable_row(element, elements|toHeadersArray(options), options) }}
+    {% endfor %}
+</tbody>
