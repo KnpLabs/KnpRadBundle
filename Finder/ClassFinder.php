@@ -18,15 +18,15 @@ class ClassFinder
 
     public function findClasses($directory, $namespace)
     {
+        if (false === $this->filesystem->exists($directory)) {
+            return array();
+        }
+
         $classes = array();
 
         $this->finder->files();
         $this->finder->name('*.php');
         $this->finder->in($directory);
-
-        if (false === $this->filesystem->exists($directory)) {
-            return $classes;
-        }
 
         foreach ($this->finder->getIterator() as $name) {
             $baseName = substr($name, strlen($directory)+1, -4);
