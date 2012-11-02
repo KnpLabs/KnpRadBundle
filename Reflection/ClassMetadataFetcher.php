@@ -29,7 +29,7 @@ class ClassMetadataFetcher
         $parentClass = $this->reflect($object)->getParentClass();
 
         if ($parentClass instanceof \ReflectionClass) {
-            return $parent->getName();
+            return $parentClass->getName();
         }
     }
 
