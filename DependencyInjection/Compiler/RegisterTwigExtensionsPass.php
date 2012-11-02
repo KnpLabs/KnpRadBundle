@@ -9,19 +9,22 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Knp\RadBundle\Finder\ClassFinder;
 use Knp\RadBundle\DependencyInjection\Definition\TwigExtensionFactory;
 use Knp\RadBundle\DependencyInjection\ReferenceFactory;
+use Knp\RadBundle\DependencyInjection\ServiceIdGenerator;
 
 class RegisterTwigExtensionsPass implements CompilerPassInterface
 {
     private $bundle;
     private $classFinder;
     private $definitionFactory;
+    private $serviceIdGenerator;
 
-    public function __construct(BundleInterface $bundle, ClassFinder $classFinder = null, TwigExtensionFactory $definitionFactory = null, ReferenceFactory $referenceFactory = null)
+    public function __construct(BundleInterface $bundle, ClassFinder $classFinder = null, TwigExtensionFactory $definitionFactory = null, ReferenceFactory $referenceFactory = null, ServiceIdGenerator $serviceIdGenerator = null)
     {
         $this->bundle = $bundle;
         $this->classFinder = $classFinder ?: new ClassFinder();
         $this->definitionFactory = $definitionFactory ?: new TwigExtensionServiceFactory();
         $this->referenceFactory = $referenceFactory ?: new ReferenceFactory();
+        $this->serviceIdGenerator = $serviceIdGenerator ?: new ServiceIdGenerator();
     }
 
     /**
@@ -41,9 +44,7 @@ class RegisterTwigExtensionsPass implements CompilerPassInterface
         $classes = $this->classFinder->findClassesMatching($directory, $namespace, 'Extension$');
 
         foreach ($classes as $class) {
-            $baseClass = substr($class, strlen($namespace) + 1);
-
-            $id = sprintf('app.twig.%s', str_replace('\\', '.', Container::underscore($baseClass)));
+            $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
             $def = $this->definitionFactory->createDefinition($class);
             $ref = $this->referenceFactory->createReference($id);
 
