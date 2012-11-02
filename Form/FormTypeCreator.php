@@ -3,12 +3,17 @@
 namespace Knp\RadBundle\Form;
 
 use Knp\RadBundle\Reflection\ClassMetadataFetcher;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class FormTypeCreator implements FormCreatorInterface
 {
-    public function __construct(ClassMetadataFetcher $fetcher = null)
+    private $fetcher;
+    private $factory;
+
+    public function __construct(ClassMetadataFetcher $fetcher = null, FormFactoryInterface $factory)
     {
         $this->fetcher = $fetcher ?: new ClassMetadataFetcher;
+        $this->factory = $factory;
     }
 
     public function create($object, $purpose = null, array $options = array())
@@ -16,7 +21,9 @@ class FormTypeCreator implements FormCreatorInterface
         $formClass = $this->getFormType($object, $purpose);
 
         if (null !== $formClass) {
-            return $this->fetcher->newInstance($formClass, array($object, $options));
+            $formType = $this->fetcher->newInstance($formClass);
+
+            return $this->factory->create($formType, $object, $options);
         }
     }
 

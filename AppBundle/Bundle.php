@@ -5,12 +5,14 @@ namespace Knp\RadBundle\AppBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle as BaseBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Knp\RadBundle\DependencyInjection\Compiler\RegisterDoctrineRepositoriesPass;
+use Knp\RadBundle\DependencyInjection\Compiler\RegisterFormCreatorCompilerPass;
 
 class Bundle extends BaseBundle
 {
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new RegisterDoctrineRepositoriesPass($this));
+        $container->addCompilerPass(new RegisterFormCreatorCompilerPass);
     }
 
     public function getContainerExtension()

@@ -13,7 +13,8 @@ class FormManager
                 return $form;
             }
         }
-        throw new \RuntimeException(sprintf('No creator fitted your need!!!'));
+
+        throw new \RuntimeException(sprintf('The form manager was unable to create the form. Please, make sure you have correctly registered one that fit your need.'));
     }
 
     public function registerCreator(FormCreatorInterface $creator)

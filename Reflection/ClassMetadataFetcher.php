@@ -14,9 +14,9 @@ class ClassMetadataFetcher
         return class_exists($classname);
     }
 
-    public function newInstance($class, array $args = array())
+    public function newInstance($class)
     {
-        return $this->reflect($class)->newInstanceArgs($args);
+        return $this->reflect($class)->newInstance();
     }
 
     public function reflect($classname)
@@ -26,7 +26,7 @@ class ClassMetadataFetcher
 
     public function getParentClass($object)
     {
-        $parentClass = $this->reflect($classname)->getParentClass();
+        $parentClass = $this->reflect($object)->getParentClass();
 
         if ($parentClass instanceof \ReflectionClass) {
             return $parent->getName();

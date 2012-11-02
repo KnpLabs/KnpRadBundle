@@ -90,4 +90,8 @@ class Controller extends BaseController
         $this->get('session')->setFlash($type, $message);
     }
 
+    public function getFormFor($object, $purpose = null, array $options = array())
+    {
+        return $this->get('knp_rad.form.manager')->createObjectForm($object, $purpose, $options);
+    }
 }

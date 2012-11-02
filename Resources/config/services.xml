@@ -6,8 +6,13 @@
 
     <parameters>
         <parameter key="knp_rad.view.listener.class">Knp\RadBundle\EventListener\ViewListener</parameter>
+
         <parameter key="knp_rad.form.manager.class">Knp\RadBundle\Form\FormManager</parameter>
+        <parameter key="knp_rad.form.type_creator.class">Knp\RadBundle\Form\FormTypeCreator</parameter>
         <parameter key="knp_rad.form.default_creator.class">Knp\RadBundle\Form\DefaultFormCreator</parameter>
+
+        <parameter key="knp_rad.reflection.metadata_fetcher.class">Knp\RadBundle\Reflection\ClassMetadataFetcher</parameter>
+
         <parameter key="knp_rad.routing.loader.class">Knp\RadBundle\Routing\Loader\ConventionalLoader</parameter>
         <parameter key="knp_rad.twig.datatable.class">Knp\RadBundle\Twig\DataTableTwigExtension</parameter>
     </parameters>
@@ -21,8 +26,21 @@
         </service>
 
         <service id="knp_rad.form.manager" class="%knp_rad.form.manager.class%">
-            <argument type="service" id="form.factory" />
         </service>
+
+        <service id="knp_rad.form.type_creator" class="%knp_rad.form.type_creator.class%" public="false">
+            <argument type="service" id="knp_rad.reflection.metadata_fetcher" />
+            <argument type="service" id="form.factory" />
+            <tag name="knp_rad.form.creator" />
+        </service>
+
+        <service id="knp_rad.form.default_creator" class="%knp_rad.form.default_creator.class%" public="false">
+            <argument type="service" id="knp_rad.reflection.metadata_fetcher" />
+            <argument type="service" id="form.factory" />
+            <tag name="knp_rad.form.creator" />
+        </service>
+
+        <service id="knp_rad.reflection.metadata_fetcher" class="%knp_rad.reflection.metadata_fetcher.class%" public="false"></service>
 
         <service id="knp_rad.routing.loader" class="%knp_rad.routing.loader.class%" public="false">
             <argument type="service" id="file_locator" />
