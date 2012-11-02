@@ -21,21 +21,28 @@ class DefaultFormCreator implements FormCreatorInterface
         $builder = $this->factory->createBuilder('form', $object, $options);
 
         foreach ($this->fetcher->getMethods($object) as $method) {
-            if (0 === strpos($method, 'get')) {
-                $this->addField($builder, $object, strtolower(substr($method, 3)));
+            if (0 === strpos($method, 'get') || 0 === strpos($method, 'is')) {
+                $propertyName = $this->extractPropertyName($method);
+                if ($this->hasRelatedSetter($object, $propertyName)) {
+                    $builder->add($propertyName);
+                }
             }
-            if (0 === strpos($method, 'is')) {
-                $this->addField($builder, $object, strtolower(substr($method, 2)));
-            }
+        }
+
+        foreach ($this->fetcher->getProperties($object) as $property) {
+            $builder->add($property);
         }
 
         return $builder->getForm();
     }
 
-    private function addField($builder, $object, $propertyName)
+    private function extractPropertyName($methodName)
     {
-        if ($this->fetcher->hasMethod($object, 'set'.ucfirst($propertyName))) {
-            $builder->add($propertyName);
-        }
+        return lcfirst(preg_replace('#is|get#', '', $methodName));
+    }
+
+    private function hasRelatedSetter($object, $propertyName)
+    {
+        return $this->fetcher->hasMethod($object, 'set'.ucfirst($propertyName));
     }
 }
