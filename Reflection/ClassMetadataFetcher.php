@@ -37,7 +37,14 @@ class ClassMetadataFetcher
     {
         return array_map(function ($method) {
             return $method->getName();
-        }, $this->reflect($object)->getMethods());
+        }, $this->reflect($object)->getMethods(\ReflectionMethod::IS_PUBLIC));
+    }
+
+    public function getProperties($object)
+    {
+        return array_map(function($property) {
+            return $property->getName();
+        }, $this->reflect($object)->getProperties(\ReflectionProperty::IS_PUBLIC));
     }
 
     public function hasMethod($object, $methodName)

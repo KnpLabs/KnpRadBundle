@@ -4,6 +4,7 @@ namespace Knp\RadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 
 class Controller extends BaseController
 {
@@ -86,5 +87,10 @@ class Controller extends BaseController
     protected function createObjectForm($object, $purpose = null, array $options = array())
     {
         return $this->get('knp_rad.form.manager')->createObjectForm($object, $purpose, $options);
+    }
+
+    public function getBoundFormFor($object, Request $request, $purpose = null, array $options = array())
+    {
+        return $this->get('knp_rad.form.manager')->createBoundObjectForm($object, $request, $purpose, $options);
     }
 }
