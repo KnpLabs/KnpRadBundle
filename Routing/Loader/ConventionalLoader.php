@@ -296,22 +296,22 @@ class ConventionalLoader extends FileLoader
             $this->getRouteName($bundle, $class, 'show') => new Route(
                 '/{id}',
                 array('_controller' => sprintf('%s:%s:show', $bundle, $class)),
-                array('_method' => 'GET', 'id' => '\\d+')
+                array('_method' => 'GET')
             ),
             $this->getRouteName($bundle, $class, 'edit') => new Route(
                 '/{id}/edit',
                 array('_controller' => sprintf('%s:%s:edit', $bundle, $class)),
-                array('_method' => 'GET', 'id' => '\\d+')
+                array('_method' => 'GET')
             ),
             $this->getRouteName($bundle, $class, 'update') => new Route(
                 '/{id}',
                 array('_controller' => sprintf('%s:%s:edit', $bundle, $class)),
-                array('_method' => 'PUT', 'id' => '\\d+')
+                array('_method' => 'PUT')
             ),
             $this->getRouteName($bundle, $class, 'delete') => new Route(
                 '/{id}',
                 array('_controller' => sprintf('%s:%s:delete', $bundle, $class)),
-                array('_method' => 'DELETE', 'id' => '\\d+')
+                array('_method' => 'DELETE')
             ),
         );
     }
@@ -321,7 +321,7 @@ class ConventionalLoader extends FileLoader
         return new Route(
             '/{id}/'.$action,
             array('_controller' => sprintf('%s:%s:%s', $bundle, $class, $action)),
-            array('_method' => 'PUT', 'id' => '\\d+')
+            array('_method' => 'PUT')
         );
     }
 
