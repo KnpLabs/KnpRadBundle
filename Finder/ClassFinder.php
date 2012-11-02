@@ -3,14 +3,17 @@
 namespace Knp\RadBundle\Finder;
 
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ClassFinder
 {
     private $finder;
+    private $filesystem;
 
-    public function __construct(Finder $finder = null)
+    public function __construct(Finder $finder = null, Filesystem $filesystem = null)
     {
         $this->finder = $finder ?: new Finder();
+        $this->filesystem = $filesystem ?: new Filesystem();
     }
 
     public function findClasses($directory, $namespace)
@@ -20,6 +23,10 @@ class ClassFinder
         $this->finder->files();
         $this->finder->name('*.php');
         $this->finder->in($directory);
+
+        if (false === $this->filesystem->exists($directory)) {
+            return $classes;
+        }
 
         foreach ($this->finder->getIterator() as $name) {
             $baseName = substr($name, strlen($directory)+1, -4);
