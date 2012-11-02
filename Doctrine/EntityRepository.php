@@ -2,12 +2,12 @@
 
 namespace Knp\RadBundle\Doctrine;
 
-use Doctrine\ORM\EntityRepository as BaseEntityRepository;
+use Doctrine\ORM\BaseEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 abstract class EntityRepository extends BaseEntityRepository
 {
-    public function __call($method, $arguments)
+    public function __call($method, array $arguments = array())
     {
         if (0 === strpos($method, 'find')) {
             if (method_exists($builder = 'build'.substr($method, 4))) {
