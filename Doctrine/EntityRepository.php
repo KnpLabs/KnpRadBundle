@@ -2,10 +2,10 @@
 
 namespace Knp\RadBundle\Doctrine;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\BaseEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-abstract class EntityRepository extends EntityRepository
+abstract class EntityRepository extends BaseEntityRepository
 {
     public function __call($method, array $arguments = array())
     {
@@ -39,6 +39,6 @@ abstract class EntityRepository extends EntityRepository
     {
         $reflection = new \ReflectionObject($this);
 
-        return preg_replace('/[a-z0-9]/', '', $reflection->getShortName());
+        return preg_replace(array('/Repository$/', '/[a-z0-9]/'), '', $reflection->getShortName());
     }
 }
