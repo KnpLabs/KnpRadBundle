@@ -39,6 +39,8 @@ abstract class EntityRepository extends BaseEntityRepository
     {
         $reflection = new \ReflectionObject($this);
 
-        return preg_replace(array('/Repository$/', '/[a-z0-9]/'), '', $reflection->getShortName());
+        return strtolower(
+            preg_replace(array('/Repository$/', '/[a-z0-9]/'), '', $reflection->getShortName())
+        );
     }
 }
