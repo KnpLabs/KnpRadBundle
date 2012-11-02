@@ -42,12 +42,23 @@ class DataTableTwigExtension extends \Twig_Extension
 
     public function getDataTableRowRender($element, $headers, $options = array())
     {
+
+        $routes = isset($options['routes'])
+            ? $options['routes']
+            : array()
+        ;
+
         return $this
             ->container
             ->get('templating')
             ->render(
                 'KnpRadBundle:Twig:datatable_row.html.twig',
-                array('element' => $element, 'headers' => $headers, 'options' => $options)
+                array(
+                    'element' => $element, 
+                    'headers' => $headers, 
+                    'options' => $options, 
+                    'routes'  => $routes
+                )
             )
         ;
     }
