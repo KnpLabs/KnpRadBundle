@@ -32,7 +32,7 @@ abstract class EntityRepository extends BaseEntityRepository
 
     protected function buildAll()
     {
-        return $this->buld();
+        return $this->build();
     }
 
     protected function getAlias()
