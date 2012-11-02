@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Knp\RadBundle\Finder\ClassFinder;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\DependencyInjection\Container;
+use Knp\RadBundle\DependencyInjection\Definition\DoctrineRepositoryFactory;
 
 class RegisterDoctrineRepositoriesPass implements CompilerPassInterface
 {
@@ -14,7 +15,7 @@ class RegisterDoctrineRepositoriesPass implements CompilerPassInterface
     private $classFinder;
     private $definitionFactory;
 
-    public function __construct(BundleInterface $bundle, ClassFinder $classFinder = null, RepositoryDefinitionFactory $definitionFactory = null)
+    public function __construct(BundleInterface $bundle, ClassFinder $classFinder = null, DoctrineRepositoryFactory $definitionFactory = null)
     {
         $this->bundle = $bundle;
         $this->classFinder = $classFinder ?: new ClassFinder();
