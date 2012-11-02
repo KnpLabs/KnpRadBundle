@@ -10,10 +10,10 @@ abstract class EntityRepository extends BaseEntityRepository
     public function __call($method, array $arguments = array())
     {
         if (0 === strpos($method, 'find')) {
-            if (method_exists($builder = 'build'.substr($method, 4))) {
+            if (method_exists($this, $builder = 'build'.substr($method, 4))) {
                 $qb = call_user_func_array(array($this, $builder), $arguments);
 
-                return $qb->getQuery()->getResults();
+                return $qb->getQuery()->getResult();
             }
         }
 

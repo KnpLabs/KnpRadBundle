@@ -1,10 +1,10 @@
 <?php
 
-namespace Knp\RadBundle\DependencyInjection\Compiler;
+namespace Knp\RadBundle\DependencyInjection\Definition;
 
 use Symfony\Component\DependencyInjection\Definition;
 
-class RepositoryDefinitionFactory
+class DoctrineRepositoryFactory
 {
     public function createDefinition($className)
     {

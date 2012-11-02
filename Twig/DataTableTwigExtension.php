@@ -30,11 +30,13 @@ class DataTableTwigExtension extends \Twig_Extension
 
     public function getDataTableRender($elements, $options = array())
     {
+        $options = array_merge(array('bootstrap' => "Default"), $options);
+
         return $this
             ->container
             ->get('templating')
             ->render(
-                'KnpRadBundle:Twig:datatable.html.twig',
+                'KnpRadBundle:Twig:Datatable/' . $options['bootstrap'] . '/datatable.html.twig',
                 array('elements' => $elements, 'options' => $options)
             )
         ;
@@ -42,6 +44,7 @@ class DataTableTwigExtension extends \Twig_Extension
 
     public function getDataTableRowRender($element, $headers, $options = array())
     {
+        $options = array_merge(array('bootstrap' => "Default"), $options);
 
         $routes = isset($options['routes'])
             ? $options['routes']
@@ -52,7 +55,7 @@ class DataTableTwigExtension extends \Twig_Extension
             ->container
             ->get('templating')
             ->render(
-                'KnpRadBundle:Twig:datatable_row.html.twig',
+                'KnpRadBundle:Twig:Datatable/' . $options['bootstrap'] . '/datatable_row.html.twig',
                 array(
                     'element' => $element, 
                     'headers' => $headers, 

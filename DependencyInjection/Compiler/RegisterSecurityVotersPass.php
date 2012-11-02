@@ -4,45 +4,41 @@ namespace Knp\RadBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Knp\RadBundle\Finder\ClassFinder;
-use Knp\RadBundle\DependencyInjection\Definition\TwigExtensionFactory;
+use Knp\RadBundle\DependencyInjection\Definition\SecurityVoterFactory;
 use Knp\RadBundle\DependencyInjection\ReferenceFactory;
 use Knp\RadBundle\DependencyInjection\ServiceIdGenerator;
+use Knp\RadBundle\DependencyInjection\DefinitionManipulator;
 
-class RegisterTwigExtensionsPass implements CompilerPassInterface
+class RegisterSecurityVotersPass implements CompilerPassInterface
 {
     private $bundle;
     private $classFinder;
     private $definitionFactory;
+    private $referenceFactory;
     private $serviceIdGenerator;
+    private $definitionManipulator;
 
-    public function __construct(BundleInterface $bundle, ClassFinder $classFinder = null, TwigExtensionFactory $definitionFactory = null, ReferenceFactory $referenceFactory = null, ServiceIdGenerator $serviceIdGenerator = null)
+    public function __construct(BundleInterface $bundle, ClassFinder $classFinder = null, SecurityVoterFactory $definitionFactory = null, ReferenceFactory $referenceFactory = null, ServiceIdGenerator $serviceIdGenerator = null, DefinitionManipulator $definitionManipulator = null)
     {
         $this->bundle = $bundle;
         $this->classFinder = $classFinder ?: new ClassFinder();
-        $this->definitionFactory = $definitionFactory ?: new TwigExtensionServiceFactory();
+        $this->definitionFactory = $definitionFactory ?: new SecurityVoterFactory();
         $this->referenceFactory = $referenceFactory ?: new ReferenceFactory();
         $this->serviceIdGenerator = $serviceIdGenerator ?: new ServiceIdGenerator();
+        $this->definitionManipulator = $definitionManipulator ?: new DefinitionManipulator();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('twig')) {
+        if (false === $container->hasDefinition('security.access.decision_manager')) {
             return;
         }
 
-        $twigDef = $container->getDefinition('twig');
+        $decisionManagerDef = $container->getDefinition('security.access.decision_manager');
 
-        $directory = $this->bundle->getPath().'/Twig';
-        $namespace = $this->bundle->getNamespace().'\Twig';
-
-        $classes = $this->classFinder->findClassesMatching($directory, $namespace, 'Extension$');
-
+        $classes = $this->classFinder->findClassesMatching('App\Security', '/my/project/src/App/Security', 'Voter$');
         foreach ($classes as $class) {
             $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
             $def = $this->definitionFactory->createDefinition($class);
@@ -50,7 +46,7 @@ class RegisterTwigExtensionsPass implements CompilerPassInterface
 
             $container->setDefinition($id, $def);
 
-            $twigDef->addMethodCall('addExtension', array($ref));
+            $this->definitionManipulator->appendArgumentValue($decisionManagerDef, 0, $ref);
         }
     }
 }

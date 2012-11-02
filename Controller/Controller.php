@@ -47,7 +47,7 @@ class Controller extends BaseController
         $em->remove($entity);
 
         if ($flush) {
-            $em->flush($entity);
+            $em->flush();
         }
     }
 
@@ -74,7 +74,7 @@ class Controller extends BaseController
         throw $this->createNotFoundException('Resource not found');
     }
 
-    protected function getSession($name)
+    protected function getSession()
     {
         return $this->get('session');
     }
