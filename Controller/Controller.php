@@ -7,54 +7,56 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class Controller extends BaseController
 {
-
-    public function redirectRoute($route, $parameters = array(), $status = 302)
+    protected function redirectRoute($route, $parameters = array(), $status = 302)
     {
-
         return $this->redirect($this->generateUrl($route, $parameters), $status);
-
     }
 
-    public function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
+    protected function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
     {
-
         return new AccessDeniedException($message, $previous);
-
     }
 
     protected function getEntityManager()
     {
-
-        return $this->getDoctrine()->getEntityManager();
-
+        return $this->getDoctrine()->getManager();
     }
 
     protected function getRepository($entity)
     {
-
         return is_object($entity)
             ? $this->getEntityManager()->getRepository(get_class($entity))
             : $this->getEntityManager()->getRepository($entity)
         ;
-
     }
 
-    public function persistAndFlush($entity)
+    protected function persist($entity, $flush = false)
     {
         $em = $this->getEntityManager();
         $em->persist($entity);
-        $em->flush();
+
+        if ($flush) {
+            $em->flush($entity);
+        }
     }
 
-    public function removeAndFlush($entity)
+    protected function remove($entity, $flush = false)
     {
         $em = $this->getEntityManager();
         $em->remove($entity);
-        $em->flush();
+
+        if ($flush) {
+            $em->flush($entity);
+        }
     }
 
-    protected function findEntityOr404($entity, $criterias = array()) {
+    protected function flush()
+    {
+        $this->getEntityManager()->flush();
+    }
 
+    protected function findOr404($entity, $criterias = array())
+    {
         $result = null;
 
         if (is_object($entity) && $this->getEntityManager()->contains($entity)) {
@@ -71,26 +73,17 @@ class Controller extends BaseController
         throw $this->createNotFoundException('Resource not found');
     }
 
-    public function getSession($name, $default = null)
+    protected function getSession($name)
     {
-        return $this->get('session')->get($name, $default);
+        return $this->get('session');
     }
 
-    public function setSession($name, $value)
+    protected function getFlashBag()
     {
-        $this->get('session')->set($name, $value);
+        return $this->getSession()->getFlashBag();
     }
 
-    public function setFlash($type, $message, $title = null)
-    {
-        $message = null === $title
-            ? $message
-            : sprintf('<h4>%s</h4>%s', $title, $message);
-        ;
-        $this->get('session')->setFlash($type, $message);
-    }
-
-    public function getFormFor($object, $purpose = null, array $options = array())
+    protected function createObjectForm($object, $purpose = null, array $options = array())
     {
         return $this->get('knp_rad.form.manager')->createObjectForm($object, $purpose, $options);
     }
