@@ -2,6 +2,8 @@
 
 namespace Knp\RadBundle\Form;
 
+use Knp\RadBundle\Reflection\ClassMetadataFetcher;
+
 class FormTypeCreator implements FormCreatorInterface
 {
     public function __construct(ClassMetadataFetcher $fetcher = null)

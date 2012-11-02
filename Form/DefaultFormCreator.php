@@ -3,6 +3,7 @@
 namespace Knp\RadBundle\Form;
 
 use Symfony\Component\Form\FormFactoryInterface;
+use Knp\RadBundle\Reflection\ClassMetadataFetcher;
 
 class DefaultFormCreator implements FormCreatorInterface
 {

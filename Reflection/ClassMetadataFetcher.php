@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\RadBundle\Form;
+namespace Knp\RadBundle\Reflection;
 
 class ClassMetadataFetcher
 {
