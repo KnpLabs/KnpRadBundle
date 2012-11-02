@@ -1,5 +1,5 @@
 <tr>
-{% set element = element|toArray(fields) %}
+{% set element = element|toArray(options) %}
 {% for id, title in headers %}
     <td>
         {% if element[id] is defined %}{{ element[id] }}{% endif %}

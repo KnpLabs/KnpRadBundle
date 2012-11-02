@@ -23,53 +23,50 @@ class DataTableTwigExtension extends \Twig_Extension
     public function getFilters()
     {
         return array(
-            'toArray' => new \Twig_Filter_Method($this, 'toArrayFilter'),
-            'toHeadersArray' => new \Twig_Filter_Method($this, 'toHeadersFilter'),
+            'toArray'           => new \Twig_Filter_Method($this, 'toArrayFilter'),
+            'toHeadersArray'    => new \Twig_Filter_Method($this, 'toHeadersFilter'),
         );
     }
 
-    public function getDataTableRender($elements, $fields = array())
+    public function getDataTableRender($elements, $options = array())
     {
         return $this
             ->container
             ->get('templating')
             ->render(
                 'KnpRadBundle:Twig:datatable.html.twig',
-                array('elements' => $elements, 'fields' => $fields)
+                array('elements' => $elements, 'options' => $options)
             )
         ;
     }
 
-    public function getDataTableRowRender($element, $headers, $fields = array())
+    public function getDataTableRowRender($element, $headers, $options = array())
     {
         return $this
             ->container
             ->get('templating')
             ->render(
                 'KnpRadBundle:Twig:datatable_row.html.twig',
-                array('element' => $element, 'headers' => $headers, 'fields' => $fields)
+                array('element' => $element, 'headers' => $headers, 'options' => $options)
             )
         ;
     }
 
-    public function toHeadersFilter($els, $fields = array ())
+    public function toHeadersFilter($els, $options = array ())
     {
+
+        $fields = isset($options['fields'])
+            ? $options['fields']
+            : array()
+        ;
+
         $headers = array();
 
         foreach ($els as $el) {
 
             if (is_object($el)) {
-            
-                $rfl = new \ReflectionClass($el);
 
-                $methods = array_filter(
-                    $rfl->getMethods(\ReflectionMethod::IS_PUBLIC), 
-                    function($method){
-                        return preg_match('#get.*#', $method->name);
-                    }
-                );
-
-                foreach ($methods as $method) {
+                foreach ($this->getGettersWithoutParameters($el) as $method) {
                     preg_match('#get(?P<name>.*)#', $method->name, $matches);
                     $name = strtolower($matches['name']);
                     if (!in_array($name, $headers) && (0 === count($fields) || array_key_exists($name, $fields))) {
@@ -99,23 +96,19 @@ class DataTableTwigExtension extends \Twig_Extension
 
     }
 
-    public function toArrayFilter($el, $fields = array ())
+    public function toArrayFilter($el, $options = array ())
     {
+
+        $fields = isset($options['fields'])
+            ? $options['fields']
+            : array()
+        ;
 
         $values = array();
 
         if (is_object($el)) {
-        
-            $rfl = new \ReflectionClass($el);
 
-            $methods = array_filter(
-                $rfl->getMethods(\ReflectionMethod::IS_PUBLIC), 
-                function($method){
-                    return preg_match('#get.*#', $method->name);
-                }
-            );
-
-            foreach ($methods as $method) {
+            foreach ($this->getGettersWithoutParameters($el) as $method) {
                 preg_match('#get(?P<name>.*)#', $method->name, $matches);
 
                 $name = strtolower($matches['name']);
@@ -138,6 +131,19 @@ class DataTableTwigExtension extends \Twig_Extension
         }
 
         return $values;
+    }
+
+    public function getGettersWithoutParameters($el)
+    {
+        $rfl = new \ReflectionClass($el);
+
+        return array_filter(
+            $rfl->getMethods(\ReflectionMethod::IS_PUBLIC),
+            function($method){
+                return preg_match('#get.*#', $method->name) && 0 === count($method->getParameters());
+            }
+
+        );
     }
 
     public function getName()
