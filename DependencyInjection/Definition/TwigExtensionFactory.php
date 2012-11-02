@@ -1,12 +1,12 @@
 <?php
 
-namespace Knp\RadBundle\DependencyInjection\Compiler;
+namespace Knp\RadBundle\DependencyInjection\Definition;
 
 use Symfony\Component\DependencyInjection\Definition;
 use Knp\RadBundle\Reflection\ReflectionFactory;
 use Knp\RadBundle\DependencyInjection\ReferenceFactory;
 
-class TwigExtensionServiceFactory
+class TwigExtensionFactory
 {
     const CONTAINER_AWARE_INTERFACE = 'Symfony\Component\DependencyInjection\ContainerAwareInterface';
     const CONTAINER_SERVICE_ID = 'service_container';
