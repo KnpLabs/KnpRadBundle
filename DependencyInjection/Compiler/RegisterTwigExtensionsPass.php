@@ -22,7 +22,7 @@ class RegisterTwigExtensionsPass implements CompilerPassInterface
     {
         $this->bundle = $bundle;
         $this->classFinder = $classFinder ?: new ClassFinder();
-        $this->definitionFactory = $definitionFactory ?: new TwigExtensionServiceFactory();
+        $this->definitionFactory = $definitionFactory ?: new TwigExtensionFactory();
         $this->referenceFactory = $referenceFactory ?: new ReferenceFactory();
         $this->serviceIdGenerator = $serviceIdGenerator ?: new ServiceIdGenerator();
     }
