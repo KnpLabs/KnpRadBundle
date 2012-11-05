@@ -7,7 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 
 abstract class EntityRepository extends BaseEntityRepository
 {
-    public function __call($method, array $arguments = array())
+    public function __call($method, $arguments)
     {
         if (0 === strpos($method, 'find')) {
             if (method_exists($this, $builder = 'build'.substr($method, 4))) {
