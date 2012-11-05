@@ -2,7 +2,7 @@
 
 namespace Knp\RadBundle\Doctrine;
 
-use Doctrine\ORM\BaseEntityRepository;
+use Doctrine\ORM\EntityRepository as BaseEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
 abstract class EntityRepository extends BaseEntityRepository
