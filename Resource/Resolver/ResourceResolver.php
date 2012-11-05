@@ -43,8 +43,13 @@ class ResourceResolver
             }
         }
 
-        $service = $this->container->get($options['service']);
+        $service  = $this->container->get($options['service']);
+        $resolved = call_user_func_array(array($service, $options['method']), $arguments);
 
-        return call_user_func_array(array($service, $options['method']), $arguments);
+        if (null === $resolved) {
+            throw new ResolutionFailureException('The resolution resulted in a NULL value.');
+        }
+
+        return $resolved;
     }
 }
