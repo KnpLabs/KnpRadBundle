@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser;
+use Knp\RadBundle\HttpFoundation\RequestManipulator;
 
 /**
  * Adds Response event listener to render no-Response
@@ -17,19 +18,22 @@ class ViewListener
     private $templating;
     private $parser;
     private $engine;
+    private $requestManipulator;
 
     /**
      * Initializes listener.
      *
-     * @param EngineInterface      $templating  Templating engine
-     * @param ControllerNameParser $parser      Controller name parser
-     * @param string               $engine      Default engine name
+     * @param EngineInterface      $templating         Templating engine
+     * @param ControllerNameParser $parser             Controller name parser
+     * @param string               $engine             Default engine name
+     * @param RequestManipulator   $requestManipulator The request manipulator
      */
-    public function __construct(EngineInterface $templating, ControllerNameParser $parser, $engine)
+    public function __construct(EngineInterface $templating, ControllerNameParser $parser, $engine, RequestManipulator $requestManipulator = null)
     {
-        $this->templating = $templating;
-        $this->parser     = $parser;
-        $this->engine     = $engine;
+        $this->templating         = $templating;
+        $this->parser             = $parser;
+        $this->engine             = $engine;
+        $this->requestManipulator = $requestManipulator ?: new RequestManipulator();
     }
 
     /**
@@ -39,14 +43,13 @@ class ViewListener
      */
     public function onKernelView(GetResponseForControllerResultEvent $event)
     {
-        $request    = $event->getRequest();
-        $attributes = $request->attributes;
+        $request = $event->getRequest();
 
-        if (!$attributes->has('_controller')) {
+        if (false === $this->requestManipulator->hasAttribute($request, '_controller')) {
             return;
         }
 
-        $controller = $attributes->get('_controller');
+        $controller = $this->requestManipulator->getAttribute($request, '_controller');
         if (false === strpos($controller, '::')) {
             $controller = $this->parser->parse($controller);
         }
@@ -60,6 +63,7 @@ class ViewListener
         $event->setResponse($this->templating->renderResponse(
             sprintf('App:%s:%s.%s.%s', $group, $view, $request->getRequestFormat(), $this->engine),
             $event->getControllerResult()
+
         ));
     }
 }
