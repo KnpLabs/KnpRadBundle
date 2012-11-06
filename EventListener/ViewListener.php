@@ -26,13 +26,15 @@ class ViewListener
      * @param EngineInterface      $templating         Templating engine
      * @param ControllerNameParser $parser             Controller name parser
      * @param string               $engine             Default engine name
+     * @param MissingViewHandler   $missingViewHandler The handle to be used in case the view does not exist
      * @param RequestManipulator   $requestManipulator The request manipulator
      */
-    public function __construct(EngineInterface $templating, ControllerNameParser $parser, $engine, RequestManipulator $requestManipulator = null)
+    public function __construct(EngineInterface $templating, ControllerNameParser $parser, $engine, MissingViewHandler $missingViewHandler = null, RequestManipulator $requestManipulator = null)
     {
         $this->templating         = $templating;
         $this->parser             = $parser;
         $this->engine             = $engine;
+        $this->missingViewHandler = $missingViewHandler ?: new MissingViewHandler();
         $this->requestManipulator = $requestManipulator ?: new RequestManipulator();
     }
 
@@ -54,16 +56,25 @@ class ViewListener
             $controller = $this->parser->parse($controller);
         }
 
+        $viewName   = $this->deduceViewName($controller, $request->getRequestFormat());
+        $viewParams = $event->getControllerResult();
+
+        if ($this->templating->exists($viewName)) {
+            $response = $this->templating->renderResponse($viewName, $viewParams);
+            $event->setResponse($response);
+        } else {
+            $this->missingViewHandler->handleMissingView($event, $viewName, $viewParams);
+        }
+    }
+
+    private function deduceViewName($controller, $format)
+    {
         list($class, $method) = explode('::', $controller, 2);
 
         $group = preg_replace(array('#^.*\\Controller\\\\#', '#Controller$#'), '', $class);
         $group = str_replace('\\', '/', $group);
         $view  = preg_replace('/Action$/', '', $method);
 
-        $event->setResponse($this->templating->renderResponse(
-            sprintf('App:%s:%s.%s.%s', $group, $view, $request->getRequestFormat(), $this->engine),
-            $event->getControllerResult()
-
-        ));
+        return sprintf('App:%s:%s.%s.%s', $group, $view, $format, $this->engine);
     }
 }
