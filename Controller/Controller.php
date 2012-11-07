@@ -81,11 +81,10 @@ class Controller extends BaseController
 
     protected function addFlashf()
     {
-        $args    = func_get_args();
-        $type    = array_shift($args);
-        $message = array_shift($message);
+        $args = func_get_args();
+        $type = array_shift($args);
 
-        $this->addFlash($type, sprintf($message, $args));
+        $this->addFlash($type, call_user_func_array('sprintf', $args));
     }
 
     protected function addFlash($type, $message)

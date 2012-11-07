@@ -6,7 +6,13 @@ use Symfony\Component\HttpFoundation\Request;
 
 class FormManager
 {
+    private $request;
     private $creators = array();
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
     public function createObjectForm($object, $purpose = null, array $options = array())
     {
@@ -19,9 +25,15 @@ class FormManager
         throw new \RuntimeException(sprintf('The form manager was unable to create the form. Please, make sure you have correctly registered one that fit your need.'));
     }
 
-    public function createBoundObjectForm($object, Request $request, $purpose = null, array $options = array())
+    public function createBoundObjectForm($object, $purpose = null, array $options = array())
     {
-        return $this->createObjectForm($object, $purpose, $options)->bind($request);
+        $form = $this->createObjectForm($object, $purpose, $options);
+
+        if (!$this->request->isMethodSafe()) {
+            $form->bind($this->request);
+        }
+
+        return $form;
     }
 
     public function registerCreator(FormCreatorInterface $creator)

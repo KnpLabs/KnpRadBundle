@@ -31,7 +31,8 @@
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
         </service>
 
-        <service id="knp_rad.form.manager" class="%knp_rad.form.manager.class%">
+        <service id="knp_rad.form.manager" class="%knp_rad.form.manager.class%" scope="request">
+            <argument type="service" id="request" />
         </service>
 
         <service id="knp_rad.form.type_creator" class="%knp_rad.form.type_creator.class%" public="false">
