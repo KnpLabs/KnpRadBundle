@@ -19,6 +19,8 @@
         <parameter key="knp_rad.resource.resolver.resource.class">Knp\RadBundle\Resource\Resolver\ResourceResolver</parameter>
         <parameter key="knp_rad.resource.resolver.argument.class">Knp\RadBundle\Resource\Resolver\ArgumentResolver</parameter>
         <parameter key="knp_rad.event_listener.resource_resolver.class">Knp\RadBundle\EventListener\ResourceResolverListener</parameter>
+        <parameter key="knp_rad.filesystem.path_expander.class">Knp\RadBundle\Filesystem\PathExpander</parameter>
+        <parameter key="knp_rad.view.path_deducer.class">Knp\RadBundle\View\PathDeducer</parameter>
     </parameters>
 
     <services>
@@ -76,6 +78,15 @@
         <service id="knp_rad.event_listener.resource_resolver" class="%knp_rad.event_listener.resource_resolver.class%">
             <argument type="service" id="knp_rad.resource.resolver.request" />
             <tag name="kernel.event_listener" event="kernel.request" />
+        </service>
+
+        <service id="knp_rad.filesystem.path_expander" class="%knp_rad.filesystem.path_expander.class%">
+            <argument type="service" id="kernel" />
+        </service>
+
+        <service id="knp_rad.view.path_deducer" class="%knp_rad.view.path_deducer.class%">
+            <argument type="service" id="templating.name_parser" />
+            <argument type="service" id="knp_rad.filesystem.path_expander" />
         </service>
     </services>
 
