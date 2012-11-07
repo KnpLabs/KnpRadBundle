@@ -161,12 +161,12 @@ class ConventionalLoader extends FileLoader
         }
 
         $collections = $mapping['collections'];
+        unset($collections['defaults']);
+        unset($collections['requirements']);
+
         if (0 == count($collections)) {
             return $defaults;
         }
-
-        unset($collections['defaults']);
-        unset($collections['requirements']);
 
         $routes = array();
         foreach ($collections as $action => $params) {
@@ -198,12 +198,12 @@ class ConventionalLoader extends FileLoader
         }
 
         $resources = $mapping['resources'];
+        unset($resources['defaults']);
+        unset($resources['requirements']);
+
         if (0 == count($resources)) {
             return $defaults;
         }
-
-        unset($resources['defaults']);
-        unset($resources['requirements']);
 
         $routes = array();
         foreach ($resources as $action => $params) {
