@@ -79,6 +79,20 @@ class Controller extends BaseController
         return $this->get('session');
     }
 
+    protected function addFlashf()
+    {
+        $args    = func_get_args();
+        $type    = array_shift($args);
+        $message = array_shift($message);
+
+        $this->addFlash($type, sprintf($message, $args));
+    }
+
+    protected function addFlash($type, $message)
+    {
+        $this->getFlashBag()->add($type, $message);
+    }
+
     protected function getFlashBag()
     {
         return $this->getSession()->getFlashBag();
@@ -87,10 +101,5 @@ class Controller extends BaseController
     protected function createObjectForm($object, $purpose = null, array $options = array())
     {
         return $this->get('knp_rad.form.manager')->createObjectForm($object, $purpose, $options);
-    }
-
-    public function getBoundFormFor($object, Request $request, $purpose = null, array $options = array())
-    {
-        return $this->get('knp_rad.form.manager')->createBoundObjectForm($object, $request, $purpose, $options);
     }
 }
