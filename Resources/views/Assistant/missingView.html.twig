@@ -1,0 +1,62 @@
+{% extends 'TwigBundle::layout.html.twig' %}
+
+{% block body %}
+<div class="sf-exceptionreset">
+    <div class="block">
+        <h1>The view "<strong>{{ viewName }}</strong>" is missing.</h1>
+    </div>
+    <div class="block" id="view-file">
+        <h2>View file</h2>
+
+        <p>The view file <a href="{{ viewPath|file_link(0) }}">{{ viewPath }}</a> does not exist.</p>
+
+        <form method="post" action="{{ path('_knp_rad_assistant_create_view') }}">
+            <input type="hidden" name="viewName" value="{{ viewName }}" />
+            <div style="width:870px;height:400px;border:1px solid #ccc;margin:10px 0;">
+<div id="viewBody" style="width:870px;height:400px;">{{ viewBody }}</div>
+            </div>
+            <div class="clear_fix"></div>
+            <div>
+                <button type="submit">Create the view file</button>
+            </div>
+        </form>
+    </div>
+    <div class="block">
+        <h2>Available variables</h2>
+        <p>The following variables were passed to the view.</p>
+        <ul>
+            {% for name,value in viewParams %}
+                <li>{{ name }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript" src="{{ asset('bundles/knprad/js/jquery.js') }}"></script>
+<script type="text/javascript" src="{{ asset('bundles/knprad/ace/ace.js') }}"></script>
+<script type="text/javascript">
+jQuery(function ($) {
+    var editor = ace.edit("viewBody");
+    editor.setTheme("ace/theme/chrome");
+    editor.getSession().setMode("ace/mode/html");
+    editor.setShowPrintMargin(false);
+    var $form = $('#view-file form');
+    $form.on('submit', function (e) {
+        e.preventDefault();
+        $form.css('opacity', .5);
+        $.ajax({
+            type: 'POST',
+            url:  $form.attr('action'),
+            data: {
+                'viewName': $('input[name=viewName]', $form).val(),
+                'viewBody': editor.getSession().getValue()
+            },
+            success: function () {
+                alert('Template successfully created, you can now refresh the page!');
+                $form.hide();
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
