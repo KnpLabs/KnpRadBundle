@@ -1,0 +1,22 @@
+{% extends 'KnpRadBundle:Layout:h5bp.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/knprad/tb/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/knprad/tb/css/bootstrap-responsive.min.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/knprad/common/js/jquery-1.8.2.min.js') }}"></script>
+    <script src="{{ asset('bundles/knprad/tb/js/bootstrap.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="knprad-flashes" style="position:absolute;width:500px;z-index:1000;left:50%;margin-left:-250px;top:10px;">
+    {% for name, flash in app.session.flashes %}
+        <div class="alert alert-block alert-{{ name }}">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            {{ flash.message|default(flash)|trans(flash.parameters|default({}))|raw }}
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}
