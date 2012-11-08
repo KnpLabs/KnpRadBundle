@@ -10,7 +10,7 @@ class ServiceIdGenerator
     public function generateForBundleClass(BundleInterface $bundle, $className)
     {
         $namespace = $bundle->getNamespace();
-        $extension = $bundle->getExtension();
+        $extension = $bundle->getContainerExtension();
 
         $extensionAlias = $extension->getAlias();
 
