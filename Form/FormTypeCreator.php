@@ -34,10 +34,14 @@ class FormTypeCreator implements FormCreatorInterface
         $formClass   = sprintf('App\Form\%s%sType', ucfirst($purpose), end($arr));
 
         if (!$this->fetcher->classExists($formClass)) {
-            if ($parentClass = $this->fetcher->getParentClass($object)) {
-                return $this->getFormType($parentClass, $purpose);
+            if (null === $purpose) {
+                if ($parentClass = $this->fetcher->getParentClass($object)) {
+                    return $this->getFormType($parentClass, $purpose);
+                }
+                return;
+            } else {
+                return $this->getFormType($objectClass);
             }
-            return;
         }
 
         return $formClass;
