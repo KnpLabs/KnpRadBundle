@@ -9,41 +9,49 @@ class FormTypeCreator implements FormCreatorInterface
 {
     private $fetcher;
     private $factory;
+    private $formRegistry;
 
-    public function __construct(ClassMetadataFetcher $fetcher = null, FormFactoryInterface $factory)
+    public function __construct(ClassMetadataFetcher $fetcher = null, FormFactoryInterface $factory, $formRegistry)
     {
         $this->fetcher = $fetcher ?: new ClassMetadataFetcher;
         $this->factory = $factory;
+        $this->formRegistry = $formRegistry;
     }
 
     public function create($object, $purpose = null, array $options = array())
     {
-        $formClass = $this->getFormType($object, $purpose);
+        $type = $this->getFormType($object, $purpose);
 
-        if (null !== $formClass) {
-            $formType = $this->fetcher->newInstance($formClass);
-
-            return $this->factory->create($formType, $object, $options);
+        if (null !== $type) {
+            return $this->factory->create($type, $object, $options);
         }
     }
 
     private function getFormType($object, $purpose = null)
     {
-        $objectClass = is_object($object) ? $this->fetcher->getClass($object) : $object;
-        $arr         = explode('\\', $objectClass);
-        $formClass   = sprintf('App\Form\%s%sType', ucfirst($purpose), end($arr));
+        $currentPurpose = $purpose ? $purpose.'_' : '';
 
-        if (!$this->fetcher->classExists($formClass)) {
-            if (null === $purpose) {
-                if ($parentClass = $this->fetcher->getParentClass($object)) {
-                    return $this->getFormType($parentClass, $purpose);
-                }
-                return;
-            } else {
-                return $this->getFormType($objectClass);
+        $id = sprintf('app_form_%s%s_type', $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
+        $class = sprintf('App\\Form\\%s%sType', ucfirst($purpose), $this->fetcher->getShortClassName($object));
+        $type = $this->getAlias($class, $id);
+
+        if (!$this->formRegistry->hasType($type)) {
+            if ($purpose) {
+                return $this->getFormType($object);
             }
+
+            return null;
         }
 
-        return $formClass;
+        return $type;
+    }
+
+    private function getAlias($class, $default)
+    {
+        try {
+            return (new \ReflectionClass($class))->newInstanceWithoutConstructor()->getName();
+        } catch (\Exception $e) {
+            return $default;
+        }
     }
 }

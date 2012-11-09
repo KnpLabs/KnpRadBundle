@@ -38,6 +38,7 @@
         <service id="knp_rad.form.type_creator" class="%knp_rad.form.type_creator.class%" public="false">
             <argument type="service" id="knp_rad.reflection.metadata_fetcher" />
             <argument type="service" id="form.factory" />
+            <argument type="service" id="form.registry" />
             <tag name="knp_rad.form.creator" />
         </service>
 
