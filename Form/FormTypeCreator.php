@@ -48,10 +48,15 @@ class FormTypeCreator implements FormCreatorInterface
 
     private function getAlias($class, $default)
     {
-        try {
-            return (new \ReflectionClass($class))->newInstanceWithoutConstructor()->getName();
-        } catch (\Exception $e) {
+        if (!class_exists($class)) {
             return $default;
         }
+
+        try {
+            return unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class))->getName();
+        } catch (\Exception $e) {
+        }
+
+        return $default;
     }
 }
