@@ -1,5 +1,5 @@
 {
-    "name":        "Nubio/rad-bundle",
+    "name":        "nubio/rad-bundle",
     "type":        "symfony-bundle",
     "description": "Fork from KnpLabs to make it compatible for 2.1 version. This Bundle provides RAD development flow for Symfony2.",
     "keywords":    ["rad"],
