@@ -20,9 +20,20 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('knp_rad');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->arrayNode('listener')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('view')->defaultTrue()->end()
+                        ->booleanNode('resolver')->defaultTrue()->end()
+                    ->end()
+                ->end()
+                ->booleanNode('routing_loader')->defaultTrue()->end()
+                ->booleanNode('form')->defaultTrue()->end()
+                ->booleanNode('datatable')->defaultTrue()->end()
+            ->end()
+        ;
 
         return $treeBuilder;
     }

@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_rad.view.listener.class">Knp\RadBundle\EventListener\ViewListener</parameter>
+        <parameter key="knp_rad.filesystem.path_expander.class">Knp\RadBundle\Filesystem\PathExpander</parameter>
+        <parameter key="knp_rad.view.path_deducer.class">Knp\RadBundle\View\PathDeducer</parameter>
+    </parameters>
+
+    <services>
+        <service id="knp_rad.view.listener" class="%knp_rad.view.listener.class%">
+            <argument type="service" id="templating" />
+            <argument type="service" id="controller_name_converter" />
+            <argument>twig</argument>
+            <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
+        </service>
+
+        <service id="knp_rad.view.path_deducer" class="%knp_rad.view.path_deducer.class%">
+            <argument type="service" id="templating.name_parser" />
+            <argument type="service" id="knp_rad.filesystem.path_expander" />
+        </service>
+
+        <service id="knp_rad.filesystem.path_expander" class="%knp_rad.filesystem.path_expander.class%">
+            <argument type="service" id="kernel" />
+        </service>
+    </services>
+
+</container>
