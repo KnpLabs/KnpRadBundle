@@ -34,8 +34,12 @@ class RegisterDoctrineRepositoriesPass implements CompilerPassInterface
 
         foreach ($classes as $class) {
             $baseClass = substr($class, strlen($namespace) + 1);
-
             $id = sprintf('orm.%s_repository', str_replace('\\', '.', Container::underscore($baseClass)));
+
+            if ($container->hasDefinition($id)) {
+                continue;
+            }
+
             $def = $this->definitionFactory->createDefinition($class);
 
             $container->setDefinition($id, $def);
