@@ -21,9 +21,10 @@ all:
         # FOSUserBundle: http://bit.ly/fosuserbundle or http://bit.ly/KnpU-FOS
         # docs: http://symfony.com/doc/current/cookbook/security/entity_provider.html
         in_memory:
-            users:
-                user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+            memory:
+                users:
+                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
 
         # database_users:
         #   entity:   { class: UserBundle:User, property: username }
