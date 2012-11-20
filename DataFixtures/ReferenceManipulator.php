@@ -11,7 +11,7 @@ class ReferenceManipulator
         $this->referenceRepository = $referenceRepository;
     }
 
-    public function createReferenceName($className, array $attributes = [])
+    public function createReferenceName($className, array $attributes = array())
     {
          $className     = join('', array_slice(explode('\\', $className), -1));
          $referenceId   = reset($attributes);
