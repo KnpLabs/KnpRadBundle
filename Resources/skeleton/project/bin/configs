@@ -5,7 +5,7 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Knp\Bundle\RadBundle\HttpKernel\RadKernel;
 use Knp\Bundle\RadBundle\DependencyInjection\Extension\ConfigurationDumper;
 
-$loader = require(__DIR__.'/../vendor/.composer/autoload.php');
+$loader = require(__DIR__.'/../vendor/autoload.php');
 $kernel = RadKernel::createAppKernel($loader, 'dev', true);
 $kernel->loadClassCache();
 $output = new ConsoleOutput();

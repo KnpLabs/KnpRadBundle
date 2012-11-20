@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Knp\Bundle\RadBundle\HttpKernel\RadKernel;
 
-$loader = require(__DIR__.'/vendor/.composer/autoload.php');
+$loader = require(__DIR__.'/vendor/autoload.php');
 
 $input = new ArgvInput();
 $env   = $input->getParameterOption(array('--env', '-e'), getenv('SYMFONY_ENV') ?: 'dev');

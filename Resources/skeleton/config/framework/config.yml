@@ -10,7 +10,6 @@ all:
     # esi:             ~
     translator:      { fallback: %locale% }
     secret:          %secret%
-    charset:         UTF-8
     form:            true
     csrf_protection: true
     validation:      { enable_annotations: true }
@@ -20,10 +19,6 @@ all:
         engines: ['twig']
         # assets_version: v2
         # assets_base_urls:
-        #    - //somecdn.com/
-    session:
-        default_locale: %locale%
-        auto_start:     true
 
     profiler: { only_exceptions: false }
 

@@ -1,7 +1,7 @@
 {
-    "name":        "knplabs/rad-bundle",
+    "name":        "nubio/rad-bundle",
     "type":        "symfony-bundle",
-    "description": "This Bundle provides RAD development flow for Symfony2.",
+    "description": "Fork from KnpLabs to make it compatible for 2.1 version. This Bundle provides RAD development flow for Symfony2.",
     "keywords":    ["rad"],
     "homepage":    "http://rad.knplabs.com",
     "license":     "MIT",
@@ -13,12 +13,12 @@
     ],
 
     "require": {
-        "php":              ">=5.3.2",
-        "symfony/symfony":  ">=2.0.10,<2.1.0",
-        "twig/extensions":  "*",
+        "php":              ">=5.3.3",
+        "symfony/symfony":  "2.1.*",
+        "twig/extensions":  "1.0.*",
 
-        "symfony/assetic-bundle":  "2.0.*",
-        "sensio/generator-bundle": "2.0.*"
+        "symfony/assetic-bundle":  "2.1.*",
+        "sensio/generator-bundle": "2.1.*"
     },
 
     "autoload": {

@@ -15,7 +15,7 @@ if (!$vendorPath) {
 
 $projectPath = realpath($vendorPath.'/..');
 
-require $vendorPath.'/.composer/autoload.php';
+require $vendorPath.'/autoload.php';
 
 $projectName     = str_replace('/', '\\', $argv[1]);
 $applicationPath = $projectPath.'/src/'.str_replace('\\', '/', $projectName);
