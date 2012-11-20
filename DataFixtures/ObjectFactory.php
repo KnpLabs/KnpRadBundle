@@ -9,7 +9,7 @@ class ObjectFactory
 {
     private $manager;
     private $className;
-    private $defaultAttributes;
+    private $defaultAttributes = array();
 
     public function __construct(
         ReferenceRepository $referenceRepository,
