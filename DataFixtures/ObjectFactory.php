@@ -9,6 +9,7 @@ class ObjectFactory
 {
     private $manager;
     private $className;
+    private $defaultAttributes;
 
     public function __construct(
         ReferenceRepository $referenceRepository,
@@ -25,9 +26,11 @@ class ObjectFactory
 
     public function add(array $attributes = array())
     {
+        // We do not override $attributes because the reference manipulator will use the first element to generate the reference name
+        $mergedAttributes = array_merge($this->defaultAttributes, $attributes);
         $object = new $this->className();
 
-        foreach ($attributes as $attribute => $value) {
+        foreach ($mergedAttributes as $attribute => $value) {
             $object->{'set'.ucfirst($attribute)}($value);
         }
 
@@ -37,6 +40,13 @@ class ObjectFactory
         );
 
         $this->manager->persist($object);
+
+        return $this;
+    }
+
+    public function setDefaults(array $attributes = array())
+    {
+        $this->defaultAttributes = $attributes;
 
         return $this;
     }
