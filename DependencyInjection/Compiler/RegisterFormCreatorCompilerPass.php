@@ -22,11 +22,20 @@ class RegisterFormCreatorCompilerPass implements CompilerPassInterface
             'knp_rad.form.creator'
         );
 
-        foreach ($taggedServices as $id => $attribute) {
+        foreach ($taggedServices as $id => $attributes) {
             $definition->addMethodCall(
                 'registerCreator',
-                array(new Reference($id))
+                array(new Reference($id), $this->getPriority($attributes))
             );
         }
+    }
+
+    private function getPriority(array $attributes = array())
+    {
+        if (isset($attributes['priority'])) {
+            return $attributes['priority'];
+        }
+
+        return 0;
     }
 }
