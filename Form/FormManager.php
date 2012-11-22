@@ -39,7 +39,7 @@ class FormManager
     public function registerCreator(FormCreatorInterface $creator, $priority = 0)
     {
         if (isset($this->creators[$priority])) {
-            return $this->registerCreator($creator, $priority++);
+            return $this->registerCreator($creator, ++$priority);
         }
         $this->creators[$priority] = $creator;
     }
