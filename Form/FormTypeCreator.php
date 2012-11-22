@@ -37,6 +37,7 @@ class FormTypeCreator implements FormCreatorInterface
 
         if (!$this->formRegistry->hasType($type)) {
             if ($purpose) {
+                // let's try without the purpose
                 return $this->getFormType($object);
             }
 

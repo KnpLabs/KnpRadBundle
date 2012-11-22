@@ -45,7 +45,7 @@ class RegisterFormTypesCompilerPass implements CompilerPassInterface
                 continue;
             }
 
-            $definition = $this->definitionFactory->create($class);
+            $definition = $this->definitionFactory->createDefinition($class);
             $container->setDefinition($id, $definition);
 
             $types[$alias] = $id;
