@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Controller extends BaseController
 {
-    protected function redirectRoute($route, $parameters = array(), $status = 302)
+    protected function redirectToRoute($route, $parameters = array(), $status = 302)
     {
         return $this->redirect($this->generateUrl($route, $parameters), $status);
     }
