@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_rad.resource.resolver.request.class">Knp\RadBundle\Resource\Resolver\RequestResolver</parameter>
+        <parameter key="knp_rad.resource.resolver.resource.class">Knp\RadBundle\Resource\Resolver\ResourceResolver</parameter>
+        <parameter key="knp_rad.resource.resolver.argument.class">Knp\RadBundle\Resource\Resolver\ArgumentResolver</parameter>
+        <parameter key="knp_rad.event_listener.resource_resolver.class">Knp\RadBundle\EventListener\ResourceResolverListener</parameter>
+    </parameters>
+
+    <services>
+        <service id="knp_rad.resource.resolver.request" class="%knp_rad.resource.resolver.request.class%" public="false">
+            <argument type="service" id="knp_rad.resource.resolver.resource" />
+        </service>
+
+        <service id="knp_rad.resource.resolver.resource" class="%knp_rad.resource.resolver.resource.class%" public="false">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="knp_rad.resource.resolver.argument" />
+        </service>
+
+        <service id="knp_rad.resource.resolver.argument" class="%knp_rad.resource.resolver.argument.class%" public="false">
+        </service>
+
+        <service id="knp_rad.event_listener.resource_resolver" class="%knp_rad.event_listener.resource_resolver.class%">
+            <argument type="service" id="knp_rad.resource.resolver.request" />
+            <tag name="kernel.event_listener" event="kernel.request" />
+        </service>
+    </services>
+
+</container>

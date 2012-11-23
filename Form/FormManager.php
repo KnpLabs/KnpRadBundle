@@ -16,7 +16,7 @@ class FormManager
 
     public function createObjectForm($object, $purpose = null, array $options = array())
     {
-        foreach ($this->creators as $creator) {
+        foreach ($this->getCreators() as $creator) {
             if ($form = $creator->create($object, $purpose, $options)) {
                 return $form;
             }
@@ -36,13 +36,18 @@ class FormManager
         return $form;
     }
 
-    public function registerCreator(FormCreatorInterface $creator)
+    public function registerCreator(FormCreatorInterface $creator, $priority = 0)
     {
-        $this->creators[] = $creator;
+        if (isset($this->creators[$priority])) {
+            return $this->registerCreator($creator, ++$priority);
+        }
+        $this->creators[$priority] = $creator;
     }
 
     public function getCreators()
     {
+        krsort($this->creators);
+
         return $this->creators;
     }
 }

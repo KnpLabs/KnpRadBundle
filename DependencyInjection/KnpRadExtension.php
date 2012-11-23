@@ -23,6 +23,25 @@ class KnpRadExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
+
+        if ($config['listener']['view']) {
+            $loader->load('view_listener.xml');
+        }
+
+        if ($config['listener']['resolver']) {
+            $loader->load('resource_resolver.xml');
+        }
+
+        if ($config['routing_loader']) {
+            $loader->load('routing_loader.xml');
+        }
+
+        if ($config['form']) {
+            $loader->load('form.xml');
+        }
+
+        if ($config['datatable']) {
+            $loader->load('datatable.xml');
+        }
     }
 }

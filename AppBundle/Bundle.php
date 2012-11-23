@@ -7,6 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Knp\RadBundle\DependencyInjection\Compiler\RegisterDoctrineRepositoriesPass;
 use Knp\RadBundle\DependencyInjection\Compiler\RegisterTwigExtensionsPass;
 use Knp\RadBundle\DependencyInjection\Compiler\RegisterSecurityVotersPass;
+use Knp\RadBundle\DependencyInjection\Compiler\RegisterAppBundlePass;
 use Knp\RadBundle\DependencyInjection\Compiler\RegisterFormTypesCompilerPass;
 use Knp\RadBundle\DependencyInjection\Compiler\RegisterFormCreatorCompilerPass;
 
@@ -17,6 +18,7 @@ class Bundle extends BaseBundle
         $container->addCompilerPass(new RegisterDoctrineRepositoriesPass($this));
         $container->addCompilerPass(new RegisterTwigExtensionsPass($this));
         $container->addCompilerPass(new RegisterSecurityVotersPass($this));
+        $container->addCompilerPass(new RegisterAppBundlePass($this));
         $container->addCompilerPass(new RegisterFormTypesCompilerPass($this));
         $container->addCompilerPass(new RegisterFormCreatorCompilerPass);
     }

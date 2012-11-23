@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_rad.form.manager.class">Knp\RadBundle\Form\FormManager</parameter>
+        <parameter key="knp_rad.form.type_creator.class">Knp\RadBundle\Form\FormTypeCreator</parameter>
+        <parameter key="knp_rad.form.default_creator.class">Knp\RadBundle\Form\DefaultFormCreator</parameter>
+
+        <parameter key="knp_rad.reflection.metadata_fetcher.class">Knp\RadBundle\Reflection\ClassMetadataFetcher</parameter>
+    </parameters>
+
+    <services>
+        <service id="knp_rad.form.manager" class="%knp_rad.form.manager.class%" scope="request">
+            <argument type="service" id="request" />
+        </service>
+
+        <service id="knp_rad.form.type_creator" class="%knp_rad.form.type_creator.class%" public="false">
+            <argument type="service" id="knp_rad.reflection.metadata_fetcher" />
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="form.registry" />
+            <tag name="knp_rad.form.creator" priority="2"/>
+        </service>
+
+        <service id="knp_rad.form.default_creator" class="%knp_rad.form.default_creator.class%" public="false">
+            <argument type="service" id="knp_rad.reflection.metadata_fetcher" />
+            <argument type="service" id="form.factory"/>
+            <tag name="knp_rad.form.creator" priority="1"/>
+        </service>
+        <service id="knp_rad.reflection.metadata_fetcher" class="%knp_rad.reflection.metadata_fetcher.class%" public="false"></service>
+    </services>
+
+</container>
