@@ -14,7 +14,7 @@ class FileStore implements ObjectStoreInterface
     public function findAll()
     {
         if (!file_exists($this->filename)) {
-            return [];
+            return array();
         }
 
         $contents = unserialize(file_get_contents($this->filename));
