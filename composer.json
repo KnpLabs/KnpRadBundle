@@ -1,0 +1,25 @@
+{
+    "name": "knplabs/rad-bundle",
+    "description": "The \"KnpLabs Rad Edition\" bundle",
+    "autoload": {
+        "psr-0": { "Knp\\RadBundle": "" }
+    },
+    "target-dir": "Knp/RadBundle",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": ">=2.1"
+    },
+    "require-dev": {
+        "phpspec/phpspec2": "dev-develop",
+        "symfony/form": ">=2.1",
+        "doctrine/doctrine-fixtures-bundle": "*"
+    },
+    "suggest": {
+        "symfony/form": ">=2.1",
+        "doctrine/doctrine-fixtures-bundle": "*"
+    },
+    "minimum-stability": "dev",
+    "config": {
+        "bin-dir": "bin"
+    }
+}
