@@ -1,10 +1,13 @@
 {
     "name": "knplabs/rad-bundle",
     "description": "The \"KnpLabs Rad Edition\" bundle",
-    "autoload": {
-        "psr-0": { "Knp\\RadBundle": "" }
-    },
-    "target-dir": "Knp/RadBundle",
+    "license":     "MIT",
+    "authors": [
+        {
+            "name":     "Knplabs",
+            "homepage": "http://knplabs.com"
+        }
+    ],
     "require": {
         "php":                               ">=5.3.3",
         "symfony/framework-bundle":          ">=2.1"
@@ -27,5 +30,9 @@
     "minimum-stability": "dev",
     "config": {
         "bin-dir": "bin"
-    }
+    },
+    "autoload": {
+        "psr-0": { "Knp\\RadBundle": "" }
+    },
+    "target-dir": "Knp/RadBundle",
 }
