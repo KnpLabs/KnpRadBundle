@@ -34,5 +34,5 @@
     "autoload": {
         "psr-0": { "Knp\\RadBundle": "" }
     },
-    "target-dir": "Knp/RadBundle",
+    "target-dir": "Knp/RadBundle"
 }
