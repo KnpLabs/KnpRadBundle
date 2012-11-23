@@ -67,6 +67,7 @@ class RegisterDoctrineRepositoriesPass extends ObjectBehavior
 
         $this->process($container);
     }
+
     /**
      * @param Symfony\Component\DependencyInjection\Definition $definition
      */

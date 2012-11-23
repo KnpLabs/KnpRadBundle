@@ -456,4 +456,12 @@ class ConventionalLoader extends ObjectBehavior
             'The `pattern` is only supported for actions, if you want to prefix all the routes of the controller, use `prefix` instead.'
         ))->duringLoad('routing.yml');
     }
+
+    function it_should_not_fail_when_loading_empty_resource($yaml)
+    {
+        $yaml->parse('yaml file')->willReturn(null);
+
+        $routes = $this->load('routing.yml');
+        $routes->shouldHaveCount(0);
+    }
 }

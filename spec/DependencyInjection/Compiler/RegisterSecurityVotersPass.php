@@ -66,44 +66,6 @@ class RegisterSecurityVotersPass extends ObjectBehavior
         $this->process($container);
     }
 
-    /**
-     * @param  Symfony\Component\DependencyInjection\Definition $decisionManagerDef
-     * @param  Symfony\Component\DependencyInjection\Definition $cheeseVoterDef
-     * @param  Symfony\Component\DependencyInjection\Definition $customerVoterDef
-     * @param  Symfony\Component\DependencyInjection\Reference $cheeseVoterRef
-     * @param  Symfony\Component\DependencyInjection\Reference $customerVoterRef
-     */
-    function it_should_not_register_security_voters_alread_defined_as_services($bundle, $container, $classFinder, $definitionFactory, $serviceIdGenerator, $referenceFactory, $definitionManipulator, $decisionManagerDef, $cheeseVoterDef, $customerVoterDef, $cheeseVoterRef, $customerVoterRef)
-    {
-        $container->hasDefinition('security.access.decision_manager')->willReturn(true);
-        $container->getDefinition('security.access.decision_manager')->willReturn($decisionManagerDef);
-
-        $classFinder->findClassesMatching('/my/project/src/App/Security', 'App\Security', 'Voter$')->willReturn(array(
-            'App\Security\Voter\CheeseVoter',
-            'App\Security\Voter\CustomerVoter',
-        ));
-
-        $container->hasDefinition('app.security.voter.cheese_voter')->willReturn(false)->shouldBeCalled();
-        $container->hasDefinition('app.security.voter.customer_voter')->willReturn(true)->shouldBeCalled();
-
-        $definitionFactory->createDefinition('App\Security\Voter\CheeseVoter')->willReturn($cheeseVoterDef);
-        $definitionFactory->createDefinition('App\Security\Voter\CustomerVoter')->shouldNotBeCalled();
-
-        $serviceIdGenerator->generateForBundleClass($bundle, 'App\Security\Voter\CheeseVoter')->shouldBeCalled()->willReturn('app.security.voter.cheese_voter');
-        $serviceIdGenerator->generateForBundleClass($bundle, 'App\Security\Voter\CustomerVoter')->shouldBeCalled()->willReturn('app.security.voter.customer_voter');
-
-        $container->setDefinition('app.security.voter.cheese_voter', $cheeseVoterDef)->shouldBeCalled();
-        $container->setDefinition('app.security.voter.customer_voter', $customerVoterDef)->shouldNotBeCalled();
-
-        $referenceFactory->createReference('app.security.voter.cheese_voter')->willReturn($cheeseVoterRef);
-        $referenceFactory->createReference('app.security.voter.customer_voter')->shouldNotBeCalled();
-
-        $definitionManipulator->appendArgumentValue($decisionManagerDef, 0, $cheeseVoterRef)->shouldBeCalled();
-        $definitionManipulator->appendArgumentValue($decisionManagerDef, 0, $customerVoterRef)->shouldNotBeCalled();
-
-        $this->process($container);
-    }
-
     function it_should_abort_processing_when_decision_manager_is_not_defined($container, $classFinder)
     {
         $container->hasDefinition('security.access.decision_manager')->willReturn(false);

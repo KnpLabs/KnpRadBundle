@@ -41,6 +41,25 @@ class ViewListener extends ObjectBehavior
         $this->onKernelView($event);
     }
 
+    function it_should_create_a_view_response_when_controller_return_null($request, $response, $reqManip, $engine, $event, $mvh)
+    {
+        $reqManip->hasAttribute($request, '_controller')->willReturn(true);
+        $reqManip->getAttribute($request, '_controller')->willReturn('App\Controller\CheeseController::eatAction');
+
+        $request->getRequestFormat()->willReturn('html');
+
+        $engine->exists('App:Cheese:eat.html.twig')->willReturn(true);
+        $engine->renderResponse('App:Cheese:eat.html.twig', array())->willReturn($response);
+
+        $event->setResponse($response)->shouldBeCalled();
+        $event->getRequest()->willReturn($request);
+        $event->getControllerResult()->willReturn(null);
+
+        $mvh->handleMissingView(ANY_ARGUMENTS)->shouldNotBeCalled();
+
+        $this->onKernelView($event);
+    }
+
     function it_should_resolve_controller_when_not_yet_resolved($request, $response, $reqManip, $engine, $event, $cnp, $mvh)
     {
         $reqManip->hasAttribute($request, '_controller')->willReturn(true);

@@ -36,6 +36,7 @@ class FormTypeCreator extends ObjectBehavior
 
     /**
      * @param stdClass $object
+     * @param stdClass $formType
      * @param Symfony\Component\Form\Form $form
      */
     function it_should_return_form_type_if_there_is_one($object, $fetcher, $factory, $form, $formRegistry)
@@ -50,6 +51,7 @@ class FormTypeCreator extends ObjectBehavior
 
     /**
      * @param stdClass $object
+     * @param stdClass $formType
      * @param Symfony\Component\Form\Form $form
      */
     function it_should_return_form_type_with_purpose_if_there_is_one($object, $fetcher, $factory, $form, $formRegistry)
@@ -65,6 +67,7 @@ class FormTypeCreator extends ObjectBehavior
 
     /**
      * @param stdClass $object
+     * @param stdClass $formType
      * @param Symfony\Component\Form\Form $form
      */
     function it_should_fallback_on_default_form_type_if_given_purpose_has_no_associated_form_type($object, $fetcher, $factory, $form, $formRegistry)

@@ -6,17 +6,23 @@
     },
     "target-dir": "Knp/RadBundle",
     "require": {
-        "php": ">=5.3.3",
-        "symfony/framework-bundle": ">=2.1"
+        "php":                               ">=5.3.3",
+        "symfony/framework-bundle":          ">=2.1"
     },
     "require-dev": {
-        "phpspec/phpspec2": "dev-develop",
-        "symfony/form": ">=2.1",
+        "phpspec/phpspec2":                  "dev-develop",
+        "symfony/form":                      ">=2.1",
+        "symfony/security":                  ">=2.1",
+        "symfony/swiftmailer-bundle":        "2.1.*",
+        "doctrine/orm":                      ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-fixtures-bundle": "*"
     },
     "suggest": {
-        "symfony/form": ">=2.1",
-        "doctrine/doctrine-fixtures-bundle": "*"
+        "symfony/form":                      "To take advantage of the Rad Form Manager",
+        "symfony/security":                  "To take advantage of the Rad User Interface",
+        "doctrine/doctrine-fixtures-bundle": "To Take advantage of the Rad Doctrine AbstractFixture",
+        "symfony/swiftmailer-bundle":        "To take advantage of the Rad mailer logger in your tests",
+        "doctrine/orm":                      "To take advantage of the Rad password hash updater listener"
     },
     "minimum-stability": "dev",
     "config": {
