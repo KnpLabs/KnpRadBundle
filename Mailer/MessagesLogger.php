@@ -15,7 +15,7 @@ class MessagesLogger
 
     public function getMessagesSentTo($email)
     {
-        $messages = [];
+        $messages = array();
 
         foreach ($this->objectStore->findAll() as $message) {
             $emails = array_keys($message->getTo());

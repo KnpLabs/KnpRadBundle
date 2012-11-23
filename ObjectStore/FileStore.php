@@ -19,7 +19,7 @@ class FileStore implements ObjectStoreInterface
 
         $contents = unserialize(file_get_contents($this->filename));
 
-        return is_array($contents) ? $contents : [];
+        return is_array($contents) ? $contents : array();
     }
 
     public function store($object)
