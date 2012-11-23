@@ -5,6 +5,7 @@ namespace Knp\RadBundle\EventListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser;
 use Knp\RadBundle\HttpFoundation\RequestManipulator;
@@ -19,6 +20,7 @@ class ViewListener
     private $parser;
     private $engine;
     private $requestManipulator;
+    private $bundleName;
 
     /**
      * Initializes listener.
@@ -36,6 +38,11 @@ class ViewListener
         $this->engine             = $engine;
         $this->missingViewHandler = $missingViewHandler ?: new MissingViewHandler();
         $this->requestManipulator = $requestManipulator ?: new RequestManipulator();
+    }
+
+    public function setAppBundleName($bundleName)
+    {
+        $this->bundleName = $bundleName;
     }
 
     /**
@@ -75,6 +82,11 @@ class ViewListener
         $group = str_replace('\\', '/', $group);
         $view  = preg_replace('/Action$/', '', $method);
 
-        return sprintf('App:%s:%s.%s.%s', $group, $view, $format, $this->engine);
+        return sprintf('%s:%s:%s.%s.%s', $this->getBundleName(), $group, $view, $format, $this->engine);
+    }
+
+    public function getBundleName()
+    {
+        return $this->bundleName ?: 'App';
     }
 }
