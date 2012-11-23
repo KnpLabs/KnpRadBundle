@@ -45,6 +45,11 @@ class RegisterTwigExtensionsPass implements CompilerPassInterface
 
         foreach ($classes as $class) {
             $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
+
+            if ($container->hasDefinition($id)) {
+                continue;
+            }
+
             $def = $this->definitionFactory->createDefinition($class);
             $ref = $this->referenceFactory->createReference($id);
 

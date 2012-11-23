@@ -12,6 +12,7 @@ class TwigExtensionFactory
     const CONTAINER_SERVICE_ID = 'service_container';
 
     private $reflectionFactory;
+    private $referenceFactory;
 
     public function __construct(ReflectionFactory $reflectionFactory = null, ReferenceFactory $referenceFactory = null)
     {

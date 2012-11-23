@@ -34,7 +34,7 @@ class AssistantController extends Controller
         $viewPath = $this->get('knp_rad.view.path_deducer')->deducePath($viewName);
 
         // in case directory does not exist
-        $this->get('filesystem')->touch($viewPath);
+        $this->get('filesystem')->mkdir(dirname($viewPath));
 
         file_put_contents($viewPath, $viewBody);
 

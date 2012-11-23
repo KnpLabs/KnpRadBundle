@@ -20,12 +20,12 @@
         <service id="knp_rad.form.type_creator" class="%knp_rad.form.type_creator.class%" public="false">
             <argument type="service" id="knp_rad.reflection.metadata_fetcher" />
             <argument type="service" id="form.factory" />
-            <tag name="knp_rad.form.creator" />
+            <tag name="knp_rad.form.creator" priority="2"/>
         </service>
 
         <service id="knp_rad.form.default_creator" class="%knp_rad.form.default_creator.class%" public="false">
             <argument type="service" id="knp_rad.reflection.metadata_fetcher" />
-            <argument type="service" id="form.factory" />
+            <argument type="service" id="form.factory" priority="1"/>
             <tag name="knp_rad.form.creator" />
         </service>
         <service id="knp_rad.reflection.metadata_fetcher" class="%knp_rad.reflection.metadata_fetcher.class%" public="false"></service>
