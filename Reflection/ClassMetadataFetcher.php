@@ -8,6 +8,7 @@ class ClassMetadataFetcher
     {
         return $this->reflect($object)->getName();
     }
+
     public function getShortClassName($object)
     {
         return $this->reflect($object)->getShortName();

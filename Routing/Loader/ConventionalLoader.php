@@ -38,6 +38,10 @@ class ConventionalLoader extends FileLoader
         $collection = new RouteCollection();
         $collection->addResource(new FileResource($file));
 
+        if (!$config) {
+            return $collection;
+        }
+
         foreach ($config as $shortname => $mapping) {
             $parts = explode(':', $shortname);
 

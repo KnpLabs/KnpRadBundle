@@ -29,6 +29,6 @@ class Bundle extends BaseBundle
             return $extension;
         }
 
-        return $this->extension = new ContainerExtension(__DIR__);
+        return $this->extension = new ContainerExtension($this->getPath());
     }
 }

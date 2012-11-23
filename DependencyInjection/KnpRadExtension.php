@@ -24,6 +24,9 @@ class KnpRadExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
+        if ($config['mailer_logger']) {
+            $loader->load('mailer.logger.xml');
+        }
         if ($config['listener']['view']) {
             $loader->load('view_listener.xml');
         }

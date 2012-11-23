@@ -64,7 +64,7 @@ class ViewListener
         }
 
         $viewName   = $this->deduceViewName($controller, $request->getRequestFormat());
-        $viewParams = $event->getControllerResult();
+        $viewParams = $event->getControllerResult() ?: array();
 
         if ($this->templating->exists($viewName)) {
             $response = $this->templating->renderResponse($viewName, $viewParams);

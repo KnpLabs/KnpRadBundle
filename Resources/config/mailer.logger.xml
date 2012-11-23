@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_rad.mailer.recorder.class">Knp\RadBundle\Mailer\MessageRecorder</parameter>
+        <parameter key="knp_rad.mailer.messages_store.class">Knp\RadBundle\ObjectStore\FileStore</parameter>
+        <parameter key="knp_rad.mailer.logger.class">Knp\RadBundle\Mailer\MessagesLogger</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="knp_rad.mailer.recorder" class="%knp_rad.mailer.recorder.class%" public="false">
+            <argument type="service" id="knp_rad.mailer.logger" />
+            <tag name="swiftmailer.plugin" />
+        </service>
+
+        <service id="knp_rad.mailer.messages_store" class="%knp_rad.mailer.messages_store.class%">
+            <argument>%kernel.cache_dir%/mailer_messsages_store.meta</argument>
+        </service>
+
+        <service id="knp_rad.mailer.logger" class="%knp_rad.mailer.logger.class%">
+            <argument type="service" id="knp_rad.mailer.messages_store" />
+        </service>
+
+    </services>
+
+</container>

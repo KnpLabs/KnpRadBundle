@@ -6,7 +6,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 class MissingViewHandler
 {
-    public function handleMissingView(GetResponseEvent $event, $viewName, array $viewParams)
+    public function handleMissingView(GetResponseEvent $event, $viewName, array $viewParams = null)
     {
         $kernel = $event->getKernel();
 

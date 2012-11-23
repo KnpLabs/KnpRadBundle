@@ -31,29 +31,42 @@ class Controller extends BaseController
         ;
     }
 
+    protected function getMailer()
+    {
+        return $this->get('mailer');
+    }
+
+    protected function getSession()
+    {
+        return $this->get('session');
+    }
+
+    protected function getFlashBag()
+    {
+        return $this->getSession()->getFlashBag();
+    }
+
     protected function persist($entity, $flush = false)
     {
-        $em = $this->getEntityManager();
-        $em->persist($entity);
+        $this->getEntityManager()->persist($entity);
 
         if ($flush) {
-            $em->flush($entity);
+            $this->flush($entity);
         }
     }
 
     protected function remove($entity, $flush = false)
     {
-        $em = $this->getEntityManager();
-        $em->remove($entity);
+        $this->getEntityManager()->remove($entity);
 
         if ($flush) {
-            $em->flush();
+            $this->flush();
         }
     }
 
-    protected function flush()
+    protected function flush($entity = null)
     {
-        $this->getEntityManager()->flush();
+        $this->getEntityManager()->flush($entity);
     }
 
     protected function findOr404($entity, $criterias = array())
@@ -74,11 +87,6 @@ class Controller extends BaseController
         throw $this->createNotFoundException('Resource not found');
     }
 
-    protected function getSession()
-    {
-        return $this->get('session');
-    }
-
     protected function addFlashf()
     {
         $args = func_get_args();
@@ -92,13 +100,22 @@ class Controller extends BaseController
         $this->getFlashBag()->add($type, $message);
     }
 
-    protected function getFlashBag()
-    {
-        return $this->getSession()->getFlashBag();
-    }
-
     protected function createObjectForm($object, $purpose = null, array $options = array())
     {
         return $this->get('knp_rad.form.manager')->createObjectForm($object, $purpose, $options);
+    }
+
+    protected function createBoundObjectForm($object, $purpose = null, array $options = array())
+    {
+        return $this->get('knp_rad.form.manager')->createBoundObjectForm($object, $purpose, $options);
+    }
+
+    protected function emailText($to, $text)
+    {
+        $message = $this->getMailer()->createMessage();
+        $message->setTo($to);
+        $message->setBody($text);
+
+        return $this->getMailer()->send($message);
     }
 }
