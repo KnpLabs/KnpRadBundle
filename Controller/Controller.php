@@ -3,7 +3,7 @@
 namespace Knp\RadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Request;
 
 class Controller extends BaseController
@@ -15,7 +15,7 @@ class Controller extends BaseController
 
     protected function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
     {
-        return new AccessDeniedException($message, $previous);
+        return new AccessDeniedHttpException($message, $previous);
     }
 
     protected function getEntityManager()
