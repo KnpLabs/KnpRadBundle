@@ -25,22 +25,25 @@ class KnpRadExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         if ($config['mailer_logger']) {
-            $loader->load('mailer.logger.xml');
+            $loader->load('mailer_logger.xml');
         }
+
         if ($config['listener']['view']) {
             $loader->load('view_listener.xml');
         }
-
-        if ($config['listener']['resolver']) {
-            $loader->load('resource_resolver.xml');
+        if ($config['listener']['resource_resolver']) {
+            $loader->load('resource_resolver_listener.xml');
+        }
+        if ($config['listener']['orm_user']) {
+            $loader->load('orm_user_listener.xml');
         }
 
         if ($config['routing_loader']) {
             $loader->load('routing_loader.xml');
         }
 
-        if ($config['form']) {
-            $loader->load('form.xml');
+        if ($config['form_manager']) {
+            $loader->load('form_manager.xml');
         }
 
         if ($config['datatable']) {
