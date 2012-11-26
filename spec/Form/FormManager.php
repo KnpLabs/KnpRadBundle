@@ -29,7 +29,7 @@ class FormManager extends ObjectBehavior
 
     function it_should_be_able_to_register_creators_orderly($creator1, $creator2, $creator3)
     {
-        $this->getCreators()->shouldReturn(array(3 => $creator2, 2 => $creator1, 1 => $creator3));
+        $this->getCreators()->shouldReturn(array($creator2, $creator1, $creator3));
     }
 
     /**

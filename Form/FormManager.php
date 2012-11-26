@@ -7,11 +7,12 @@ use Symfony\Component\HttpFoundation\Request;
 class FormManager
 {
     private $request;
-    private $creators = array();
+    private $creators;
 
     public function __construct(Request $request)
     {
-        $this->request = $request;
+        $this->creators = new \SplPriorityQueue;
+        $this->request  = $request;
     }
 
     public function createObjectForm($object, $purpose = null, array $options = array())
@@ -38,16 +39,11 @@ class FormManager
 
     public function registerCreator(FormCreatorInterface $creator, $priority = 0)
     {
-        if (isset($this->creators[$priority])) {
-            return $this->registerCreator($creator, ++$priority);
-        }
-        $this->creators[$priority] = $creator;
+        $this->creators->insert($creator, $priority);
     }
 
     public function getCreators()
     {
-        krsort($this->creators);
-
-        return $this->creators;
+        return array_values(iterator_to_array($this->creators));
     }
 }
