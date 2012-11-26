@@ -26,18 +26,16 @@ class ContainerExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $environment = $container->getParameter('kernel.environment');
+        $loader = new Loader\YamlFileLoader(
+            $container, new FileLocator($this->path.'/Resources/config')
+        );
+
         if (file_exists($this->path.'/Resources/config/services.yml')) {
-            $loader = new Loader\YamlFileLoader(
-                $container, new FileLocator($this->path.'/Resources/config')
-            );
             $loader->load('services.yml');
         }
-
-        if (file_exists($this->path.'/Resources/config/services.xml')) {
-            $loader = new Loader\XmlFileLoader(
-                $container, new FileLocator($this->path.'/Resources/config')
-            );
-            $loader->load('services.xml');
+        if (file_exists($this->path.'/Resources/config/services_'.$environment.'.yml')) {
+            $loader->load('services_'.$environment.'.yml');
         }
     }
 }
