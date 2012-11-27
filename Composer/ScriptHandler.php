@@ -1,6 +1,6 @@
 <?php
 
-namespace Composer;
+namespace Knp\RadBundle\Composer;
 
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as BaseScriptHandler;
 
