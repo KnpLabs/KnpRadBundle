@@ -2,7 +2,7 @@
 
 namespace Composer;
 
-use Sensio\Bundle\DistributionBundle\Composer\ScriptHandlern as BaseScriptHandler;
+use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as BaseScriptHandler;
 
 class ScriptHandler extends BaseScriptHandler
 {
