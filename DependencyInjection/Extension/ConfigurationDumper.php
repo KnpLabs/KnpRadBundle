@@ -2,7 +2,7 @@
 
 namespace Knp\Bundle\RadBundle\DependencyInjection\Extension;
 
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 /**
  * ContianerExtension configuration dumper.
@@ -13,7 +13,7 @@ class ConfigurationDumper
     private $configPath;
     private $templatesPath;
 
-    public function __construct(Extension $extension, $configPath)
+    public function __construct(ExtensionInterface $extension, $configPath)
     {
         $this->extension     = $extension;
         $this->configPath    = $configPath;
