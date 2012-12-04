@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_rad.flash.message_renderer.class">Knp\RadBundle\Flash\MessageRenderer</parameter>
+        <parameter key="knp_rad.twig.flash_extension.class">Knp\RadBundle\Twig\FlashExtension</parameter>
+    </parameters>
+
+    <services>
+        <service id="knp_rad.flash.message_renderer" class="%knp_rad.flash.message_renderer.class%">
+            <argument type="service" id="translator" />
+        </service>
+
+        <service id="knp_rad.twig.flash_extension" class="%knp_rad.twig.flash_extension.class%">
+            <argument type="service" id="knp_rad.flash.message_renderer" />
+            <argument type="service" id="session" />
+            <tag name="twig.extension" />
+        </service>
+    </services>
+
+</container>
