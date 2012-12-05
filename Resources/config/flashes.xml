@@ -12,6 +12,7 @@
     <services>
         <service id="knp_rad.flash.message_renderer" class="%knp_rad.flash.message_renderer.class%">
             <argument type="service" id="translator" />
+            <argument>%knp_rad.flashes.trans_catalog%</argument>
         </service>
 
         <service id="knp_rad.twig.flash_extension" class="%knp_rad.twig.flash_extension.class%">

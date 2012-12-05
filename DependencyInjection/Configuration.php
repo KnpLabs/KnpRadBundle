@@ -34,7 +34,13 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('routing_loader')->defaultTrue()->end()
                 ->booleanNode('form_manager')->defaultTrue()->end()
                 ->booleanNode('datatable')->defaultTrue()->end()
-                ->booleanNode('flashes')->defaultTrue()->end()
+                ->arrayNode('flashes')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enabled')->defaultTrue()->end()
+                        ->scalarNode('trans_catalog')->defaultValue('messages')->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 
