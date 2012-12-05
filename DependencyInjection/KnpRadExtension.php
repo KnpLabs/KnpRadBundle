@@ -49,5 +49,10 @@ class KnpRadExtension extends Extension
         if ($config['datatable']) {
             $loader->load('datatable.xml');
         }
+
+        $container->setParameter('knp_rad.flashes.trans_catalog', $config['flashes']['trans_catalog']);
+        if ($config['flashes']['enabled']) {
+            $loader->load('flashes.xml');
+        }
     }
 }

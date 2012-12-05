@@ -5,6 +5,7 @@ namespace Knp\RadBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Request;
+use Knp\RadBundle\Flash;
 
 class Controller extends BaseController
 {
@@ -87,17 +88,9 @@ class Controller extends BaseController
         throw $this->createNotFoundException('Resource not found');
     }
 
-    protected function addFlashf()
+    protected function addFlash($type, $message, array $parameters = array(), $pluralization = null)
     {
-        $args = func_get_args();
-        $type = array_shift($args);
-
-        $this->addFlash($type, call_user_func_array('sprintf', $args));
-    }
-
-    protected function addFlash($type, $message)
-    {
-        $this->getFlashBag()->add($type, $message);
+        $this->getFlashBag()->add($type, new Flash\Message($message, $parameters, $pluralization));
     }
 
     protected function createObjectForm($object, $purpose = null, array $options = array())
