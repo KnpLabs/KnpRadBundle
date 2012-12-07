@@ -27,7 +27,7 @@ class FormTypeCreator extends ObjectBehavior
     function it_should_return_null_if_there_is_no_form_type($object, $fetcher, $formRegistry)
     {
         $fetcher->getShortClassName($object)->willReturn('Potato');
-        $formRegistry->hasType('app_form_potato_type')->willReturn(false);
+        $formRegistry->hasType('app.form.potato_type')->willReturn(false);
         $fetcher->getClass($object)->willReturn('App\Entity\Potato');
         $fetcher->getParentClass('App\Entity\Potato')->willReturn(null);
 
@@ -42,9 +42,9 @@ class FormTypeCreator extends ObjectBehavior
     function it_should_return_form_type_if_there_is_one($object, $fetcher, $factory, $form, $formRegistry)
     {
         $fetcher->getShortClassName($object)->willReturn('Cheese');
-        $formRegistry->hasType('app_form_cheese_type')->willReturn(true);
+        $formRegistry->hasType('app.form.cheese_type')->willReturn(true);
         $fetcher->getClass($object)->willReturn('App\Entity\Cheese');
-        $factory->create('app_form_cheese_type', $object, array())->shouldBeCalled()->willReturn($form);
+        $factory->create('app.form.cheese_type', $object, array())->shouldBeCalled()->willReturn($form);
 
         $this->create($object)->shouldReturn($form);
     }
@@ -57,10 +57,10 @@ class FormTypeCreator extends ObjectBehavior
     function it_should_return_form_type_with_purpose_if_there_is_one($object, $fetcher, $factory, $form, $formRegistry)
     {
         $fetcher->getShortClassName($object)->willReturn('Cheese');
-        $formRegistry->hasType('app_form_edit_cheese_type')->willReturn(true);
-        $formRegistry->hasType('app_form_cheese_type')->shouldNotBeCalled();
+        $formRegistry->hasType('app.form.edit_cheese_type')->willReturn(true);
+        $formRegistry->hasType('app.form.cheese_type')->shouldNotBeCalled();
         $fetcher->getClass($object)->willReturn('App\Entity\Cheese');
-        $factory->create('app_form_edit_cheese_type', $object, array())->shouldBeCalled()->willReturn($form);
+        $factory->create('app.form.edit_cheese_type', $object, array())->shouldBeCalled()->willReturn($form);
 
         $this->create($object, 'edit')->shouldReturn($form);
     }
@@ -76,9 +76,9 @@ class FormTypeCreator extends ObjectBehavior
         $fetcher->getParentClass('App\\Entity\\Cheese')->willReturn(null);
         $fetcher->getShortClassName($object)->willReturn('Cheese');
         $fetcher->getShortClassName('App\Entity\Cheese')->willReturn('Cheese');
-        $formRegistry->hasType('app_form_edit_cheese_type')->willReturn(false);
-        $formRegistry->hasType('app_form_cheese_type')->willReturn(true);
-        $factory->create('app_form_cheese_type', $object, array())->shouldBeCalled()->willReturn($form);
+        $formRegistry->hasType('app.form.edit_cheese_type')->willReturn(false);
+        $formRegistry->hasType('app.form.cheese_type')->willReturn(true);
+        $factory->create('app.form.cheese_type', $object, array())->shouldBeCalled()->willReturn($form);
 
         $this->create($object, 'edit')->shouldReturn($form);
     }
@@ -95,8 +95,8 @@ class FormTypeCreator extends ObjectBehavior
         $fetcher->getClass('App\Entity\Cheese')->willReturn('App\Entity\Cheese');
         $fetcher->getClass($object)->willReturn('App\Entity\Cheese');
         $fetcher->getParentClass('App\Entity\Cheese')->willReturn(null);
-        $formRegistry->hasType('app_form_cheese_type')->willReturn(false);
-        $formRegistry->hasType('app_form_edit_cheese_type')->willReturn(false);
+        $formRegistry->hasType('app.form.cheese_type')->willReturn(false);
+        $formRegistry->hasType('app.form.edit_cheese_type')->willReturn(false);
 
         $this->create($object, 'edit')->shouldReturn(null);
     }

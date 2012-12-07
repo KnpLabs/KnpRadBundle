@@ -31,7 +31,7 @@ class FormTypeCreator implements FormCreatorInterface
     {
         $currentPurpose = $purpose ? $purpose.'_' : '';
 
-        $id = sprintf('app_form_%s%s_type', $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
+        $id = sprintf('app.form.%s%s_type', $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
         $class = sprintf('App\\Form\\%s%sType', ucfirst($purpose), $this->fetcher->getShortClassName($object));
         $type = $this->getAlias($class, $id);
 

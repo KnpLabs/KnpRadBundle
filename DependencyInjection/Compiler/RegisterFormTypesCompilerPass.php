@@ -11,18 +11,21 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\Definition;
 use Knp\RadBundle\DependencyInjection\Definition\FormTypeDefinitionFactory;
+use Knp\RadBundle\DependencyInjection\ServiceIdGenerator;
 
 class RegisterFormTypesCompilerPass implements CompilerPassInterface
 {
     private $bundle;
     private $classFinder;
     private $definitionFactory;
+    private $serviceIdGenerator;
 
-    public function __construct(BundleInterface $bundle, ClassFinder $classFinder = null, FormTypeDefinitionFactory $definitionFactory = null)
+    public function __construct(BundleInterface $bundle, ClassFinder $classFinder = null, FormTypeDefinitionFactory $definitionFactory = null, ServiceIdGenerator $serviceIdGenerator = null)
     {
         $this->bundle = $bundle;
         $this->classFinder = $classFinder ?: new ClassFinder();
         $this->definitionFactory = $definitionFactory ?: new FormTypeDefinitionFactory;
+        $this->serviceIdGenerator = $serviceIdGenerator ?: new ServiceIdGenerator;
     }
     /**
      * {@inheritDoc}
@@ -36,9 +39,7 @@ class RegisterFormTypesCompilerPass implements CompilerPassInterface
         $classes = $this->classFinder->findClassesMatching($directory, $namespace, 'Type$');
 
         foreach ($classes as $class) {
-            $baseClass = substr($class, strlen($namespace) + 1);
-
-            $id = sprintf('app_form_%s', str_replace('\\', '.', Container::underscore($baseClass)));
+            $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
             $alias = $this->getAlias($class, $id);
 
             if ($container->hasDefinition($id)) {
