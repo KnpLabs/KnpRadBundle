@@ -26,7 +26,7 @@ class ClassMetadataFetcher
 
     public function reflect($classname)
     {
-        return new \ReflectionClass($classname);
+        return new \ReflectionObject($classname);
     }
 
     public function getParentClass($object)
