@@ -37,6 +37,9 @@ class KnpRadExtension extends Extension
         if ($config['listener']['orm_user']) {
             $loader->load('orm_user_listener.xml');
         }
+        if ($config['listener']['exception_rethrow']) {
+            $loader->load('exception_rethrow_listener.xml');
+        }
 
         if ($config['routing_loader']) {
             $loader->load('routing_loader.xml');

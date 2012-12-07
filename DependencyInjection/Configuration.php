@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('view')->defaultTrue()->end()
                         ->booleanNode('resource_resolver')->defaultTrue()->end()
                         ->booleanNode('orm_user')->defaultTrue()->end()
+                        ->booleanNode('exception_rethrow')->defaultFalse()->end()
                     ->end()
                 ->end()
                 ->booleanNode('routing_loader')->defaultTrue()->end()
