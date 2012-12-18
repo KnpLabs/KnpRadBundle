@@ -27,4 +27,9 @@ class Message
     {
         return $this->pluralization;
     }
+
+    public function __toString()
+    {
+        return strtr($this->template, $this->parameters);
+    }
 }
