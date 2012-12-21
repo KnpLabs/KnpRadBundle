@@ -32,6 +32,16 @@ class Controller extends BaseController
         ;
     }
 
+    protected function getSecurity()
+    {
+        return $this->get('security.context');
+    }
+
+    protected function isGranted($attributes, $object = null)
+    {
+        return $this->getSecurity()->isGranted($attributes, $object);
+    }
+
     protected function getMailer()
     {
         return $this->get('mailer');
