@@ -31,9 +31,4 @@ class MessagesLogger
     {
         $this->objectStore->store($message);
     }
-
-    public function clear()
-    {
-        $this->objectStore->clear();
-    }
 }
