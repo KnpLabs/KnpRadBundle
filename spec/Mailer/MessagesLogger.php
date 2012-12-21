@@ -34,4 +34,11 @@ class MessagesLogger extends ObjectBehavior
 
         $this->getMessagesSentTo('john@gmail.com')->shouldReturn(array($a, $c));
     }
+
+    function it_should_clear_the_recorded_mails($objStore)
+    {
+        $objStore->clear()->shouldBeCalled();
+
+        $this->clear();
+    }
 }
