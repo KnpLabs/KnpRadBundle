@@ -9,8 +9,10 @@
         }
     ],
     "require": {
-        "php":                               ">=5.3.3",
-        "symfony/framework-bundle":          ">=2.1"
+        "php":                      ">=5.3.3",
+        "symfony/framework-bundle": ">=2.1",
+        "nelmio/alice":             "*",
+        "fzaninotto/faker":         "*"
     },
     "require-dev": {
         "phpspec/phpspec2":                  "dev-develop",
