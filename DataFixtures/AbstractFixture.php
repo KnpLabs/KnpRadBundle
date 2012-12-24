@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Nelmio\Alice\Fixtures;
 
-abstract class AbstractFixture extends BaseAbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
+abstract class AbstractFixture extends BaseAbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     protected $container;
 
@@ -25,11 +25,6 @@ abstract class AbstractFixture extends BaseAbstractFixture implements ContainerA
     public function getOrder()
     {
         return 1;
-    }
-
-    public function createObjectFactory(ObjectManager $manager, $className)
-    {
-        return new ObjectFactory($this->referenceRepository, new ReferenceManipulator($this->referenceRepository), $manager, $className);
     }
 
     public function setContainer(ContainerInterface $container = null)
@@ -50,5 +45,10 @@ abstract class AbstractFixture extends BaseAbstractFixture implements ContainerA
         return array(
             'providers' => array($this)
         );
+    }
+
+    protected function createObjectFactory(ObjectManager $manager, $className)
+    {
+        return new ObjectFactory($this->referenceRepository, new ReferenceManipulator($this->referenceRepository), $manager, $className);
     }
 }
