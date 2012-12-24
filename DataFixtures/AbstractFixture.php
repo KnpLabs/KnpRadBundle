@@ -17,7 +17,7 @@ abstract class AbstractFixture extends BaseAbstractFixture implements ContainerA
 
     public function load(ObjectManager $manager)
     {
-        foreach ($this->getAliceFiles() as $files) {
+        foreach ($this->getAliceFiles() as $file) {
             Fixtures::load($file, $manager, $this->getAliceOptions());
         }
     }
@@ -39,7 +39,10 @@ abstract class AbstractFixture extends BaseAbstractFixture implements ContainerA
 
     protected function getAliceFiles()
     {
-        return glob(__DIR__.'/*.yml');
+        $refl = new \ReflectionObject($this);
+        $path = dirname($refl->getFileName());
+
+        return glob($path.'/*.yml');
     }
 
     protected function getAliceOptions()
