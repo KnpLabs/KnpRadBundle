@@ -14,7 +14,7 @@ class LoadAliceFixtures extends AbstractFixture
 {
     public function load(ObjectManager $manager)
     {
-        $env     = $this->continaer->getParameter('kernel.environment');
+        $env     = $this->container->getParameter('kernel.environment');
         $bundles = $this->container->getParameter('kernel.bundles');
         if (!isset($bundles['App'])) {
             return;
