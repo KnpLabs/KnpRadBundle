@@ -50,7 +50,7 @@ class LoadAliceFixtures extends AbstractFixture
         return Finder::create()
             ->files()
             ->name('*.yml')
-            ->depth(1)
+            ->depth(0)
             ->sortByName()
             ->in($paths)
         ;
