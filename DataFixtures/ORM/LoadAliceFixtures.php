@@ -3,14 +3,18 @@
 namespace Knp\RadBundle\DataFixtures\ORM;
 
 use Knp\RadBundle\DataFixtures\AbstractFixture;
+
 use Symfony\Component\Finder\Finder;
+
 use Doctrine\Common\Persistence\ObjectManager;
+
 use Nelmio\Alice\Fixtures;
 
 class LoadAliceFixtures extends AbstractFixture
 {
     public function load(ObjectManager $manager)
     {
+        $env     = $this->continaer->getParameter('kernel.environment');
         $bundles = $this->container->getParameter('kernel.bundles');
         if (!isset($bundles['App'])) {
             return;
@@ -24,18 +28,32 @@ class LoadAliceFixtures extends AbstractFixture
         $path = dirname($refl->getFileName()).DIRECTORY_SEPARATOR.'Resources'.
             DIRECTORY_SEPARATOR.'fixtures'.DIRECTORY_SEPARATOR.'orm';
 
-        foreach ($this->getAliceFiles($path) as $file) {
+        foreach ($this->getAliceFiles($path, $env) as $file) {
             Fixtures::load($file, $manager, $this->getAliceOptions());
         }
     }
 
-    protected function getAliceFiles($path)
+    protected function getAliceFiles($path, $environment)
     {
-        if (!is_dir($path)) {
+        $paths = array();
+        if (is_dir($path)) {
+            $paths[] = $path;
+        }
+        if (is_dir($path.DIRECTORY_SEPARATOR.$environment)) {
+            $paths[] = $path.DIRECTORY_SEPARATOR.$environment;
+        }
+
+        if (0 == count($paths)) {
             return array();
         }
 
-        return Finder::create()->files()->name('*.yml')->in($path);
+        return Finder::create()
+            ->files()
+            ->name('*.yml')
+            ->depth(1)
+            ->sortByName()
+            ->in($paths)
+        ;
     }
 
     protected function getAliceOptions()
