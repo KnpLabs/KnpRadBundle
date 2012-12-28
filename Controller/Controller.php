@@ -47,12 +47,12 @@ class Controller extends BaseController
         return $this->get('mailer');
     }
 
-    protected function createMessageFor($name, array $parameters)
+    protected function createMessageFor($name, array $parameters = array())
     {
         return $this->get('knp_rad.mailer.message_factory')->createMessage($name, $parameters);
     }
 
-    protected function sendMessage($from, $to, $name, array $parameters)
+    protected function sendMessage($from, $to, $name, array $parameters = array())
     {
         $message = $this->createMessageFor($name, $parameters);
         $message->setTo($to);
