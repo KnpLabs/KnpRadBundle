@@ -22,7 +22,13 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->booleanNode('mailer_logger')->defaultFalse()->end()
+                ->arrayNode('mailer')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('logger')->defaultFalse()->end()
+                        ->booleanNode('factory')->defaultTrue()->end()
+                    ->end()
+                ->end()
                 ->arrayNode('listener')
                     ->addDefaultsIfNotSet()
                     ->children()
