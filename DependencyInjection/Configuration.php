@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->booleanNode('logger')->defaultFalse()->end()
-                        ->booleanNode('factory')->defaultTrue()->end()
+                        ->booleanNode('message_factory')->defaultTrue()->end()
                     ->end()
                 ->end()
                 ->arrayNode('listener')
