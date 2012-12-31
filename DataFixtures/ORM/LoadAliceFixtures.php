@@ -21,7 +21,8 @@ class LoadAliceFixtures extends AbstractFixture
         }
 
         $refl = new \ReflectionClass($bundles['App']);
-        if (class_exists($refl->getNamespaceName().'\\DataFixtures\\ORM\\LoadAliceFixtures')) {
+        if (class_exists($customClass = $refl->getNamespaceName().'\\DataFixtures\\ORM\\LoadAliceFixtures') &&
+            $customClass !== get_class($this)) {
             return;
         }
 
