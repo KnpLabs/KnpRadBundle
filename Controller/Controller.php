@@ -109,8 +109,10 @@ class Controller extends BaseController
         throw $this->createNotFoundException('Resource not found');
     }
 
-    protected function addFlash($type, $message, array $parameters = array(), $pluralization = null)
+    protected function addFlash($type, $message = null, array $parameters = array(), $pluralization = null)
     {
+        $message = $message ?: sprintf('%s.%s', $this->getRequest()->attributes->get('_route'), $type);
+
         $this->getFlashBag()->add($type, new Flash\Message($message, $parameters, $pluralization));
     }
 
