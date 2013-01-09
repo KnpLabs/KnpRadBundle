@@ -16,37 +16,33 @@ class CsrfListener extends ObjectBehavior
     {
         $event->getRequest()->willReturn($request);
         $request->request = $requestBag;
-        $request->isMethod('DELETE')->willReturn(true);
 
         $this->beConstructedWith($csrfProvider);
     }
 
     function its_onKernelRequest_should_continue_if_csrf_valid($event, $request, $requestBag, $csrfProvider)
     {
-        $request->getMethod()->willReturn('DELETE');
         $requestBag->has('_link_token')->shouldBeCalled()->willReturn(true);
         $requestBag->get('_link_token')->shouldBeCalled()->willReturn('some token');
-        $csrfProvider->isCsrfTokenValid('delete', 'some token')->shouldBeCalled()->willReturn(true);
+        $csrfProvider->isCsrfTokenValid('link', 'some token')->shouldBeCalled()->willReturn(true);
 
         $this->onKernelRequest($event);
     }
 
     function its_onKernelRequest_should_continue_if_no_csrf_provided($event, $request, $requestBag, $csrfProvider)
     {
-        $request->getMethod()->willReturn('DELETE');
         $requestBag->has('_link_token')->shouldBeCalled()->willReturn(false);
         $requestBag->get('_link_token')->shouldNotBeCalled();
-        $csrfProvider->isCsrfTokenValid('delete', 'some token')->shouldNotBeCalled();
+        $csrfProvider->isCsrfTokenValid('link', 'some token')->shouldNotBeCalled();
 
         $this->onKernelRequest($event);
     }
 
     function its_onKernelRequest_should_throw_exception_if_csrf_invalid($event, $request, $requestBag, $csrfProvider)
     {
-        $request->getMethod()->willReturn('DELETE');
         $requestBag->has('_link_token')->shouldBeCalled()->willReturn(true);
         $requestBag->get('_link_token')->shouldBeCalled()->willReturn('some token');
-        $csrfProvider->isCsrfTokenValid('delete', 'some token')->shouldBeCalled()->willReturn(false);
+        $csrfProvider->isCsrfTokenValid('link', 'some token')->shouldBeCalled()->willReturn(false);
 
         $this->shouldThrow(new \InvalidArgumentException(
             'The CSRF token is invalid. Please try to resubmit the form.'
@@ -55,10 +51,9 @@ class CsrfListener extends ObjectBehavior
 
     function its_onKernelRequest_should_use_request_method_as_csrf_intention($event, $request, $requestBag, $csrfProvider)
     {
-        $request->getMethod()->willReturn('PUT');
         $requestBag->has('_link_token')->shouldBeCalled()->willReturn(true);
         $requestBag->get('_link_token')->shouldBeCalled()->willReturn('some token');
-        $csrfProvider->isCsrfTokenValid('put', 'some token')->shouldBeCalled()->willReturn(true);
+        $csrfProvider->isCsrfTokenValid('link', 'some token')->shouldBeCalled()->willReturn(true);
 
         $this->onKernelRequest($event);
     }

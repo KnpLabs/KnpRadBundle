@@ -12,9 +12,8 @@
     $(document).ready(function() {
         $('body').delegate('a[data-method]', 'click', function (event) {
             event.preventDefault();
-            var method = $(event.target).data('method');
 
-            if (method.toLowerCase() === 'delete' && !confirmDeletion(event)) {
+            if (!confirmDeletion(event)) {
                 return;
             }
 
@@ -28,7 +27,7 @@
 
             input.type    = 'hidden';
             input.name    = '_method';
-            input.value   = method;
+            input.value   = $(event.target).data('method');
 
             form.appendChild(input);
 

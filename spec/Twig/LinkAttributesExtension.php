@@ -11,6 +11,8 @@ class LinkAttributesExtension extends ObjectBehavior
      */
     function let($csrfProvider)
     {
+        $csrfProvider->generateCsrfToken('link')->willReturn('some token');
+
         $this->beConstructedWith($csrfProvider);
     }
 
@@ -26,59 +28,56 @@ class LinkAttributesExtension extends ObjectBehavior
 
     function it_should_have_the_csrf_attribute_function()
     {
-        $this->getFunctions()->shouldHaveCount(5);
+        $this->getFunctions()->shouldHaveCount(2);
     }
 
-    function its_getDeleteAttributes_should_return_html_attributes_for_delete_method($csrfProvider)
+    function its_getLinkAttributes_should_return_html_attributes_for_delete_method_with_default_confirmation_message()
     {
-        $csrfProvider->generateCsrfToken('delete')->willReturn('some token');
-
-        $this->getDeleteAttributes('a confirmation message')->shouldReturn('data-method="delete" data-confirm="a confirmation message" data-csrf-token="some token"');
+        $this->getLinkAttributes('delete')->shouldReturn('data-method="delete" data-confirm="Are you sure?" data-csrf-token="some token"');
     }
 
-    function its_getDeleteAttributes_should_return_html_attributes_for_delete_method_with_no_confirmation_attribute(
-        $csrfProvider
-    )
+    function its_getLinkAttributes_should_return_html_attributes_for_delete_method_with_a_specified_confirmation_message()
     {
-        $csrfProvider->generateCsrfToken('delete')->willReturn('some token');
-
-        $this->getDeleteAttributes(false)->shouldReturn('data-method="delete" data-no-confirm data-csrf-token="some token"');
+        $this->getLinkAttributes('delete', 'a confirmation message')->shouldReturn('data-method="delete" data-confirm="a confirmation message" data-csrf-token="some token"');
     }
 
-    function its_getDeleteAttributes_should_return_html_attributes_for_delete_method_with_default_confirmation_message(
-        $csrfProvider
-    )
+    function its_getLinkAttributes_should_return_html_attributes_for_delete_method_with_no_confirmation_attribute()
     {
-        $csrfProvider->generateCsrfToken('delete')->willReturn('some token');
-
-        $this->getDeleteAttributes()->shouldReturn('data-method="delete" data-confirm="Are you sure?" data-csrf-token="some token"');
+        $this->getLinkAttributes('delete', false)->shouldReturn('data-method="delete" data-no-confirm data-csrf-token="some token"');
     }
 
-    function its_getPostAttributes_should_return_html_attributes_for_post_method($csrfProvider)
+    function its_getLinkAttributes_should_return_html_attributes_for_post_method()
     {
-        $csrfProvider->generateCsrfToken('post')->willReturn('some token');
-
-        $this->getPostAttributes()->shouldReturn('data-method="post" data-csrf-token="some token"');
+        $this->getLinkAttributes('post')->shouldReturn('data-method="post" data-confirm="Are you sure?" data-csrf-token="some token"');
     }
 
-    function its_getPutAttributes_should_return_html_attributes_for_post_method($csrfProvider)
+    function its_getLinkAttributes_should_return_html_attributes_for_post_method_with_a_specified_confirmation_message()
     {
-        $csrfProvider->generateCsrfToken('put')->willReturn('some token');
-
-        $this->getPutAttributes()->shouldReturn('data-method="put" data-csrf-token="some token"');
+        $this->getLinkAttributes('post', 'Please confirm')->shouldReturn('data-method="post" data-confirm="Please confirm" data-csrf-token="some token"');
     }
 
-    function its_getPatchAttributes_should_return_html_attributes_for_post_method($csrfProvider)
+    function its_getLinkAttributes_should_return_html_attributes_for_put_method()
     {
-        $csrfProvider->generateCsrfToken('patch')->willReturn('some token');
-
-        $this->getPatchAttributes()->shouldReturn('data-method="patch" data-csrf-token="some token"');
+        $this->getLinkAttributes('put')->shouldReturn('data-method="put" data-confirm="Are you sure?" data-csrf-token="some token"');
     }
 
-    function its_getCsrf_should_return_generated_csrf_for_a_given_intention($csrfProvider)
+    function its_getLinkAttributes_should_return_html_attributes_for_put_method_with_a_specified_confirmation_message()
     {
-        $csrfProvider->generateCsrfToken('custom')->willReturn('some token');
+        $this->getLinkAttributes('put', 'Please confirm')->shouldReturn('data-method="put" data-confirm="Please confirm" data-csrf-token="some token"');
+    }
 
-        $this->getCsrf('custom')->shouldReturn('some token');
+    function its_getLinkAttributes_should_return_html_attributes_for_patch_method()
+    {
+        $this->getLinkAttributes('patch')->shouldReturn('data-method="patch" data-confirm="Are you sure?" data-csrf-token="some token"');
+    }
+
+    function its_getLinkAttributes_should_return_html_attributes_for_patch_method_with_a_specified_confirmation_message()
+    {
+        $this->getLinkAttributes('patch', 'Please confirm')->shouldReturn('data-method="patch" data-confirm="Please confirm" data-csrf-token="some token"');
+    }
+
+    function its_getLinkAttributes_should_return_html_attributes_for_specified_method_even_if_it_is_fancy()
+    {
+        $this->getLinkAttributes('fancy', 'Please confirm')->shouldReturn('data-method="fancy" data-confirm="Please confirm" data-csrf-token="some token"');
     }
 }

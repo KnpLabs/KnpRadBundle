@@ -12,11 +12,13 @@
     <services>
         <service id="knp_rad.twig.link_attributes_extension" class="%knp_rad.twig.link_attributes_extension.class%">
             <argument type="service" id="form.csrf_provider" />
+            <argument type="string">%knp_rad.csrf_link.intention%</argument>
             <tag name="twig.extension" />
         </service>
 
         <service id="knp_rad.csrf.listener" class="%knp_rad.csrf.listener.class%">
             <argument type="service" id="form.csrf_provider" />
+            <argument type="string">%knp_rad.csrf_link.intention%</argument>
             <tag name="kernel.event_listener" event="kernel.request" />
         </service>
     </services>
