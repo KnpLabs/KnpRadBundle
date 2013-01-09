@@ -28,6 +28,7 @@ class LinkAttributesExtension extends \Twig_Extension
             'post_attributes'   => new \Twig_Function_Method($this, 'getPostAttributes', array('is_safe'   => array('html'))),
             'put_attributes'    => new \Twig_Function_Method($this, 'getPutAttributes', array('is_safe'    => array('html'))),
             'patch_attributes'  => new \Twig_Function_Method($this, 'getPatchAttributes', array('is_safe'  => array('html'))),
+            'csrf'              => new \Twig_Function_Method($this, 'getCsrf', array('is_safe'             => array('html'))),
         );
     }
 
@@ -41,7 +42,7 @@ class LinkAttributesExtension extends \Twig_Extension
             $html .= ' data-no-confirm';
         }
 
-        return sprintf('%s data-csrf-token="%s"', $html, $this->csrfProvider->generateCsrfToken('delete'));
+        return sprintf('%s data-csrf-token="%s"', $html, $this->getCsrf('delete'));
     }
 
     public function getPostAttributes()
@@ -64,7 +65,12 @@ class LinkAttributesExtension extends \Twig_Extension
         return sprintf(
             'data-method="%s" data-csrf-token="%s"',
             $method,
-            $this->csrfProvider->generateCsrfToken($method)
+            $this->getCsrf($method)
         );
+    }
+
+    public function getCsrf($intention)
+    {
+        return $this->csrfProvider->generateCsrfToken($intention);
     }
 }

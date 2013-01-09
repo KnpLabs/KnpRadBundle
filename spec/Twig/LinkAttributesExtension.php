@@ -26,7 +26,7 @@ class LinkAttributesExtension extends ObjectBehavior
 
     function it_should_have_the_csrf_attribute_function()
     {
-        $this->getFunctions()->shouldHaveCount(4);
+        $this->getFunctions()->shouldHaveCount(5);
     }
 
     function its_getDeleteAttributes_should_return_html_attributes_for_delete_method($csrfProvider)
@@ -73,5 +73,12 @@ class LinkAttributesExtension extends ObjectBehavior
         $csrfProvider->generateCsrfToken('patch')->willReturn('some token');
 
         $this->getPatchAttributes()->shouldReturn('data-method="patch" data-csrf-token="some token"');
+    }
+
+    function its_getCsrf_should_return_generated_csrf_for_a_given_intention($csrfProvider)
+    {
+        $csrfProvider->generateCsrfToken('custom')->willReturn('some token');
+
+        $this->getCsrf('custom')->shouldReturn('some token');
     }
 }
