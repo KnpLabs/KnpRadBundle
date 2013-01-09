@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\Config\Resource\DirectoryResource;
 
 class ContainerExtension extends Extension
 {
@@ -36,6 +37,12 @@ class ContainerExtension extends Extension
         }
         if (file_exists($this->path.'/Resources/config/services_'.$environment.'.yml')) {
             $loader->load('services_'.$environment.'.yml');
+        }
+
+        foreach (array('Entity', 'Form', 'Security', 'Twig') as $dir) {
+            if (is_dir($dirPath = $this->path.DIRECTORY_SEPARATOR.$dir)) {
+                $container->addResource(new DirectoryResource($dirPath));
+            }
         }
     }
 }
