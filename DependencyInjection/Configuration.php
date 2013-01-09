@@ -48,6 +48,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('trans_catalog')->defaultValue('messages')->end()
                     ->end()
                 ->end()
+                ->booleanNode('csrf_links')->defaultFalse()->end()
             ->end()
         ;
 
