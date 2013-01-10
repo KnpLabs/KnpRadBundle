@@ -27,7 +27,7 @@ class LinkAttributesExtension extends \Twig_Extension
     {
         return array(
             'link_attr' => new \Twig_Function_Method($this, 'getLinkAttributes', array('is_safe' => array('html'))),
-            'link_csrf' => new \Twig_Function_Method($this, 'getCsrf', array('is_safe' => array('html'))),
+            'link_csrf' => new \Twig_Function_Method($this, 'getCsrf'),
         );
     }
 
