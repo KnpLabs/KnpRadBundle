@@ -9,7 +9,7 @@ use Knp\RadBundle\DependencyInjection\ReferenceFactory;
 
 class RegisterFormCreatorsPass implements CompilerPassInterface
 {
-    public function __construct(ReferenceFactory $referenceFactory)
+    public function __construct(ReferenceFactory $referenceFactory = null)
     {
         $this->referenceFactory = $referenceFactory ?: new ReferenceFactory();
     }
