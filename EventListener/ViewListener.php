@@ -20,7 +20,6 @@ class ViewListener
     private $parser;
     private $engine;
     private $requestManipulator;
-    private $bundleName;
 
     /**
      * Initializes listener.
@@ -38,11 +37,6 @@ class ViewListener
         $this->engine             = $engine;
         $this->missingViewHandler = $missingViewHandler ?: new MissingViewHandler();
         $this->requestManipulator = $requestManipulator ?: new RequestManipulator();
-    }
-
-    public function setAppBundleName($bundleName)
-    {
-        $this->bundleName = $bundleName;
     }
 
     /**
@@ -82,11 +76,6 @@ class ViewListener
         $group = str_replace('\\', '/', $group);
         $view  = preg_replace('/Action$/', '', $method);
 
-        return sprintf('%s:%s:%s.%s.%s', $this->getBundleName(), $group, $view, $format, $this->engine);
-    }
-
-    public function getBundleName()
-    {
-        return $this->bundleName ?: 'App';
+        return sprintf('App:%s:%s.%s.%s', $group, $view, $format, $this->engine);
     }
 }

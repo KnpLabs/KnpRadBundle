@@ -20,7 +20,6 @@ class RegisterSecurityVotersPass extends ObjectBehavior
         $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $referenceFactory, $serviceIdGenerator, $definitionManipulator);
 
         $bundle->getPath()->willReturn('/my/project/src/App');
-        $bundle->getNamespace()->willReturn('App');
     }
 
     function it_should_be_a_compiler_pass()
@@ -42,23 +41,23 @@ class RegisterSecurityVotersPass extends ObjectBehavior
 
         $classFinder->findClassesMatching('/my/project/src/App/Security', 'App\Security', 'Voter$')->willReturn(array(
             'App\Security\Voter\CheeseVoter',
-            'App\Security\Voter\CustomerVoter',
+            'App\Security\CustomerVoter',
         ));
 
         $container->hasDefinition('app.security.voter.cheese_voter')->willReturn(false)->shouldBeCalled();
-        $container->hasDefinition('app.security.voter.customer_voter')->willReturn(false)->shouldBeCalled();
+        $container->hasDefinition('app.security.customer_voter')->willReturn(false)->shouldBeCalled();
 
         $definitionFactory->createDefinition('App\Security\Voter\CheeseVoter')->willReturn($cheeseVoterDef);
-        $definitionFactory->createDefinition('App\Security\Voter\CustomerVoter')->willReturn($customerVoterDef);
+        $definitionFactory->createDefinition('App\Security\CustomerVoter')->willReturn($customerVoterDef);
 
-        $serviceIdGenerator->generateForBundleClass($bundle, 'App\Security\Voter\CheeseVoter')->shouldBeCalled()->willReturn('app.security.voter.cheese_voter');
-        $serviceIdGenerator->generateForBundleClass($bundle, 'App\Security\Voter\CustomerVoter')->shouldBeCalled()->willReturn('app.security.voter.customer_voter');
+        $serviceIdGenerator->generateForClassName('App\Security\Voter\CheeseVoter')->shouldBeCalled()->willReturn('app.security.voter.cheese_voter');
+        $serviceIdGenerator->generateForClassName('App\Security\CustomerVoter')->shouldBeCalled()->willReturn('app.security.customer_voter');
 
         $container->setDefinition('app.security.voter.cheese_voter', $cheeseVoterDef)->shouldBeCalled();
-        $container->setDefinition('app.security.voter.customer_voter', $customerVoterDef)->shouldBeCalled();
+        $container->setDefinition('app.security.customer_voter', $customerVoterDef)->shouldBeCalled();
 
         $referenceFactory->createReference('app.security.voter.cheese_voter')->willReturn($cheeseVoterRef);
-        $referenceFactory->createReference('app.security.voter.customer_voter')->willReturn($customerVoterRef);
+        $referenceFactory->createReference('app.security.customer_voter')->willReturn($customerVoterRef);
 
         $definitionManipulator->appendArgumentValue($decisionManagerDef, 0, $cheeseVoterRef)->shouldBeCalled();
         $definitionManipulator->appendArgumentValue($decisionManagerDef, 0, $customerVoterRef)->shouldBeCalled();

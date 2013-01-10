@@ -28,12 +28,11 @@ class RegisterDoctrineRepositoriesPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $directory = $this->bundle->getPath().'/Entity';
-        $namespace = $this->bundle->getNamespace().'\Entity';
 
-        $classes = $this->classFinder->findClassesMatching($directory, $namespace, '(?<!Repository)$');
+        $classes = $this->classFinder->findClassesMatching($directory, 'App\Entity', '(?<!Repository)$');
 
         foreach ($classes as $class) {
-            $baseClass = substr($class, strlen($namespace) + 1);
+            $baseClass = substr($class, 11);
             $id = sprintf('orm.%s_repository', str_replace('\\', '.', Container::underscore($baseClass)));
 
             if ($container->hasDefinition($id)) {

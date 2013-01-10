@@ -2,8 +2,6 @@
 
 namespace Knp\RadBundle\DependencyInjection\Compiler;
 
-namespace Knp\RadBundle\DependencyInjection\Compiler;
-
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Knp\RadBundle\Finder\ClassFinder;
@@ -33,13 +31,12 @@ class RegisterFormTypesCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $directory = $this->bundle->getPath().'/Form';
-        $namespace = $this->bundle->getNamespace().'\\Form';
 
         $types   = $container->getDefinition('form.extension')->getArgument(1);
-        $classes = $this->classFinder->findClassesMatching($directory, $namespace, 'Type$');
+        $classes = $this->classFinder->findClassesMatching($directory, 'App\Form', 'Type$');
 
         foreach ($classes as $class) {
-            $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
+            $id = $this->serviceIdGenerator->generateForClassName($class);
             $alias = $this->getAlias($class, $id);
 
             if ($container->hasDefinition($id)) {
