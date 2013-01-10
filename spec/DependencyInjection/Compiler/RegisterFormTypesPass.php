@@ -4,7 +4,7 @@ namespace spec\Knp\RadBundle\DependencyInjection\Compiler;
 
 use PHPSpec2\ObjectBehavior;
 
-class RegisterFormTypesCompilerPass extends ObjectBehavior
+class RegisterFormTypesPass extends ObjectBehavior
 {
     /**
      * @param Symfony\Component\HttpKernel\Bundle\BundleInterface $bundle

@@ -4,23 +4,18 @@ namespace Knp\RadBundle\AppBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle as BaseBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Knp\RadBundle\DependencyInjection\Compiler\RegisterDoctrineRepositoriesPass;
-use Knp\RadBundle\DependencyInjection\Compiler\RegisterTwigExtensionsPass;
-use Knp\RadBundle\DependencyInjection\Compiler\RegisterSecurityVotersPass;
-use Knp\RadBundle\DependencyInjection\Compiler\RegisterAppBundlePass;
-use Knp\RadBundle\DependencyInjection\Compiler\RegisterFormTypesCompilerPass;
-use Knp\RadBundle\DependencyInjection\Compiler\RegisterFormCreatorsPass;
+use Knp\RadBundle\DependencyInjection\Compiler;
 
 class Bundle extends BaseBundle
 {
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new RegisterDoctrineRepositoriesPass($this));
-        $container->addCompilerPass(new RegisterTwigExtensionsPass($this));
-        $container->addCompilerPass(new RegisterSecurityVotersPass($this));
-        $container->addCompilerPass(new RegisterAppBundlePass($this));
-        $container->addCompilerPass(new RegisterFormTypesCompilerPass($this));
-        $container->addCompilerPass(new RegisterFormCreatorsPass);
+        $container->addCompilerPass(new Compiler\RegisterDoctrineRepositoriesPass($this));
+        $container->addCompilerPass(new Compiler\RegisterTwigExtensionsPass($this));
+        $container->addCompilerPass(new Compiler\RegisterSecurityVotersPass($this));
+        $container->addCompilerPass(new Compiler\RegisterAppBundlePass($this));
+        $container->addCompilerPass(new Compiler\RegisterFormTypesPass($this));
+        $container->addCompilerPass(new Compiler\RegisterFormCreatorsPass);
     }
 
     public function getContainerExtension()

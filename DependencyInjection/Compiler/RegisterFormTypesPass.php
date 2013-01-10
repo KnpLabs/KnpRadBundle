@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Knp\RadBundle\DependencyInjection\Definition\FormTypeDefinitionFactory;
 use Knp\RadBundle\DependencyInjection\ServiceIdGenerator;
 
-class RegisterFormTypesCompilerPass implements CompilerPassInterface
+class RegisterFormTypesPass implements CompilerPassInterface
 {
     private $bundle;
     private $classFinder;
