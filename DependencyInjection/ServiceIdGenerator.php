@@ -7,16 +7,11 @@ use Symfony\Component\DependencyInjection\Container;
 
 class ServiceIdGenerator
 {
-    public function generateForBundleClass(BundleInterface $bundle, $className)
+    public function generateForClassName($className)
     {
-        $namespace = $bundle->getNamespace();
-        $extension = $bundle->getContainerExtension();
+        $bundleClass = substr($className, 4);
+        $bundlePart  = str_replace('\\', '.', Container::underscore($bundleClass));
 
-        $extensionAlias = $extension->getAlias();
-
-        $bundleClass = substr($className, strlen($namespace) + 1);
-        $bundlePart = str_replace('\\', '.', Container::underscore($bundleClass));
-
-        return sprintf('%s.%s', $extensionAlias, $bundlePart);
+        return sprintf('app.%s', $bundlePart);
     }
 }
