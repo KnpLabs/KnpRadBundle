@@ -19,7 +19,6 @@ class RegisterFormTypesCompilerPass extends ObjectBehavior
         $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $servIdGen);
 
         $bundle->getPath()->shouldBeCalled()->willReturn('/my/project/src/App');
-        $bundle->getNamespace()->shouldBeCalled()->willReturn('App');
 
         $classFinder->findClassesMatching('/my/project/src/App/Form', 'App\Form', 'Type$')->shouldBeCalled()->willReturn(array(
             'App\Form\CheeseType',
@@ -27,9 +26,9 @@ class RegisterFormTypesCompilerPass extends ObjectBehavior
             'App\Form\MouseType',
         ));
 
-        $servIdGen->generateForBundleClass($bundle, 'App\Form\CheeseType')->willReturn('app.form.cheese_type');
-        $servIdGen->generateForBundleClass($bundle, 'App\Form\EditCheeseType')->willReturn('app.form.edit_cheese_type');
-        $servIdGen->generateForBundleClass($bundle, 'App\Form\MouseType')->willReturn('app.form.mouse_type');
+        $servIdGen->generateForClassName('App\Form\CheeseType')->willReturn('app.form.cheese_type');
+        $servIdGen->generateForClassName('App\Form\EditCheeseType')->willReturn('app.form.edit_cheese_type');
+        $servIdGen->generateForClassName('App\Form\MouseType')->willReturn('app.form.mouse_type');
 
         $formExtension->getArgument(1)->willReturn(array());
         $container->getDefinition('form.extension')->willReturn($formExtension);
