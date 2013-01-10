@@ -8,6 +8,8 @@ use Knp\RadBundle\DependencyInjection\Compiler;
 
 class Bundle extends BaseBundle
 {
+    protected $name = 'App';
+
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new Compiler\RegisterDoctrineRepositoriesPass($this));

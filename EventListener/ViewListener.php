@@ -82,11 +82,6 @@ class ViewListener
         $group = str_replace('\\', '/', $group);
         $view  = preg_replace('/Action$/', '', $method);
 
-        return sprintf('%s:%s:%s.%s.%s', $this->getBundleName(), $group, $view, $format, $this->engine);
-    }
-
-    public function getBundleName()
-    {
-        return $this->bundleName ?: 'App';
+        return sprintf('%s:%s:%s.%s.%s', $this->bundleName, $group, $view, $format, $this->engine);
     }
 }

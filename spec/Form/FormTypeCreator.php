@@ -14,6 +14,7 @@ class FormTypeCreator extends ObjectBehavior
     function let($fetcher, $factory, $formRegistry)
     {
         $this->beConstructedWith($fetcher, $factory, $formRegistry);
+        $this->setAppBundleNamespace('App');
     }
 
     function it_should_implement_form_creator_interface()
@@ -95,6 +96,25 @@ class FormTypeCreator extends ObjectBehavior
         $fetcher->getClass('App\Entity\Cheese')->willReturn('App\Entity\Cheese');
         $fetcher->getClass($object)->willReturn('App\Entity\Cheese');
         $fetcher->getParentClass('App\Entity\Cheese')->willReturn(null);
+        $formRegistry->hasType('app.form.cheese_type')->willReturn(false);
+        $formRegistry->hasType('app.form.edit_cheese_type')->willReturn(false);
+
+        $this->create($object, 'edit')->shouldReturn(null);
+    }
+
+    /**
+     * @param stdClass $object
+     * @param stdClass $formType
+     * @param Symfony\Component\Form\Form $form
+     */
+    function it_should_get_form_for_other_rad_bundle_name($object, $fetcher, $factory, $formType, $form, $formRegistry)
+    {
+        $this->setAppBundleNamespace('TestBundle');
+        $fetcher->getShortClassName($object)->willReturn('Cheese');
+        $fetcher->getShortClassName('TestBundle\Entity\Cheese')->willReturn('Cheese');
+        $fetcher->getClass('TestBundle\Entity\Cheese')->willReturn('TestBundle\Entity\Cheese');
+        $fetcher->getClass($object)->willReturn('TestBundle\Entity\Cheese');
+        $fetcher->getParentClass('TestBundle\Entity\Cheese')->willReturn(null);
         $formRegistry->hasType('app.form.cheese_type')->willReturn(false);
         $formRegistry->hasType('app.form.edit_cheese_type')->willReturn(false);
 

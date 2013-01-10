@@ -18,6 +18,7 @@ class ViewListener extends ObjectBehavior
     function let($request, $response, $engine, $cnp, $reqManip, $event, $mvh)
     {
         $this->beConstructedWith($engine, $cnp, 'twig', $mvh, $reqManip);
+        $this->setAppBundleName('App');
 
         $event->getRequest()->willReturn($request);
     }
