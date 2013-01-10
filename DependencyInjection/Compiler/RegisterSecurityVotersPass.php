@@ -37,13 +37,11 @@ class RegisterSecurityVotersPass implements CompilerPassInterface
         }
 
         $decisionManagerDef = $container->getDefinition('security.access.decision_manager');
+        $directory          = $this->bundle->getPath().'/Security';
+        $classes            = $this->classFinder->findClassesMatching($directory, 'App\Security', 'Voter$');
 
-        $directory = $this->bundle->getPath().'/Security';
-        $namespace = $this->bundle->getNamespace().'\Security';
-
-        $classes = $this->classFinder->findClassesMatching($directory, $namespace, 'Voter$');
         foreach ($classes as $class) {
-            $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
+            $id = $this->serviceIdGenerator->generateForClassName($class);
 
             if ($container->hasDefinition($id)) {
                 continue;
