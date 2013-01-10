@@ -5,9 +5,15 @@ namespace Knp\RadBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Knp\RadBundle\DependencyInjection\ReferenceFactory;
 
-class RegisterFormCreatorCompilerPass implements CompilerPassInterface
+class RegisterFormCreatorsPass implements CompilerPassInterface
 {
+    public function __construct(ReferenceFactory $referenceFactory)
+    {
+        $this->referenceFactory = $referenceFactory ?: new ReferenceFactory();
+    }
+
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('knp_rad.form.manager')) {
@@ -25,7 +31,7 @@ class RegisterFormCreatorCompilerPass implements CompilerPassInterface
         foreach ($taggedServices as $id => $attributes) {
             $definition->addMethodCall(
                 'registerCreator',
-                array(new Reference($id), $this->getPriority($attributes))
+                array($this->referenceFactory->createReference($id), $this->getPriority($attributes))
             );
         }
     }

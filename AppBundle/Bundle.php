@@ -9,7 +9,7 @@ use Knp\RadBundle\DependencyInjection\Compiler\RegisterTwigExtensionsPass;
 use Knp\RadBundle\DependencyInjection\Compiler\RegisterSecurityVotersPass;
 use Knp\RadBundle\DependencyInjection\Compiler\RegisterAppBundlePass;
 use Knp\RadBundle\DependencyInjection\Compiler\RegisterFormTypesCompilerPass;
-use Knp\RadBundle\DependencyInjection\Compiler\RegisterFormCreatorCompilerPass;
+use Knp\RadBundle\DependencyInjection\Compiler\RegisterFormCreatorsPass;
 
 class Bundle extends BaseBundle
 {
@@ -20,7 +20,7 @@ class Bundle extends BaseBundle
         $container->addCompilerPass(new RegisterSecurityVotersPass($this));
         $container->addCompilerPass(new RegisterAppBundlePass($this));
         $container->addCompilerPass(new RegisterFormTypesCompilerPass($this));
-        $container->addCompilerPass(new RegisterFormCreatorCompilerPass);
+        $container->addCompilerPass(new RegisterFormCreatorsPass);
     }
 
     public function getContainerExtension()
