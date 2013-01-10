@@ -39,7 +39,11 @@ class ContainerExtension extends Extension
             $loader->load('services_'.$environment.'.yml');
         }
 
-        foreach (array('Entity', 'Form', 'Security', 'Twig') as $dir) {
+        foreach (array(
+            'Entity', 'Form', 'Security', 'Twig',
+            'Resources'.DIRECTORY_SEPARATOR.'config',
+            'Resources'.DIRECTORY_SEPARATOR.'translations',
+        ) as $dir) {
             if (is_dir($dirPath = $this->path.DIRECTORY_SEPARATOR.$dir)) {
                 $container->addResource(new DirectoryResource($dirPath));
             }
