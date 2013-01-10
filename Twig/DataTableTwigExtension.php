@@ -10,7 +10,7 @@ class DataTableTwigExtension extends \Twig_Extension
     public function __construct($container)
     {
         $this->container = $container;
-    } 
+    }
 
     public function getFunctions()
     {
@@ -57,9 +57,9 @@ class DataTableTwigExtension extends \Twig_Extension
             ->render(
                 'KnpRadBundle:Twig:Datatable/' . $options['bootstrap'] . '/datatable_row.html.twig',
                 array(
-                    'element' => $element, 
-                    'headers' => $headers, 
-                    'options' => $options, 
+                    'element' => $element,
+                    'headers' => $headers,
+                    'options' => $options,
                     'routes'  => $routes
                 )
             )
