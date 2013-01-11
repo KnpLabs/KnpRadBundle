@@ -19,19 +19,9 @@ class Controller extends BaseController
         return new AccessDeniedHttpException($message, $previous);
     }
 
-    protected function getEntityManager()
-    {
-        return $this->getDoctrine()->getManager();
-    }
-
     protected function getRepository($entity)
     {
         return $this->getEntityManager()->getRepository(is_object($entity) ? get_class($entity) : $entity);
-    }
-
-    protected function getSecurity()
-    {
-        return $this->get('security.context');
     }
 
     protected function isGranted($attributes, $object = null)
@@ -39,33 +29,23 @@ class Controller extends BaseController
         return $this->getSecurity()->isGranted($attributes, $object);
     }
 
-    protected function getMailer()
+    protected function createMessage($name, array $parameters = array(), $from = null, $to = null)
     {
-        return $this->get('mailer');
+        $message = $this->get('knp_rad.mailer.message_factory')->createMessage($name, $parameters);
+
+        if ($from) {
+            $message->setFrom($from);
+        }
+        if ($to) {
+            $message->setTo($to);
+        }
+
+        return $message;
     }
 
-    protected function createMessageFor($name, array $parameters = array())
+    protected function send(\Swift_Mime_Message $message)
     {
-        return $this->get('knp_rad.mailer.message_factory')->createMessage($name, $parameters);
-    }
-
-    protected function sendMessage($from, $to, $name, array $parameters = array())
-    {
-        $message = $this->createMessageFor($name, $parameters);
-        $message->setTo($to);
-        $message->setFrom($from);
-
         $this->getMailer()->send($message);
-    }
-
-    protected function getSession()
-    {
-        return $this->get('session');
-    }
-
-    protected function getFlashBag()
-    {
-        return $this->getSession()->getFlashBag();
     }
 
     protected function persist($entity, $flush = false)
@@ -82,7 +62,7 @@ class Controller extends BaseController
         $this->getEntityManager()->remove($entity);
 
         if ($flush) {
-            $this->flush();
+            $this->flush($entity);
         }
     }
 
@@ -126,12 +106,33 @@ class Controller extends BaseController
         return $this->get('knp_rad.form.manager')->createBoundObjectForm($object, $purpose, $options);
     }
 
-    protected function emailText($to, $text)
+    protected function getSession()
     {
-        $message = $this->getMailer()->createMessage();
-        $message->setTo($to);
-        $message->setBody($text);
+        return $this->get('session');
+    }
 
-        return $this->getMailer()->send($message);
+    protected function getMailer()
+    {
+        return $this->get('mailer');
+    }
+
+    protected function getSecurity()
+    {
+        return $this->get('security.context');
+    }
+
+    protected function getEntityManager()
+    {
+        return $this->getDoctrine()->getManager();
+    }
+
+    protected function getFlashBag()
+    {
+        return $this->getSession()->getFlashBag();
+    }
+
+    protected function getParameter($name)
+    {
+        return $this->container->getParameter($name);
     }
 }
