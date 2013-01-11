@@ -143,4 +143,15 @@ class ViewListener extends ObjectBehavior
 
         $this->onKernelView($event);
     }
+
+    function it_should_abort_when_controller_is_not_within_the_App_bundle($reqManip, $request, $event)
+    {
+        $reqManip->hasAttribute($request, '_controller')->willReturn(true);
+        $reqManip->getAttribute($request, '_controller')->willReturn('Some\Fancy\Controller\CheeseController::eatAction');
+
+        $event->getControllerResult()->willReturn(array('foo' => 'bar'));
+        $event->setResponse(ANY_ARGUMENTS)->shouldNotBeCalled();
+
+        $this->onKernelView($event);
+    }
 }
