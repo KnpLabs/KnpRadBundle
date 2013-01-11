@@ -63,7 +63,12 @@ class ViewListener
             $controller = $this->parser->parse($controller);
         }
 
-        $viewName   = $this->deduceViewName($controller, $request->getRequestFormat());
+        list($class, $method) = explode('::', $controller, 2);
+        if (false === strpos($class, 'App\\')) {
+            return;
+        }
+
+        $viewName   = $this->deduceViewName($class, $method, $request->getRequestFormat());
         $viewParams = $event->getControllerResult() ?: array();
 
         if ($this->templating->exists($viewName)) {
@@ -74,10 +79,8 @@ class ViewListener
         }
     }
 
-    private function deduceViewName($controller, $format)
+    private function deduceViewName($class, $method, $format)
     {
-        list($class, $method) = explode('::', $controller, 2);
-
         $group = preg_replace(array('#^.*\\Controller\\\\#', '#Controller$#'), '', $class);
         $group = str_replace('\\', '/', $group);
         $view  = preg_replace('/Action$/', '', $method);
