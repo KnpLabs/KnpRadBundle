@@ -25,11 +25,11 @@ class RegisterAppBundlePass extends ObjectBehavior
     {
         $container->getParameter('kernel.bundles')->willReturn(array('Knp\RadBundle\AppBundle\Bundle', 'Knp\RadBundle\AppBundle\Bundle'));
 
-        $this->shouldThrow(new \LogicException('Only one rad bundle is authorized'))->duringProcess($container);
+        $this->shouldThrow(new \LogicException('Only one rad bundle is authorized.'))->duringProcess($container);
     }
 
     /**
-     * @param Symfony\Component\DependencyInjection\Definition       $viewListenerDef
+     * @param Symfony\Component\DependencyInjection\Definition $viewListenerDef
      **/
     function it_should_add_app_bundle_to_view_listener($viewListenerDef, $bundle, $container)
     {
@@ -39,13 +39,13 @@ class RegisterAppBundlePass extends ObjectBehavior
         $container->hasDefinition('knp_rad.form.type_creator')->willReturn(false);
         $container->getDefinition('knp_rad.view.listener')->willReturn($viewListenerDef);
 
-        $viewListenerDef->addMethodCall('setAppBundleName', array('TestBundle'))->shouldBeCalled();
+        $viewListenerDef->replaceArgument(3, 'TestBundle')->shouldBeCalled();
 
         $this->process($container);
     }
 
     /**
-     * @param Symfony\Component\DependencyInjection\Definition       $formTypeCreatorDef
+     * @param Symfony\Component\DependencyInjection\Definition $formTypeCreatorDef
      **/
     function it_should_add_app_bundle_to_form_type_creator($formTypeCreatorDef, $bundle, $container)
     {
@@ -55,7 +55,7 @@ class RegisterAppBundlePass extends ObjectBehavior
         $container->hasDefinition('knp_rad.form.type_creator')->willReturn(true);
         $container->getDefinition('knp_rad.form.type_creator')->willReturn($formTypeCreatorDef);
 
-        $formTypeCreatorDef->addMethodCall('setAppBundleNamespace', array('TestBundle'))->shouldBeCalled();
+        $formTypeCreatorDef->replaceArgument(3, 'TestBundle')->shouldBeCalled();
 
         $this->process($container);
     }

@@ -18,22 +18,23 @@ class RegisterAppBundlePass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $bundles = $container->getParameter('kernel.bundles');
+        $bundles    = $container->getParameter('kernel.bundles');
         $radBundles = array_filter($bundles, function($bundle) {
             return is_a($bundle, 'Knp\RadBundle\AppBundle\Bundle', true);
         });
+
         if (count($radBundles) > 1) {
-            throw new \LogicException('Only one rad bundle is authorized');
+            throw new \LogicException('Only one rad bundle is authorized.');
         }
 
         if ($container->hasDefinition('knp_rad.view.listener')) {
             $viewListenerDef = $container->getDefinition('knp_rad.view.listener');
-            $viewListenerDef->addMethodCall('setAppBundleName', array($this->bundle->getName()));
+            $viewListenerDef->replaceArgument(3, $this->bundle->getName());
         }
 
         if ($container->hasDefinition('knp_rad.form.type_creator')) {
-            $viewListenerDef = $container->getDefinition('knp_rad.form.type_creator');
-            $viewListenerDef->addMethodCall('setAppBundleNamespace', array($this->bundle->getNamespace()));
+            $typeCreatorDef = $container->getDefinition('knp_rad.form.type_creator');
+            $typeCreatorDef->replaceArgument(3, $this->bundle->getNamespace());
         }
     }
 }

@@ -4,6 +4,7 @@ namespace Knp\RadBundle\Form;
 
 use Knp\RadBundle\Reflection\ClassMetadataFetcher;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormRegistryInterface;
 
 class FormTypeCreator implements FormCreatorInterface
 {
@@ -12,11 +13,12 @@ class FormTypeCreator implements FormCreatorInterface
     private $formRegistry;
     private $bundleNamespace;
 
-    public function __construct(ClassMetadataFetcher $fetcher = null, FormFactoryInterface $factory, $formRegistry)
+    public function __construct(ClassMetadataFetcher $fetcher = null, FormFactoryInterface $factory, FormRegistryInterface $formRegistry, $bundleNamespace)
     {
-        $this->fetcher = $fetcher ?: new ClassMetadataFetcher;
-        $this->factory = $factory;
-        $this->formRegistry = $formRegistry;
+        $this->fetcher         = $fetcher ?: new ClassMetadataFetcher;
+        $this->factory         = $factory;
+        $this->formRegistry    = $formRegistry;
+        $this->bundleNamespace = $bundleNamespace;
     }
 
     public function setAppBundleNamespace($bundleNamespace)

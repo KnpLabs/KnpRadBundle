@@ -8,13 +8,12 @@ class FormTypeCreator extends ObjectBehavior
 {
     /**
      * @param Knp\RadBundle\Reflection\ClassMetadataFetcher $fetcher
-     * @param Symfony\Component\Form\FormRegistry $formRegistry
+     * @param Symfony\Component\Form\FormRegistryInterface $formRegistry
      * @param Symfony\Component\Form\FormFactoryInterface $factory
      */
     function let($fetcher, $factory, $formRegistry)
     {
-        $this->beConstructedWith($fetcher, $factory, $formRegistry);
-        $this->setAppBundleNamespace('App');
+        $this->beConstructedWith($fetcher, $factory, $formRegistry, 'App');
     }
 
     function it_should_implement_form_creator_interface()
@@ -109,7 +108,7 @@ class FormTypeCreator extends ObjectBehavior
      */
     function it_should_get_form_for_other_rad_bundle_name($object, $fetcher, $factory, $formType, $form, $formRegistry)
     {
-        $this->setAppBundleNamespace('TestBundle');
+        $this->beConstructedWith($fetcher, $factory, $formRegistry, 'TestBundle');
         $fetcher->getShortClassName($object)->willReturn('Cheese');
         $fetcher->getShortClassName('TestBundle\Entity\Cheese')->willReturn('Cheese');
         $fetcher->getClass('TestBundle\Entity\Cheese')->willReturn('TestBundle\Entity\Cheese');

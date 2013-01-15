@@ -21,6 +21,7 @@
             <argument type="service" id="knp_rad.reflection.metadata_fetcher" />
             <argument type="service" id="form.factory" />
             <argument type="service" id="form.registry" />
+            <argument type="string"></argument>
             <tag name="knp_rad.form.creator" priority="2"/>
         </service>
 
