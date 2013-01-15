@@ -37,6 +37,7 @@ class RegisterAppBundlePass extends ObjectBehavior
         $bundle->getName()->willReturn('TestBundle');
         $container->hasDefinition('knp_rad.view.listener')->willReturn(true);
         $container->hasDefinition('knp_rad.form.type_creator')->willReturn(false);
+        $container->hasDefinition('knp_rad.mailer.message_factory')->willReturn(false);
         $container->getDefinition('knp_rad.view.listener')->willReturn($viewListenerDef);
 
         $viewListenerDef->replaceArgument(3, 'TestBundle')->shouldBeCalled();
@@ -53,9 +54,27 @@ class RegisterAppBundlePass extends ObjectBehavior
         $bundle->getNamespace()->shouldBeCalled()->willReturn('TestBundle');
         $container->hasDefinition('knp_rad.view.listener')->willReturn(false);
         $container->hasDefinition('knp_rad.form.type_creator')->willReturn(true);
+        $container->hasDefinition('knp_rad.mailer.message_factory')->willReturn(false);
         $container->getDefinition('knp_rad.form.type_creator')->willReturn($formTypeCreatorDef);
 
         $formTypeCreatorDef->replaceArgument(3, 'TestBundle')->shouldBeCalled();
+
+        $this->process($container);
+    }
+
+    /**
+     * @param Symfony\Component\DependencyInjection\Definition $messageFactoryDef
+     **/
+    function it_should_add_app_bundle_to_message_factory($messageFactoryDef, $bundle, $container)
+    {
+        $container->getParameter('kernel.bundles')->willReturn(array('Knp\RadBundle\AppBundle\Bundle'));
+        $bundle->getName()->willReturn('TestBundle');
+        $container->hasDefinition('knp_rad.view.listener')->willReturn(false);
+        $container->hasDefinition('knp_rad.form.type_creator')->willReturn(false);
+        $container->hasDefinition('knp_rad.mailer.message_factory')->willReturn(true);
+        $container->getDefinition('knp_rad.mailer.message_factory')->willReturn($messageFactoryDef);
+
+        $messageFactoryDef->replaceArgument(2, 'TestBundle')->shouldBeCalled();
 
         $this->process($container);
     }

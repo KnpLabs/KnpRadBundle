@@ -36,6 +36,11 @@ class RegisterAppBundlePass implements CompilerPassInterface
             $typeCreatorDef = $container->getDefinition('knp_rad.form.type_creator');
             $typeCreatorDef->replaceArgument(3, $this->bundle->getNamespace());
         }
+
+        if ($container->hasDefinition('knp_rad.mailer.message_factory')) {
+            $messageFactoryDef = $container->getDefinition('knp_rad.mailer.message_factory');
+            $messageFactoryDef->replaceArgument(2, $this->bundle->getName());
+        }
     }
 }
 
