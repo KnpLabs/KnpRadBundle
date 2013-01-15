@@ -21,11 +21,6 @@ class FormTypeCreator implements FormCreatorInterface
         $this->bundleNamespace = $bundleNamespace;
     }
 
-    public function setAppBundleNamespace($bundleNamespace)
-    {
-        $this->bundleNamespace = $bundleNamespace;
-    }
-
     public function create($object, $purpose = null, array $options = array())
     {
         $type = $this->getFormType($object, $purpose);
