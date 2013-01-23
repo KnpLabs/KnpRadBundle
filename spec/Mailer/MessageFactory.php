@@ -15,7 +15,7 @@ class MessageFactory extends ObjectBehavior
     {
         $twig->getLoader()->willReturn($loader);
 
-        $this->beConstructedWith($mailer, $twig);
+        $this->beConstructedWith($mailer, $twig, 'App');
     }
 
     /**
