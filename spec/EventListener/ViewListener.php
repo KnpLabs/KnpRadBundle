@@ -17,7 +17,7 @@ class ViewListener extends ObjectBehavior
      */
     function let($request, $response, $engine, $cnp, $reqManip, $event, $mvh)
     {
-        $this->beConstructedWith($engine, $cnp, 'twig', $mvh, $reqManip);
+        $this->beConstructedWith($engine, $cnp, 'twig', 'App', $mvh, $reqManip);
 
         $event->getRequest()->willReturn($request);
     }
@@ -128,7 +128,7 @@ class ViewListener extends ObjectBehavior
 
     function it_should_deduce_view_with_correct_bundle_name($request, $response, $reqManip, $engine, $event, $cnp, $mvh)
     {
-        $this->setAppBundleName('TestBundle');
+        $this->beConstructedWith($engine, $cnp, 'twig', 'TestBundle', $mvh, $reqManip);
 
         $reqManip->hasAttribute($request, '_controller')->willReturn(true);
         $reqManip->getAttribute($request, '_controller')->willReturn('App\Controller\CheeseController::eatAction');

@@ -31,18 +31,14 @@ class ViewListener
      * @param MissingViewHandler   $missingViewHandler The handle to be used in case the view does not exist
      * @param RequestManipulator   $requestManipulator The request manipulator
      */
-    public function __construct(EngineInterface $templating, ControllerNameParser $parser, $engine, MissingViewHandler $missingViewHandler = null, RequestManipulator $requestManipulator = null)
+    public function __construct(EngineInterface $templating, ControllerNameParser $parser, $engine, $bundleName, MissingViewHandler $missingViewHandler = null, RequestManipulator $requestManipulator = null)
     {
         $this->templating         = $templating;
         $this->parser             = $parser;
         $this->engine             = $engine;
+        $this->bundleName         = $bundleName;
         $this->missingViewHandler = $missingViewHandler ?: new MissingViewHandler();
         $this->requestManipulator = $requestManipulator ?: new RequestManipulator();
-    }
-
-    public function setAppBundleName($bundleName)
-    {
-        $this->bundleName = $bundleName;
     }
 
     /**
@@ -85,11 +81,6 @@ class ViewListener
         $group = str_replace('\\', '/', $group);
         $view  = preg_replace('/Action$/', '', $method);
 
-        return sprintf('%s:%s:%s.%s.%s', $this->getBundleName(), $group, $view, $format, $this->engine);
-    }
-
-    public function getBundleName()
-    {
-        return $this->bundleName ?: 'App';
+        return sprintf('%s:%s:%s.%s.%s', $this->bundleName, $group, $view, $format, $this->engine);
     }
 }

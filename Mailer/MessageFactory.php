@@ -9,18 +9,20 @@ class MessageFactory
 {
     private $mailer;
     private $twig;
+    private $bundleName;
 
-    public function __construct(Swift_Mailer $mailer, Twig_Environment $twig)
+    public function __construct(Swift_Mailer $mailer, Twig_Environment $twig, $bundleName)
     {
-        $this->mailer = $mailer;
-        $this->twig   = $twig;
+        $this->mailer     = $mailer;
+        $this->twig       = $twig;
+        $this->bundleName = $bundleName;
     }
 
     public function createMessage($name, array $parameters)
     {
         $subject = $txtBody = $htmlBody = null;
-        $txtTpl  = sprintf('App:Mails:%s.txt.twig', $name);
-        $htmlTpl = sprintf('App:Mails:%s.html.twig', $name);
+        $txtTpl  = sprintf('%s:Mails:%s.txt.twig', $this->bundleName, $name);
+        $htmlTpl = sprintf('%s:Mails:%s.html.twig', $this->bundleName, $name);
 
         if (true === $this->twig->getLoader()->exists($txtTpl)) {
             $template = $this->twig->loadTemplate($txtTpl);
