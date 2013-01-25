@@ -10,7 +10,7 @@ set_time_limit(0);
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Knp\Bundle\RadBundle\HttpKernel\RadKernel;
 
-$loader = require(__DIR__.'/vendor/.composer/autoload.php');
+$loader = require(__DIR__.'/vendor/autoload.php');
 $kernel = RadKernel::createAppKernel($loader, 'test', false);
 
 $application = new Application($kernel);
