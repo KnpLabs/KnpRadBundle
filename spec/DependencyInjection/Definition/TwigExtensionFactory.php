@@ -29,6 +29,7 @@ class TwigExtensionFactory extends ObjectBehavior
         $definition->shouldBeAnInstanceOf('Symfony\Component\DependencyInjection\Definition');
         $definition->getClass()->shouldReturn('App\Twig\BreadExtension');
         $definition->isPublic()->shouldReturn(false);
+        $definition->hasTag('twig.extension')->shouldBe(true);
         $definition->getMethodCalls()->shouldReturn(array());
     }
 
@@ -41,6 +42,7 @@ class TwigExtensionFactory extends ObjectBehavior
         $definition->shouldBeAnInstanceOf('Symfony\Component\DependencyInjection\Definition');
         $definition->getClass()->shouldReturn('App\Twig\BreadExtension');
         $definition->isPublic()->shouldReturn(false);
+        $definition->hasTag('twig.extension')->shouldBe(true);
         $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedSubject()))));
     }
 }
