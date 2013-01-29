@@ -44,6 +44,6 @@ class FormManager
 
     public function getCreators()
     {
-        return array_values(iterator_to_array($this->creators));
+        return array_values(iterator_to_array(clone $this->creators));
     }
 }

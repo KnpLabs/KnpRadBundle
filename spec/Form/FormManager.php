@@ -32,6 +32,12 @@ class FormManager extends ObjectBehavior
         $this->getCreators()->shouldReturn(array($creator2, $creator1, $creator3));
     }
 
+    function it_should_be_able_to_return_creators_many_times($creator1, $creator2, $creator3)
+    {
+        $this->getCreators();
+        $this->getCreators()->shouldReturn(array($creator2, $creator1, $creator3));
+    }
+
     /**
      * @param stdClass $object
      */
