@@ -65,9 +65,53 @@ class ConventionalLoader extends YamlFileLoader
 
             if (1 == count($parts)) {
                 $this->validate($mapping, $shortname, $path);
+                // Symfony 2.2+
+                if (method_exists($this, 'validate')) {
+                    $this->validate($mapping, $shortname, $path);
+                // Symfony 2.0, 2.1
+                } else {
+                    foreach ($mapping as $key => $value) {
+                        if (!in_array($key, $expected = array(
+                            'type', 'resource', 'prefix', 'pattern', 'options',
+                            'defaults', 'requirements'
+                        ))) {
+                            throw new \InvalidArgumentException(sprintf(
+                                'Yaml routing loader does not support given key: "%s". Expected one of the (%s).',
+                                $key, implode(', ', $expected)
+                            ));
+                        }
+                    }
+                }
 
                 if (isset($mapping['resource'])) {
-                    $this->parseImport($collection, $mapping, $path, $file);
+                    // Symfony 2.2+
+                    if (method_exists($this, 'parseImport')) {
+                        $this->parseImport($collection, $mapping, $path, $file);
+                    } else {
+                        $getOr = function($key, $def) use($mapping) {
+                            return isset($mapping[$key]) ? $mapping[$key] : $def;
+                        };
+
+                        $type         = $getOr('type', null);
+                        $prefix       = $getOr('prefix', null);
+                        $defaults     = $getOr('defaults', array());
+                        $requirements = $getOr('requirements', array());
+                        $options      = $getOr('options', array());
+
+                        $this->setCurrentDir(dirname($path));
+                        // Symfony 2.1+
+                        if (method_exists('Symfony\Component\Routing\Route', 'addDefaults')) {
+                            $collection->addCollection($this->import(
+                                $mapping['resource'], $type, false, $file), $prefix,
+                                $defaults, $requirements, $options
+                            );
+                        // Symfony 2.0
+                        } else {
+                            $collection->addCollection($this->import(
+                                $config['resource'], $type, false, $file), $prefix
+                            );
+                        }
+                    }
                 } else {
                     $this->parseRoute($collection, $shortname, $mapping, $path);
                 }
