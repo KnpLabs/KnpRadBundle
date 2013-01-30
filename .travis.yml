@@ -10,7 +10,7 @@ env:
   - SYMFONY_VERSION='2.2.*@dev'
 
 before_script:
-  - composer --no-update require symfony/symfony=$SYMFONY_VERSION
+  - composer require --no-update symfony/symfony=$SYMFONY_VERSION
   - composer install --dev
 
 script: ./bin/phpspec run -fpretty
