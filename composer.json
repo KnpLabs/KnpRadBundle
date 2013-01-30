@@ -21,7 +21,7 @@
         "symfony/swiftmailer-bundle":        "2.1.*",
         "doctrine/orm":                      ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-fixtures-bundle": "*",
-        "twig/twig": "*"
+        "twig/twig":                         "*"
     },
     "suggest": {
         "symfony/form":                      "To take advantage of the Rad Form Manager",
