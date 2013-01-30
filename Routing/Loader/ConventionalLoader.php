@@ -64,9 +64,20 @@ class ConventionalLoader extends YamlFileLoader
             }
 
             if (1 == count($parts)) {
-                $this->validate($mapping, $shortname, $path);
                 // Symfony 2.2+
                 if (method_exists($this, 'validate')) {
+                    if (isset($mapping['pattern'])) {
+                        if (isset($mapping['path'])) {
+                            throw new \InvalidArgumentException(sprintf(
+                                'The file "%s" cannot define both a "path" and a "pattern" attribute. Use only "path".',
+                                $path
+                            ));
+                        }
+
+                        $mapping['path'] = $mapping['pattern'];
+                        unset($mapping['pattern']);
+                    }
+
                     $this->validate($mapping, $shortname, $path);
                 // Symfony 2.0, 2.1
                 } else {
@@ -108,7 +119,7 @@ class ConventionalLoader extends YamlFileLoader
                         // Symfony 2.0
                         } else {
                             $collection->addCollection($this->import(
-                                $config['resource'], $type, false, $file), $prefix
+                                $mapping['resource'], $type, false, $file), $prefix
                             );
                         }
                     }
