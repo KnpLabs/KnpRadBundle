@@ -4,11 +4,11 @@ namespace Knp\RadBundle\Routing\Loader;
 
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Config\Resource\FileResource;
-use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Config\FileLocatorInterface;
 
-class ConventionalLoader extends FileLoader
+class ConventionalLoader extends YamlFileLoader
 {
     private static $supportedControllerKeys = array(
         'prefix', 'defaults', 'requirements', 'collections', 'resources'
@@ -38,14 +38,20 @@ class ConventionalLoader extends FileLoader
         $collection = new RouteCollection();
         $collection->addResource(new FileResource($file));
 
-        if (!$config) {
+        if (null === $config) {
             return $collection;
+        }
+
+        if (!is_array($config)) {
+            throw new \InvalidArgumentException(sprintf(
+                'The file "%s" must contain a YAML array.', $path
+            ));
         }
 
         foreach ($config as $shortname => $mapping) {
             $parts = explode(':', $shortname);
 
-            if (3 === count($parts)) {
+            if (3 == count($parts)) {
                 list($bundle, $class, $action) = $parts;
 
                 $routeName = $this->getRouteName($bundle, $class, $action);
@@ -57,10 +63,16 @@ class ConventionalLoader extends FileLoader
                 continue;
             }
 
-            if (2 != count($parts)) {
-                throw new \InvalidArgumentException(sprintf(
-                    'You should use `Bundle:Controller` or `Bundle:Controller:Action` notation as route. `%s` given.', $shortname
-                ));
+            if (1 == count($parts)) {
+                $this->validate($mapping, $shortname, $path);
+
+                if (isset($mapping['resource'])) {
+                    $this->parseImport($collection, $mapping, $path, $file);
+                } else {
+                    $this->parseRoute($collection, $shortname, $mapping, $path);
+                }
+
+                continue;
             }
 
             if (is_array($mapping)) {

@@ -407,15 +407,21 @@ class ConventionalLoader extends ObjectBehavior
         $routes->get('superAppBundle_adminControllers_cheeses_index')->shouldNotReturn(null);
     }
 
-    function it_should_throw_exception_for_wrong_route_matcher($yaml)
+    function it_should_use_classic_loader_scheme_for_basic_routes($yaml)
     {
         $yaml->parse('yaml file')->willReturn(array(
-            'App' => null
+            'blog_show' => array(
+                'pattern'  => '/blog/{slug}',
+                'defaults' => array('_controller' => 'AcmeBlogBundle:Blog:show'),
+            ),
         ));
 
-        $this->shouldThrow(new InvalidArgumentException(
-            'You should use `Bundle:Controller` or `Bundle:Controller:Action` notation as route. `App` given.'
-        ))->duringLoad('routing.yml');
+        $routes = $this->load('routing.yml');
+        $route  = $routes->get('blog_show');
+
+        $route->shouldNotBe(null);
+        $route->getPattern()->shouldReturn('/blog/{slug}');
+        $route->getDefaults()->shouldReturn(array('_controller' => 'AcmeBlogBundle:Blog:show'));
     }
 
     function it_should_throw_exception_if_unsupported_controller_route_param_provided($yaml)
