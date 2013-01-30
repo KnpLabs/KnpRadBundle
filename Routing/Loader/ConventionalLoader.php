@@ -158,6 +158,7 @@ class ConventionalLoader extends YamlFileLoader
             // Symfony 2.2+
             if (method_exists($this, 'parseImport')) {
                 $this->parseImport($collection, $mapping, $path, $file);
+            // Symfony 2.1
             } else {
                 $getOr = function($key, $def) use($mapping) {
                     return isset($mapping[$key]) ? $mapping[$key] : $def;
@@ -170,18 +171,10 @@ class ConventionalLoader extends YamlFileLoader
                 $options      = $getOr('options', array());
 
                 $this->setCurrentDir(dirname($path));
-                // Symfony 2.1+
-                if (method_exists('Symfony\Component\Routing\Route', 'addDefaults')) {
-                    $collection->addCollection($this->import(
-                        $mapping['resource'], $type, false, $file), $prefix,
-                        $defaults, $requirements, $options
-                    );
-                // Symfony 2.0
-                } else {
-                    $collection->addCollection($this->import(
-                        $mapping['resource'], $type, false, $file), $prefix
-                    );
-                }
+                $collection->addCollection($this->import(
+                    $mapping['resource'], $type, false, $file), $prefix,
+                    $defaults, $requirements, $options
+                );
             }
         } else {
             $this->parseRoute($collection, $shortname, $mapping, $path);
