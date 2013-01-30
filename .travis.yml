@@ -11,6 +11,6 @@ env:
 
 before_script:
   - composer require --no-update symfony/symfony=$SYMFONY_VERSION
-  - composer install --dev
+  - composer install --prefer-source --dev
 
 script: ./bin/phpspec run -fpretty
