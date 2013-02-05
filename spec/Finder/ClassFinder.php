@@ -80,8 +80,8 @@ class ClassFinder extends ObjectBehavior
         $reflectionFactory->createReflectionClass('App\Entity\Cheese')->willReturn($cheeseRefl);
         $reflectionFactory->createReflectionClass('App\Entity\NoCheese')->willReturn($noCheeseRefl);
 
-        $noCheeseRefl->implementsInterface('Some\Cheese')->shouldBeCalled()->willReturn(false);
-        $cheeseRefl->implementsInterface('Some\Cheese')->shouldBeCalled()->willReturn(true);
+        $noCheeseRefl->isSubclassOf('Some\Cheese')->shouldBeCalled()->willReturn(false);
+        $cheeseRefl->isSubclassOf('Some\Cheese')->shouldBeCalled()->willReturn(true);
 
         $this->filterClassesImplementing(array('App\Entity\Cheese', 'App\Entity\NoCheese'), 'Some\Cheese')->shouldReturn(array(
                 'App\Entity\Cheese',
