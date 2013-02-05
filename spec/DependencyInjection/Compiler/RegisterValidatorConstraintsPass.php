@@ -21,11 +21,6 @@ class RegisterValidatorConstraintsPass extends ObjectBehavior
         $bundle->getPath()->shouldBeCalled()->willReturn('/my/project/src/App');
         $bundle->getNamespace()->shouldBeCalled()->willReturn('App');
 
-        $classFinder->findClassesMatching('/my/project/src/App/Validator/Constraints', 'App\Validator\Constraints', '(?<!Validator)$')->shouldBeCalled()->willReturn(array(
-            'App\Validator\Constraints\Taste',
-            'App\Validator\Constraints\MinimumHole',
-        ));
-
         $servIdGen->generateForBundleClass($bundle, 'App\Validator\Constraints\Taste', 'validator')->willReturn('app.validator.constraints.taste_validator');
         $servIdGen->generateForBundleClass($bundle, 'App\Validator\Constraints\MinimumHole', 'validator')->willReturn('app.validator.constraints.minimum_hole_validator');
 
@@ -39,6 +34,13 @@ class RegisterValidatorConstraintsPass extends ObjectBehavior
      **/
     function it_should_add_tagged_service_for_each_validator_constraint($container, $classFinder, $definitionFactory, $tasteValidatorDef, $minimumHoleValidatorDef)
     {
+        $classes = array(
+            'App\Validator\Constraints\Taste',
+            'App\Validator\Constraints\MinimumHole',
+        );
+        $classFinder->findClassesMatching('/my/project/src/App/Validator/Constraints', 'App\Validator\Constraints', '(?<!Validator)$')->shouldBeCalled()->willReturn($classes);
+        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Validator\Constraint')->willReturn($classes);
+
         $container->hasDefinition('app.validator.constraints.taste_validator')->willReturn(false);
         $definitionFactory->createDefinition('App\Validator\Constraints\TasteValidator')->shouldBeCalled()->willReturn($tasteValidatorDef);
         $container->setDefinition('app.validator.constraints.taste_validator', $tasteValidatorDef)->shouldBeCalled();
@@ -55,10 +57,38 @@ class RegisterValidatorConstraintsPass extends ObjectBehavior
      **/
     function it_should_not_add_service_with_same_id_and_tag_alias($container, $classFinder, $definitionFactory, $tasteValidatorDef)
     {
+        $classes = array(
+            'App\Validator\Constraints\Taste',
+            'App\Validator\Constraints\MinimumHole',
+        );
+        $classFinder->findClassesMatching('/my/project/src/App/Validator/Constraints', 'App\Validator\Constraints', '(?<!Validator)$')->shouldBeCalled()->willReturn($classes);
+        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Validator\Constraint')->willReturn($classes);
+
         $container->hasDefinition('app.validator.constraints.taste_validator')->willReturn(true);
         $definitionFactory->createDefinition('App\Validator\Constraints\TasteValidator')->shouldNotBeCalled();
 
         $container->hasDefinition('app.validator.constraints.minimum_hole_validator')->willReturn(true);
+        $definitionFactory->createDefinition('App\Validator\Constraints\MinimumHoleValidator')->shouldNotBeCalled();
+
+        $this->process($container);
+    }
+
+    /**
+     * @param Symfony\Component\DependencyInjection\Definition $tasteValidatorDef
+     **/
+    function it_should_not_add_service_for_classes_not_extending_constraint($container, $classFinder, $definitionFactory, $tasteValidatorDef)
+    {
+        $classes = array(
+            'App\Validator\Constraints\Taste',
+            'App\Validator\Constraints\MinimumHole',
+        );
+        $classFinder->findClassesMatching('/my/project/src/App/Validator/Constraints', 'App\Validator\Constraints', '(?<!Validator)$')->shouldBeCalled()->willReturn($classes);
+        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Validator\Constraint')->willReturn((array) $classes[0]);
+
+        $container->hasDefinition('app.validator.constraints.taste_validator')->willReturn(false);
+        $definitionFactory->createDefinition('App\Validator\Constraints\TasteValidator')->willReturn($tasteValidatorDef);
+        $container->setDefinition('app.validator.constraints.taste_validator', $tasteValidatorDef)->shouldBeCalled();
+
         $definitionFactory->createDefinition('App\Validator\Constraints\MinimumHoleValidator')->shouldNotBeCalled();
 
         $this->process($container);
