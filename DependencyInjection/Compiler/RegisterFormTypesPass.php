@@ -27,6 +27,7 @@ class RegisterFormTypesPass implements CompilerPassInterface
         $this->definitionFactory = $definitionFactory ?: new FormTypeDefinitionFactory;
         $this->serviceIdGenerator = $serviceIdGenerator ?: new ServiceIdGenerator;
     }
+
     /**
      * {@inheritDoc}
      */
