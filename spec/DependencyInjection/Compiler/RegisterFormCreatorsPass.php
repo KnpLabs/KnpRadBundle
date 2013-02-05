@@ -32,8 +32,8 @@ class RegisterFormCreatorsPass extends ObjectBehavior
         $container->hasDefinition('knp_rad.form.manager')->willReturn(true);
         $container->getDefinition('knp_rad.form.manager')->willReturn($managerDef);
         $container->findTaggedServiceIds('knp_rad.form.creator')->willReturn(array(
-            'knp_rad.creator.memory' => array('priority' => 1),
-            'knp_rad.creator.type'   => array('priority' => 2),
+            'knp_rad.creator.memory' => array(0 => array('priority' => 1)),
+            'knp_rad.creator.type'   => array(0 => array('priority' => 2)),
         ));
 
         $referenceFactory->createReference('knp_rad.creator.memory')->willReturn($memoryRef);
