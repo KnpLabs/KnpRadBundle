@@ -4,16 +4,19 @@ namespace Knp\RadBundle\Finder;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
+use Knp\RadBundle\Reflection\ReflectionFactory;
 
 class ClassFinder
 {
     private $finder;
     private $filesystem;
+    private $reflectionFactory;
 
-    public function __construct(Finder $finder = null, Filesystem $filesystem = null)
+    public function __construct(Finder $finder = null, Filesystem $filesystem = null, ReflectionFactory $reflectionFactory = null)
     {
         $this->finder = $finder ?: new Finder();
         $this->filesystem = $filesystem ?: new Filesystem();
+        $this->reflectionFactory = $reflectionFactory ?: new ReflectionFactory();
     }
 
     public function findClasses($directory, $namespace)
@@ -44,5 +47,14 @@ class ClassFinder
         $matches = function ($path) use ($pattern) { return preg_match($pattern, $path); };
 
         return array_values(array_filter($this->findClasses($directory, $namespace), $matches));
+    }
+
+    public function filterClassesImplementing(array $classes, $interface)
+    {
+        $reflectionFactory = $this->reflectionFactory;
+
+        return array_filter($classes, function($class) use($interface, $reflectionFactory) {
+            return $reflectionFactory->createReflectionClass($class)->implementsInterface($interface);
+        });
     }
 }

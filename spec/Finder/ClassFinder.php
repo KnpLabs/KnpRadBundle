@@ -10,10 +10,11 @@ class ClassFinder extends ObjectBehavior
     /**
      * @param  Symfony\Component\Finder\Finder $finder
      * @param  Symfony\Component\Filesystem\Filesystem $filesystem
+     * @param  Knp\RadBundle\Reflection\ReflectionFactory $reflectionFactory
      */
-    function let($finder, $filesystem)
+    function let($finder, $filesystem, $reflectionFactory)
     {
-        $this->beConstructedWith($finder, $filesystem);
+        $this->beConstructedWith($finder, $filesystem, $reflectionFactory);
     }
 
     function it_should_find_classes_from_specified_the_namespace_directory($finder, $filesystem)
@@ -68,5 +69,23 @@ class ClassFinder extends ObjectBehavior
             'App\Entity\Customer',
             'App\Entity\Customer\Address',
         ));
+    }
+
+    /**
+     * @param ReflectionClass $cheeseRefl
+     * @param ReflectionClass $noCheeseRefl
+     **/
+    function it_should_allow_to_filter_by_class_interface($reflectionFactory, $cheeseRefl, $noCheeseRefl)
+    {
+        $reflectionFactory->createReflectionClass('App\Entity\Cheese')->willReturn($cheeseRefl);
+        $reflectionFactory->createReflectionClass('App\Entity\NoCheese')->willReturn($noCheeseRefl);
+
+        $noCheeseRefl->implementsInterface('Some\Cheese')->shouldBeCalled()->willReturn(false);
+        $cheeseRefl->implementsInterface('Some\Cheese')->shouldBeCalled()->willReturn(true);
+
+        $this->filterClassesImplementing(array('App\Entity\Cheese', 'App\Entity\NoCheese'), 'Some\Cheese')->shouldReturn(array(
+                'App\Entity\Cheese',
+            )
+        );
     }
 }

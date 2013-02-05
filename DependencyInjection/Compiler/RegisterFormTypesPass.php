@@ -36,7 +36,8 @@ class RegisterFormTypesPass implements CompilerPassInterface
         $namespace = $this->bundle->getNamespace().'\\Form';
 
         $types   = $container->getDefinition('form.extension')->getArgument(1);
-        $classes = $this->classFinder->findClassesMatching($directory, $namespace, 'Type$');
+        $potentialClasses = $this->classFinder->findClassesMatching($directory, $namespace, 'Type$');
+        $classes = $this->classFinder->filterClassesImplementing($potentialClasses, 'Symfony\Component\Form\FormTypeInterface');
 
         foreach ($classes as $class) {
             $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
