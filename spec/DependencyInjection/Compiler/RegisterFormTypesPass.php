@@ -21,11 +21,13 @@ class RegisterFormTypesPass extends ObjectBehavior
         $bundle->getPath()->shouldBeCalled()->willReturn('/my/project/src/App');
         $bundle->getNamespace()->shouldBeCalled()->willReturn('App');
 
-        $classFinder->findClassesMatching('/my/project/src/App/Form', 'App\Form', 'Type$')->shouldBeCalled()->willReturn(array(
+        $classes = array(
             'App\Form\CheeseType',
             'App\Form\EditCheeseType',
             'App\Form\MouseType',
-        ));
+        );
+        $classFinder->findClassesMatching('/my/project/src/App/Form', 'App\Form', 'Type$')->shouldBeCalled()->willReturn($classes);
+        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Form\FormTypeInterface')->willReturn($classes);
 
         $servIdGen->generateForBundleClass($bundle, 'App\Form\CheeseType')->willReturn('app.form.cheese_type');
         $servIdGen->generateForBundleClass($bundle, 'App\Form\EditCheeseType')->willReturn('app.form.edit_cheese_type');
