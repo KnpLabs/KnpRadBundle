@@ -25,6 +25,7 @@ class RegisterValidatorConstraintsPass extends ObjectBehavior
         $servIdGen->generateForBundleClass($bundle, 'App\Validator\Constraints\MinimumHole', 'validator')->willReturn('app.validator.constraints.minimum_hole_validator');
 
         $validatorFactory->getArgument(1)->willReturn(array());
+        $container->hasDefinition('validator.validator_factory')->willReturn(true);
         $container->getDefinition('validator.validator_factory')->willReturn($validatorFactory);
     }
 

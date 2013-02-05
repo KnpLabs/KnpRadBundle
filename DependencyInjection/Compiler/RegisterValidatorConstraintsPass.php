@@ -24,6 +24,10 @@ class RegisterValidatorConstraintsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        if (false === $container->hasDefinition('validator.validator_factory')) {
+            return;
+        }
+
         $directory = $this->bundle->getPath().'/Validator/Constraints';
         $namespace = $this->bundle->getNamespace().'\\Validator\\Constraints';
 
