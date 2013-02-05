@@ -10,18 +10,16 @@
     ],
     "require": {
         "php":                      ">=5.3.3",
-        "symfony/framework-bundle": ">=2.1",
+        "symfony/symfony":          "2.1.*",
         "nelmio/alice":             "*",
         "fzaninotto/faker":         "*"
     },
     "require-dev": {
-        "phpspec/phpspec2":                  "dev-develop",
-        "symfony/form":                      ">=2.1",
-        "symfony/security":                  ">=2.1",
-        "symfony/swiftmailer-bundle":        "2.1.*",
-        "doctrine/orm":                      ">=2.2.3,<2.4-dev",
-        "doctrine/doctrine-fixtures-bundle": "*",
-        "twig/twig":                         "*"
+        "phpspec/phpspec2":                   "dev-develop",
+        "symfony/swiftmailer-bundle":         "2.1.*",
+        "doctrine/orm":                       ">=2.2.3,<2.4-dev",
+        "doctrine/doctrine-fixtures-bundle":  "dev-master",
+        "twig/twig":                          ">=1.11.0,<2.0"
     },
     "suggest": {
         "symfony/form":                      "To take advantage of the Rad Form Manager",
