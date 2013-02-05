@@ -41,7 +41,8 @@ class RegisterTwigExtensionsPass implements CompilerPassInterface
         $directory = $this->bundle->getPath().'/Twig';
         $namespace = $this->bundle->getNamespace().'\Twig';
 
-        $classes = $this->classFinder->findClassesMatching($directory, $namespace, 'Extension$');
+        $potentialClasses = $this->classFinder->findClassesMatching($directory, $namespace, 'Extension$');
+        $classes = $this->classFinder->filterClassesImplementing($potentialClasses, 'Twig_ExtensionInterface');
 
         foreach ($classes as $class) {
             $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
