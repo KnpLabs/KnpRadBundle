@@ -40,10 +40,21 @@ class RegisterSecurityVotersPass extends ObjectBehavior
         $container->hasDefinition('security.access.decision_manager')->willReturn(true);
         $container->getDefinition('security.access.decision_manager')->willReturn($decisionManagerDef);
 
-        $classFinder->findClassesMatching('/my/project/src/App/Security', 'App\Security', 'Voter$')->willReturn(array(
+        $classes = array(
             'App\Security\Voter\CheeseVoter',
             'App\Security\Voter\CustomerVoter',
-        ));
+        );
+
+        $classFinder->findClassesMatching('/my/project/src/App/Security', 'App\Security', 'Voter$')->willReturn($classes);
+
+        $classFinder->filterClassesImplementing(
+            $classes,
+            'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface')
+            ->willReturn(array(
+                'App\Security\Voter\CheeseVoter',
+                'App\Security\Voter\CustomerVoter',
+            )
+        );
 
         $container->hasDefinition('app.security.voter.cheese_voter')->willReturn(false)->shouldBeCalled();
         $container->hasDefinition('app.security.voter.customer_voter')->willReturn(false)->shouldBeCalled();
@@ -61,6 +72,42 @@ class RegisterSecurityVotersPass extends ObjectBehavior
         $referenceFactory->createReference('app.security.voter.customer_voter')->willReturn($customerVoterRef);
 
         $definitionManipulator->appendArgumentValue($decisionManagerDef, 0, $cheeseVoterRef)->shouldBeCalled();
+        $definitionManipulator->appendArgumentValue($decisionManagerDef, 0, $customerVoterRef)->shouldBeCalled();
+
+        $this->process($container);
+    }
+
+    /**
+     * @param  Symfony\Component\DependencyInjection\Definition $decisionManagerDef
+     * @param  Symfony\Component\DependencyInjection\Definition $customerVoterDef
+     * @param  Symfony\Component\DependencyInjection\Reference $customerVoterRef
+     */
+    function it_should_not_register_security_voters_that_do_not_implement_correct_interface($bundle, $container, $classFinder, $definitionFactory, $serviceIdGenerator, $referenceFactory, $definitionManipulator, $decisionManagerDef, $customerVoterDef, $customerVoterRef)
+    {
+        $container->hasDefinition('security.access.decision_manager')->willReturn(true);
+        $container->getDefinition('security.access.decision_manager')->willReturn($decisionManagerDef);
+
+        $classes = array(
+            'App\Security\Voter\CheeseVoter',
+            'App\Security\Voter\CustomerVoter',
+        );
+
+        $classFinder->findClassesMatching('/my/project/src/App/Security', 'App\Security', 'Voter$')->willReturn($classes);
+
+        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface')
+            ->willReturn(array(
+                'App\Security\Voter\CustomerVoter',
+            )
+        );
+
+        $container->hasDefinition('app.security.voter.cheese_voter')->shouldNotBeCalled();
+        $container->hasDefinition('app.security.voter.customer_voter')->shouldBeCalled();
+
+        $definitionFactory->createDefinition('App\Security\Voter\CustomerVoter')->willReturn($customerVoterDef);
+
+        $serviceIdGenerator->generateForBundleClass($bundle, 'App\Security\Voter\CustomerVoter')->shouldBeCalled()->willReturn('app.security.voter.customer_voter');
+        $container->setDefinition('app.security.voter.customer_voter', $customerVoterDef)->shouldBeCalled();
+        $referenceFactory->createReference('app.security.voter.customer_voter')->willReturn($customerVoterRef);
         $definitionManipulator->appendArgumentValue($decisionManagerDef, 0, $customerVoterRef)->shouldBeCalled();
 
         $this->process($container);
