@@ -17,6 +17,7 @@ class Bundle extends BaseBundle
         $container->addCompilerPass(new Compiler\RegisterSecurityVotersPass($this));
         $container->addCompilerPass(new Compiler\RegisterAppBundlePass($this));
         $container->addCompilerPass(new Compiler\RegisterFormTypesPass($this));
+        $container->addCompilerPass(new Compiler\RegisterFormTypeExtensionsPass($this));
         $container->addCompilerPass(new Compiler\RegisterValidatorConstraintsPass($this));
         $container->addCompilerPass(new Compiler\RegisterFormCreatorsPass);
     }
