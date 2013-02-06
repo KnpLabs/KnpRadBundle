@@ -44,7 +44,7 @@ class FlashesNode extends Twig_Node
 
         $compiler
             ->write("\$savedContext   = null;\n")
-            ->write("\$flashesByTypes = [];\n")
+            ->write("\$flashesByTypes = array();\n")
             ->write("\$numFlashes     = 0;\n")
             ->write("foreach (\$this->env->getExtension('flash')->getFlashes(\$types) as \$type => \$flashes) {\n")
             ->indent()
