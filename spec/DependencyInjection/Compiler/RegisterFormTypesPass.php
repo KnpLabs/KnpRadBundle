@@ -18,15 +18,15 @@ class RegisterFormTypesPass extends ObjectBehavior
     {
         $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $servIdGen);
 
-        $bundle->getPath()->shouldBeCalled()->willReturn('/my/project/src/App');
-        $bundle->getNamespace()->shouldBeCalled()->willReturn('App');
+        $bundle->getPath()->willReturn('/my/project/src/App');
+        $bundle->getNamespace()->willReturn('App');
 
         $classes = array(
             'App\Form\CheeseType',
             'App\Form\EditCheeseType',
             'App\Form\MouseType',
         );
-        $classFinder->findClassesMatching('/my/project/src/App/Form', 'App\Form', 'Type$')->shouldBeCalled()->willReturn($classes);
+        $classFinder->findClassesMatching('/my/project/src/App/Form', 'App\Form', 'Type$')->willReturn($classes);
         $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Form\FormTypeInterface')->willReturn($classes);
 
         $servIdGen->generateForBundleClass($bundle, 'App\Form\CheeseType')->willReturn('app.form.cheese_type');
@@ -44,6 +44,8 @@ class RegisterFormTypesPass extends ObjectBehavior
      **/
     function it_should_add_tagged_service_for_each_form_type($container, $classFinder, $definitionFactory, $cheeseTypeDef, $editCheeseTypeDef, $mouseTypeDef)
     {
+        $container->hasDefinition('form.extension')->willReturn(true);
+
         $container->hasDefinition('app.form.cheese_type')->willReturn(false);
         $definitionFactory->createDefinition('App\Form\CheeseType')->shouldBeCalled()->willReturn($cheeseTypeDef);
         $container->setDefinition('app.form.cheese_type', $cheeseTypeDef)->shouldBeCalled();
@@ -66,6 +68,8 @@ class RegisterFormTypesPass extends ObjectBehavior
      **/
     function it_should_not_add_service_with_same_id_and_tag_alias($container, $classFinder, $definitionFactory, $cheeseTypeDef, $editCheeseTypeDef, $mouseTypeDef)
     {
+        $container->hasDefinition('form.extension')->willReturn(true);
+
         $container->hasDefinition('app.form.cheese_type')->willReturn(false);
         $definitionFactory->createDefinition('App\Form\CheeseType')->shouldBeCalled()->willReturn($cheeseTypeDef);
         $container->setDefinition('app.form.cheese_type', $cheeseTypeDef)->shouldBeCalled();
@@ -74,6 +78,22 @@ class RegisterFormTypesPass extends ObjectBehavior
         $container->setDefinition('app.form.edit_cheese_type', $editCheeseTypeDef)->shouldNotBeCalled();
 
         $container->hasDefinition('app.form.mouse_type')->willReturn(true);
+        $container->setDefinition('app.form.mouse_type', $mouseTypeDef)->shouldNotBeCalled();
+
+        $this->process($container);
+    }
+
+    /**
+     * @param Symfony\Component\DependencyInjection\Definition $cheeseTypeDef
+     * @param Symfony\Component\DependencyInjection\Definition $editCheeseTypeDef
+     * @param Symfony\Component\DependencyInjection\Definition $mouseTypeDef
+     **/
+    function it_should_not_register_form_types_if_form_extension_service_is_not_loaded($container, $classFinder, $definitionFactory, $cheeseTypeDef, $editCheeseTypeDef, $mouseTypeDef)
+    {
+        $container->hasDefinition('form.extension')->willReturn(false);
+
+        $container->setDefinition('app.form.cheese_type', $cheeseTypeDef)->shouldNotBeCalled();
+        $container->setDefinition('app.form.edit_cheese_type', $editCheeseTypeDef)->shouldNotBeCalled();
         $container->setDefinition('app.form.mouse_type', $mouseTypeDef)->shouldNotBeCalled();
 
         $this->process($container);

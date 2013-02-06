@@ -33,6 +33,10 @@ class RegisterFormTypesPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        if (false === $container->hasDefinition('form.extension')) {
+            return;
+        }
+
         $directory = $this->bundle->getPath().'/Form';
         $namespace = $this->bundle->getNamespace().'\\Form';
 
