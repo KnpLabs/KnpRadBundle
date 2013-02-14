@@ -5,6 +5,7 @@ namespace Knp\RadBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityRepository;
 use Knp\RadBundle\Flash;
 
 class Controller extends BaseController
@@ -75,11 +76,13 @@ class Controller extends BaseController
     {
         $result = null;
 
-        if (is_object($entity) && $this->getEntityManager()->contains($entity)) {
+        if (is_object($entity) && $entity instanceof EntityRepository) {
+            $result = $repository->findOneBy($criterias);
+        } elseif (is_object($entity) && $this->getEntityManager()->contains($entity)) {
             $result = $this->getEntityManager()->refresh($entity);
         } elseif (is_string($entity)) {
             $repository = $this->getRepository($entity);
-            $result = $repository->findOneBy($criterias);
+            $result     = $repository->findOneBy($criterias);
         }
 
         if (null !== $result){
