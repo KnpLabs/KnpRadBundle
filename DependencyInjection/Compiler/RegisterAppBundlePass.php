@@ -20,7 +20,7 @@ class RegisterAppBundlePass implements CompilerPassInterface
     {
         $bundles    = $container->getParameter('kernel.bundles');
         $radBundles = array_filter($bundles, function($bundle) {
-            return 'Knp\RadBundle\AppBundle\Bundle' === get_class($bundle)
+            return 'Knp\RadBundle\AppBundle\Bundle' === $bundle
                 || is_subclass_of($bundle, 'Knp\RadBundle\AppBundle\Bundle');
         });
 
