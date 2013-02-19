@@ -13,14 +13,12 @@ use Knp\RadBundle\DependencyInjection\ServiceIdGenerator;
 class RegisterDoctrineRepositoriesPass implements CompilerPassInterface
 {
     private $bundle;
-    private $classFinder;
     private $definitionFactory;
     private $serviceIdGenerator;
 
-    public function __construct(BundleInterface $bundle, ClassFinder $classFinder = null, DoctrineRepositoryFactory $definitionFactory = null, ServiceIdGenerator $serviceIdGenerator = null)
+    public function __construct(BundleInterface $bundle, DoctrineRepositoryFactory $definitionFactory = null, ServiceIdGenerator $serviceIdGenerator = null)
     {
         $this->bundle             = $bundle;
-        $this->classFinder        = $classFinder ?: new ClassFinder();
         $this->definitionFactory  = $definitionFactory ?: new DoctrineRepositoryFactory();
         $this->serviceIdGenerator = $serviceIdGenerator ?: new ServiceIdGenerator();
     }
@@ -30,21 +28,22 @@ class RegisterDoctrineRepositoriesPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $directory = $this->bundle->getPath().'/Entity';
         $namespace = $this->bundle->getNamespace().'\Entity';
 
-        $classes = $this->classFinder->findClassesMatching($directory, $namespace, '(?<!Repository)$');
-
+        $classes = $container->get('doctrine.orm.entity_manager')->getConfiguration()->getMetadataDriverImpl()->getAllClassNames();
+        
         foreach ($classes as $class) {
-            $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class, 'repository');
+            if (strpos($class, $this->bundle->getNamespace()) === 0) {
+                $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class, 'repository');
 
-            if ($container->hasDefinition($id)) {
-                continue;
+                if ($container->hasDefinition($id)) {
+                    continue;
+                }
+
+                $def = $this->definitionFactory->createDefinition($class);
+
+                $container->setDefinition($id, $def);
             }
-
-            $def = $this->definitionFactory->createDefinition($class);
-
-            $container->setDefinition($id, $def);
         }
     }
 }
