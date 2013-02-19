@@ -9,5 +9,6 @@ env:
 before_script:
   - composer require --no-update symfony/symfony=$SYMFONY_VERSION
   - composer install --prefer-source --dev
+  - curl -H "Accept: text/plain" https://security.sensiolabs.org/check_lock -F lock=@composer.lock
 
 script: ./bin/phpspec run -fpretty
