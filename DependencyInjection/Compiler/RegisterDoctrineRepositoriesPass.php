@@ -30,19 +30,21 @@ class RegisterDoctrineRepositoriesPass implements CompilerPassInterface
     {
         $namespace = $this->bundle->getNamespace().'\Entity';
 
-        $classes = $container->get('doctrine.orm.entity_manager')->getConfiguration()->getMetadataDriverImpl()->getAllClassNames();
-        
-        foreach ($classes as $class) {
-            if (strpos($class, $this->bundle->getNamespace()) === 0) {
-                $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class, 'repository');
+        if ($container->has('doctrine.orm.entity_manager')) {
+            $classes = $container->get('doctrine.orm.entity_manager')->getConfiguration()->getMetadataDriverImpl()->getAllClassNames();
+            
+            foreach ($classes as $class) {
+                if (strpos($class, $this->bundle->getNamespace()) === 0) {
+                    $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class, 'repository');
 
-                if ($container->hasDefinition($id)) {
-                    continue;
+                    if ($container->hasDefinition($id)) {
+                        continue;
+                    }
+
+                    $def = $this->definitionFactory->createDefinition($class);
+
+                    $container->setDefinition($id, $def);
                 }
-
-                $def = $this->definitionFactory->createDefinition($class);
-
-                $container->setDefinition($id, $def);
             }
         }
     }
