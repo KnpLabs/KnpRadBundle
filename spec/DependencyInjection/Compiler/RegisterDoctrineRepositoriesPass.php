@@ -13,9 +13,9 @@ class RegisterDoctrineRepositoriesPass extends ObjectBehavior
      * @param Knp\RadBundle\DependencyInjection\Definition\DoctrineRepositoryFactory $definitionFactory
      * @param Knp\RadBundle\DependencyInjection\ServiceIdGenerator                   $serviceIdGenerator
      */
-    function let($bundle, $container, $classFinder, $definitionFactory, $serviceIdGenerator)
+    function let($bundle, $container, $definitionFactory, $serviceIdGenerator)
     {
-        $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $serviceIdGenerator);
+        $this->beConstructedWith($bundle, $definitionFactory, $serviceIdGenerator);
     }
 
     function it_should_be_a_compiler_pass()
@@ -24,15 +24,22 @@ class RegisterDoctrineRepositoriesPass extends ObjectBehavior
     }
 
     /**
+     * @param Doctrine\ORM\EntityManager $entityManager
+     * @param Doctrine\DBAL\Connection $configuration
+     * @param Doctrine\ORM\Mapping\Driver\DatabaseDriver $driverImpl
      * @param Symfony\Component\DependencyInjection\Definition $cheeseDef
      * @param Symfony\Component\DependencyInjection\Definition $customerDef
      */
-    function it_should_register_a_repository_service_for_all_entities_found_in_the_bundle($container, $bundle, $classFinder, $definitionFactory, $serviceIdGenerator, $cheeseDef, $customerDef)
+    function it_should_register_a_repository_service_for_all_entities_found_in_the_bundle($container, $bundle, $definitionFactory, $serviceIdGenerator, $entityManager, $configuration, $driverImpl, $cheeseDef, $customerDef)
     {
-        $bundle->getPath()->shouldBeCalled()->willReturn('/my/project/src/App');
         $bundle->getNamespace()->shouldBeCalled()->willReturn('App');
 
-        $classFinder->findClassesMatching('/my/project/src/App/Entity', 'App\Entity', '(?<!Repository)$')->shouldBeCalled()->willReturn(array('App\Entity\Cheese', 'App\Entity\Customer'));
+        $container->has('doctrine.orm.entity_manager')->willReturn(true)->shouldBeCalled();
+        
+        $container->get('doctrine.orm.entity_manager')->willReturn($entityManager)->shouldBeCalled();
+        $entityManager->getConfiguration()->willReturn($configuration)->shouldBeCalled();
+        $configuration->getMetadataDriverImpl()->willReturn($driverImpl)->shouldBeCalled();
+        $driverImpl->getAllClassNames()->shouldBeCalled()->willReturn(array('App\Entity\Cheese', 'App\Entity\Customer'));
 
         $serviceIdGenerator->generateForBundleClass($bundle, 'App\Entity\Cheese', 'repository')->willReturn('app.entity.cheese_repository');
         $serviceIdGenerator->generateForBundleClass($bundle, 'App\Entity\Customer', 'repository')->willReturn('app.entity.customer_repository');
@@ -50,16 +57,23 @@ class RegisterDoctrineRepositoriesPass extends ObjectBehavior
     }
 
     /**
+     * @param Doctrine\ORM\EntityManager $entityManager
+     * @param Doctrine\DBAL\Connection $configuration
+     * @param Doctrine\ORM\Mapping\Driver\DatabaseDriver $driverImpl
      * @param Symfony\Component\DependencyInjection\Definition $cheeseDef
      * @param Symfony\Component\DependencyInjection\Definition $customerDef
      */
-    function it_should_not_register_a_repository_service_if_already_defined($container, $bundle, $classFinder, $definitionFactory, $serviceIdGenerator, $cheeseDef, $customerDef)
+    function it_should_not_register_a_repository_service_if_already_defined($container, $bundle, $definitionFactory, $serviceIdGenerator, $entityManager, $configuration, $driverImpl, $cheeseDef, $customerDef)
     {
-        $bundle->getPath()->shouldBeCalled()->willReturn('/my/project/src/App');
         $bundle->getNamespace()->shouldBeCalled()->willReturn('App');
 
-        $classFinder->findClassesMatching('/my/project/src/App/Entity', 'App\Entity', '(?<!Repository)$')->shouldBeCalled()->willReturn(array('App\Entity\Cheese', 'App\Entity\Customer'));
-
+        $container->has('doctrine.orm.entity_manager')->willReturn(true)->shouldBeCalled();
+        
+        $container->get('doctrine.orm.entity_manager')->willReturn($entityManager)->shouldBeCalled();
+        $entityManager->getConfiguration()->willReturn($configuration)->shouldBeCalled();
+        $configuration->getMetadataDriverImpl()->willReturn($driverImpl)->shouldBeCalled();
+        $driverImpl->getAllClassNames()->shouldBeCalled()->willReturn(array('App\Entity\Cheese', 'App\Entity\Customer'));
+        
         $serviceIdGenerator->generateForBundleClass($bundle, 'App\Entity\Cheese', 'repository')->willReturn('app.entity.cheese_repository');
         $serviceIdGenerator->generateForBundleClass($bundle, 'App\Entity\Customer', 'repository')->willReturn('app.entity.customer_repository');
 
