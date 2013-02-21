@@ -13,7 +13,7 @@
                 {% block route_show %}
                     {% set parameters = [] %}
                     {% for name, attrib in routes.show.parameters %}
-                        {% set parameters = parameters|merge({name: element[attrib]}) %}
+                        {% set parameters = parameters|merge({( name ): element[attrib]}) %}
                     {% endfor %}
                     <a href="{{ path(routes.show.path, parameters) }}" {% if routes.show.label is defined %}title="{{ routes.show.label }}"{% endif %}>
                         {% if routes.show.label is defined %}
@@ -27,7 +27,7 @@
                 {% block route_edit %}
                     {% set parameters = [] %}
                     {% for name, attrib in routes.edit.parameters %}
-                        {% set parameters = parameters|merge({name: element[attrib]}) %}
+                        {% set parameters = parameters|merge({( name ): element[attrib]}) %}
                     {% endfor %}
                     <a href="{{ path(routes.edit.path, parameters) }}" {% if routes.edit.label is defined %}title="{{ routes.edit.label }}"{% endif %}>
                         {% if routes.edit.label is defined %}
@@ -41,10 +41,10 @@
                 {% block route_delete %}
                 {% set parameters = [] %}
                 {% for name, attrib in routes.delete.parameters %}
-                    {% set parameters = parameters|merge({name: element[attrib]}) %}
+                    {% set parameters = parameters|merge({( name ): element[attrib]}) %}
                 {% endfor %}
                 <form method="post" action="{{ path(routes.delete.path, parameters) }}" style="margin:0;display:inline" >
-                    <input type="hidden" name="_method" value="DELETE" /> 
+                    <input type="hidden" name="_method" value="DELETE" />
                     <button type="submit" {% if routes.delete.label is defined %}title="{{ routes.delete.label }}"{% endif %}>
                         {% if routes.delete.label is defined %}
                             {{ routes.delete.label }}
@@ -53,7 +53,7 @@
                 </form>
                 {% endblock %}
             {% endif %}
-            
+
         </td>
     {% endif %}
     </tr>
