@@ -10,7 +10,7 @@
     <script src="{{ asset('bundles/knprad/bootstrap/js/bootstrap.min.js') }}"></script>
 {% endblock %}
 
-{% block body %}
+{% block flashes %}
     <div class="knprad-flashes" style="position:absolute;width:500px;z-index:1000;left:50%;margin-left:-250px;top:10px;">
     {% for name, flash in app.session.flashes %}
         <div class="alert alert-block alert-{{ name }}">
@@ -19,4 +19,7 @@
         </div>
     {% endfor %}
     </div>
+{% endblock %}
+
+{% block body %}
 {% endblock %}
