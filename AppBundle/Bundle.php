@@ -5,7 +5,6 @@ namespace Knp\RadBundle\AppBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle as BaseBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Knp\RadBundle\DependencyInjection\Compiler;
-use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 
 class Bundle extends BaseBundle
 {
