@@ -13,7 +13,7 @@ class Bundle extends BaseBundle
 
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new Compiler\RegisterDoctrineRepositoriesPass($this), PassConfig::TYPE_OPTIMIZE);
+        $container->addCompilerPass(new Compiler\RegisterDoctrineRepositoriesPass($this));
         $container->addCompilerPass(new Compiler\RegisterTwigExtensionsPass($this));
         $container->addCompilerPass(new Compiler\RegisterSecurityVotersPass($this));
         $container->addCompilerPass(new Compiler\RegisterAppBundlePass($this));
