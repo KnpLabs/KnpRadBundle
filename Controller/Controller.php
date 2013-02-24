@@ -77,7 +77,7 @@ class Controller extends BaseController
         $result = null;
 
         if (is_object($entity) && $entity instanceof EntityRepository) {
-            $result = $repository->findOneBy($criterias);
+            $result = $entity->findOneBy($criterias);
         } elseif (is_object($entity) && $this->getEntityManager()->contains($entity)) {
             $result = $this->getEntityManager()->refresh($entity);
         } elseif (is_string($entity)) {
