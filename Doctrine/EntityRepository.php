@@ -5,7 +5,7 @@ namespace Knp\RadBundle\Doctrine;
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-abstract class EntityRepository extends BaseEntityRepository
+class EntityRepository extends BaseEntityRepository
 {
     public function __call($method, $arguments)
     {
