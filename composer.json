@@ -2,6 +2,7 @@
     "name": "knplabs/rad-bundle",
     "description": "The \"KnpLabs Rad Edition\" bundle",
     "license":     "MIT",
+    "homepage": "http://rad.knplabs.com",
     "authors": [
         {
             "name":     "Knplabs",
@@ -10,14 +11,14 @@
     ],
     "require": {
         "php":                      ">=5.3.3",
-        "symfony/symfony":          "2.1.*",
+        "symfony/symfony":          "2.2.*",
         "nelmio/alice":             "*",
         "fzaninotto/faker":         "*"
     },
     "require-dev": {
         "phpspec/phpspec2":                   "dev-develop",
-        "symfony/swiftmailer-bundle":         "2.1.*",
-        "doctrine/orm":                       ">=2.2.3,<3.0",
+        "symfony/swiftmailer-bundle":         "2.2.*",
+        "doctrine/orm":                       "~2.2,>=2.2.3",
         "doctrine/doctrine-fixtures-bundle":  "dev-master",
         "twig/twig":                          ">=1.11.0,<2.0"
     },
