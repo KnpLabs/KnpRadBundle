@@ -83,7 +83,7 @@ class ClassFinder extends ObjectBehavior
         $noCheeseRefl->isSubclassOf('Some\Cheese')->shouldBeCalled()->willReturn(false);
         $cheeseRefl->isSubclassOf('Some\Cheese')->shouldBeCalled()->willReturn(true);
 
-        $this->filterClassesImplementing(array('App\Entity\Cheese', 'App\Entity\NoCheese'), 'Some\Cheese')->shouldReturn(array(
+        $this->filterClassesSubclassing(array('App\Entity\Cheese', 'App\Entity\NoCheese'), 'Some\Cheese')->shouldReturn(array(
                 'App\Entity\Cheese',
             )
         );

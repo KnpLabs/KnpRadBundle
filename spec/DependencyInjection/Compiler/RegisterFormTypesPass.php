@@ -27,7 +27,7 @@ class RegisterFormTypesPass extends ObjectBehavior
             'App\Form\MouseType',
         );
         $classFinder->findClassesMatching('/my/project/src/App/Form', 'App\Form', 'Type$')->willReturn($classes);
-        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Form\FormTypeInterface')->willReturn($classes);
+        $classFinder->filterClassesSubclassing($classes, 'Symfony\Component\Form\FormTypeInterface')->willReturn($classes);
 
         $servIdGen->generateForBundleClass($bundle, 'App\Form\CheeseType')->willReturn('app.form.cheese_type');
         $servIdGen->generateForBundleClass($bundle, 'App\Form\EditCheeseType')->willReturn('app.form.edit_cheese_type');

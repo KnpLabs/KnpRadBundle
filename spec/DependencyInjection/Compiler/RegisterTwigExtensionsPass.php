@@ -44,7 +44,7 @@ class RegisterTwigExtensionsPass extends ObjectBehavior
             'App\Twig\WineExtension'
         );
         $classFinder->findClassesMatching('/my/project/src/App/Twig', 'App\Twig', 'Extension$')->willReturn($classes);
-        $classFinder->filterClassesImplementing($classes, 'Twig_ExtensionInterface')->willReturn($classes);
+        $classFinder->filterClassesSubclassing($classes, 'Twig_ExtensionInterface')->willReturn($classes);
 
         $container->hasDefinition('app.twig.bread_extension')->willReturn(false)->shouldBeCalled();
         $container->hasDefinition('app.twig.wine_extension')->willReturn(false)->shouldBeCalled();
@@ -83,7 +83,7 @@ class RegisterTwigExtensionsPass extends ObjectBehavior
             'App\Twig\WineExtension'
         );
         $classFinder->findClassesMatching('/my/project/src/App/Twig', 'App\Twig', 'Extension$')->willReturn($classes);
-        $classFinder->filterClassesImplementing($classes, 'Twig_ExtensionInterface')->willReturn($classes);
+        $classFinder->filterClassesSubclassing($classes, 'Twig_ExtensionInterface')->willReturn($classes);
 
         $container->hasDefinition('app.twig.bread_extension')->willReturn(true)->shouldBeCalled();
         $container->hasDefinition('app.twig.wine_extension')->willReturn(false)->shouldBeCalled();

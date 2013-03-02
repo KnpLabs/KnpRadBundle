@@ -42,7 +42,7 @@ class RegisterSecurityVotersPass implements CompilerPassInterface
         $namespace = $this->bundle->getNamespace().'\Security';
 
         $potentialClasses = $this->classFinder->findClassesMatching($directory, $namespace, 'Voter$');
-        $classes = $this->classFinder->filterClassesImplementing($potentialClasses, 'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface');
+        $classes = $this->classFinder->filterClassesSubclassing($potentialClasses, 'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface');
 
         foreach ($classes as $class) {
             $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);

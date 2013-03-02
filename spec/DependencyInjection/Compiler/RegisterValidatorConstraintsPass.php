@@ -40,7 +40,7 @@ class RegisterValidatorConstraintsPass extends ObjectBehavior
             'App\Validator\Constraints\MinimumHole',
         );
         $classFinder->findClassesMatching('/my/project/src/App/Validator/Constraints', 'App\Validator\Constraints', '(?<!Validator)$')->shouldBeCalled()->willReturn($classes);
-        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Validator\Constraint')->willReturn($classes);
+        $classFinder->filterClassesSubclassing($classes, 'Symfony\Component\Validator\Constraint')->willReturn($classes);
 
         $container->hasDefinition('app.validator.constraints.taste_validator')->willReturn(false);
         $definitionFactory->createDefinition('App\Validator\Constraints\TasteValidator')->shouldBeCalled()->willReturn($tasteValidatorDef);
@@ -63,7 +63,7 @@ class RegisterValidatorConstraintsPass extends ObjectBehavior
             'App\Validator\Constraints\MinimumHole',
         );
         $classFinder->findClassesMatching('/my/project/src/App/Validator/Constraints', 'App\Validator\Constraints', '(?<!Validator)$')->shouldBeCalled()->willReturn($classes);
-        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Validator\Constraint')->willReturn($classes);
+        $classFinder->filterClassesSubclassing($classes, 'Symfony\Component\Validator\Constraint')->willReturn($classes);
 
         $container->hasDefinition('app.validator.constraints.taste_validator')->willReturn(true);
         $definitionFactory->createDefinition('App\Validator\Constraints\TasteValidator')->shouldNotBeCalled();
@@ -84,7 +84,7 @@ class RegisterValidatorConstraintsPass extends ObjectBehavior
             'App\Validator\Constraints\MinimumHole',
         );
         $classFinder->findClassesMatching('/my/project/src/App/Validator/Constraints', 'App\Validator\Constraints', '(?<!Validator)$')->shouldBeCalled()->willReturn($classes);
-        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Validator\Constraint')->willReturn((array) $classes[0]);
+        $classFinder->filterClassesSubclassing($classes, 'Symfony\Component\Validator\Constraint')->willReturn((array) $classes[0]);
 
         $container->hasDefinition('app.validator.constraints.taste_validator')->willReturn(false);
         $definitionFactory->createDefinition('App\Validator\Constraints\TasteValidator')->willReturn($tasteValidatorDef);
