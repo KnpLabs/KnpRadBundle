@@ -36,7 +36,7 @@ class RegisterSecurityVotersPass implements CompilerPassInterface
             return;
         }
 
-        $decisionManagerDef = $container->getDefinition('security.access.decision_manager');
+        $decisionManagerDef = $this->getDecisionManagerDef($container);
 
         $directory = $this->bundle->getPath().'/Security';
         $namespace = $this->bundle->getNamespace().'\Security';
@@ -58,5 +58,14 @@ class RegisterSecurityVotersPass implements CompilerPassInterface
 
             $this->definitionManipulator->appendArgumentValue($decisionManagerDef, 0, $ref);
         }
+    }
+
+    private function getDecisionManagerDef(ContainerBuilder $container)
+    {
+        if ($container->hasDefinition('security.access.decision_manager.delegate')) {
+            return $container->getDefinition('security.access.decision_manager.delegate');
+        }
+
+        return $container->getDefinition('security.access.decision_manager');
     }
 }
