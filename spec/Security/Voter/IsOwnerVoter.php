@@ -80,4 +80,74 @@ class IsOwnerVoter extends ObjectBehavior
         $object->getOwner()->willReturn($user);
         $this->vote($token, $object, array('IS_TEST'))->shouldReturn(VoterInterface::ACCESS_ABSTAIN);
     }
+
+    /**
+     * @param Knp\RadBundle\Security\OwnableInterface $object
+     * @param Symfony\Component\Security\Core\User\UserInterface $equatableUser
+     * @param Knp\RadBundle\Security\OwnerInterface,Symfony\Component\Security\Core\User\EquatableInterface $user
+     **/
+    function it_should_vote_yes_for_equal_owners($token, $user, $object, $equatableUser)
+    {
+        $token->getUser()->willReturn($user);
+        $object->getOwner()->willReturn($equatableUser);
+        $user->isEqualTo($equatableUser->getWrappedSubject())->willReturn(true);
+
+        $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_GRANTED);
+    }
+
+    /**
+     * @param Knp\RadBundle\Security\OwnableInterface $object
+     * @param Symfony\Component\Security\Core\User\UserInterface $equatableUser
+     * @param Knp\RadBundle\Security\OwnerInterface,Symfony\Component\Security\Core\User\EquatableInterface $user
+     **/
+    function it_should_vote_no_for_non_equal_owners($token, $user, $object, $equatableUser)
+    {
+        $token->getUser()->willReturn($user);
+        $object->getOwner()->willReturn($equatableUser);
+        $user->isEqualTo($equatableUser->getWrappedSubject())->willReturn(false);
+
+        $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_DENIED);
+    }
+
+    /**
+     * @param Knp\RadBundle\Security\OwnableInterface $object
+     * @param Symfony\Component\Security\Core\User\UserInterface $equatableUser
+     * @param Knp\RadBundle\Security\OwnerInterface,Symfony\Component\Security\Core\User\EquatableInterface $user
+     **/
+    function it_should_use_isEqualTo_if_possible($token, $user, $object, $equatableUser)
+    {
+        $token->getUser()->willReturn($user);
+        $object->getOwner()->willReturn($equatableUser);
+        $user->isEqualTo($equatableUser->getWrappedSubject())->shouldBeCalled();
+
+        $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_DENIED);
+    }
+
+    /**
+     * @param Knp\RadBundle\Security\OwnableInterface $object
+     * @param Knp\RadBundle\Security\OwnerInterface $nonEquatableUser
+     * @param Knp\RadBundle\Security\OwnerInterface,Symfony\Component\Security\Core\User\EquatableInterface $user
+     **/
+    function it_should_not_use_isEqualTo_if_no_UserInterface($token, $user, $object, $nonEquatableUser)
+    {
+        $token->getUser()->willReturn($user);
+        $object->getOwner()->willReturn($nonEquatableUser);
+        $user->isEqualTo($nonEquatableUser)->shouldNotBeCalled();
+
+        $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_DENIED);
+    }
+
+    /**
+     * @param Knp\RadBundle\Security\OwnableInterface $object
+     * @param Symfony\Component\Security\Core\User\UserInterface $equatableUser
+     * @param Knp\RadBundle\Security\OwnerInterface $user
+     **/
+    function it_should_not_use_isEqualTo_if_no_EquatableInterface($token, $user, $object, $equatableUser)
+    {
+        $token->getUser()->willReturn($user);
+        $object->getOwner()->willReturn($equatableUser);
+        $user->isEqualTo($equatableUser)->shouldNotBeCalled();
+
+        $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_DENIED);
+    }
 }
