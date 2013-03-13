@@ -74,7 +74,7 @@ class IsOwnerVoter extends ObjectBehavior
      * @param Knp\RadBundle\Security\OwnerInterface   $user
      * @param Knp\RadBundle\Security\OwnableInterface $object
      **/
-    function it_should_abstain_to_vote_for_unkown_attribute($token, $user, $object)
+    function it_should_abstain_to_vote_for_unknown_attribute($token, $user, $object)
     {
         $token->getUser()->willReturn($user);
         $object->getOwner()->willReturn($user);
