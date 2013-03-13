@@ -17,9 +17,13 @@ class IsOwnerVoter implements VoterInterface
 
     public function supportsClass($class)
     {
-        $refl = new \ReflectionClass($class);
+        if (is_object($class)) {
+            $refl = new \ReflectionObject($class);
 
-        return $refl->implementsInterface('Knp\RadBundle\Security\OwnableInterface');
+            return $refl->implementsInterface('Knp\RadBundle\Security\OwnableInterface');
+        }
+
+        return false;
     }
 
     public function vote(TokenInterface $token, $object, array $attributes)
@@ -29,12 +33,12 @@ class IsOwnerVoter implements VoterInterface
                 continue;
             }
 
-            if (!$this->supportsClass(get_class($object))) {
-                return self::ACCESS_DENIED;
+            if (!$this->supportsClass($object)) {
+                return self::ACCESS_ABSTAIN;
             }
 
             if (!$token->getUser() instanceof OwnerInterface) {
-                return self::ACCESS_DENIED;
+                return self::ACCESS_ABSTAIN;
             }
 
             if ($object->getOwner() === $token->getUser()) {

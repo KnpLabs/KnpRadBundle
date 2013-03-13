@@ -52,22 +52,22 @@ class IsOwnerVoter extends ObjectBehavior
      * @param Knp\RadBundle\Security\OwnerInterface   $user
      * @param stdClass $object
      **/
-    function it_should_vote_no_for_not_ownable_object($token, $user, $object)
+    function it_should_abstain_to_vote_for_not_ownable_object($token, $user, $object)
     {
         $token->getUser()->willReturn($user);
         $object->getOwner()->willReturn($user);
-        $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_DENIED);
+        $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_ABSTAIN);
     }
 
     /**
      * @param stdClass  $user
      * @param Knp\RadBundle\Security\OwnableInterface $object
      **/
-    function it_should_vote_no_for_not_owner_token_user($token, $user, $object)
+    function it_should_abstain_to_vote_for_not_owner_token_user($token, $user, $object)
     {
         $token->getUser()->willReturn($user);
         $object->getOwner()->willReturn($user);
-        $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_DENIED);
+        $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_ABSTAIN);
     }
 
     /**
