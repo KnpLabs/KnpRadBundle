@@ -40,6 +40,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->booleanNode('routing_loader')->defaultTrue()->end()
                 ->booleanNode('form_manager')->defaultTrue()->end()
+                ->booleanNode('security_voter')->defaultTrue()->end()
                 ->booleanNode('datatable')->defaultTrue()->end()
                 ->arrayNode('flashes')
                     ->addDefaultsIfNotSet()

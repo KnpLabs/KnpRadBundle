@@ -30,7 +30,6 @@ class KnpRadExtension extends Extension
         if ($config['mailer']['message_factory']) {
             $loader->load('mailer_message_factory.xml');
         }
-
         if ($config['listener']['view']) {
             $loader->load('view_listener.xml');
         }
@@ -43,24 +42,22 @@ class KnpRadExtension extends Extension
         if ($config['listener']['exception_rethrow']) {
             $loader->load('exception_rethrow_listener.xml');
         }
-
         if ($config['routing_loader']) {
             $loader->load('routing_loader.xml');
         }
-
         if ($config['form_manager']) {
             $loader->load('form_manager.xml');
         }
-
+        if ($config['security_voter']) {
+            $loader->load('security_voter.xml');
+        }
         if ($config['datatable']) {
             $loader->load('datatable.xml');
         }
-
         $container->setParameter('knp_rad.csrf_link.intention', $config['csrf_links']['intention']);
         if ($config['csrf_links']['enabled']) {
             $loader->load('link_attributes.xml');
         }
-
         $container->setParameter('knp_rad.flashes.trans_catalog', $config['flashes']['trans_catalog']);
         if ($config['flashes']['enabled']) {
             $loader->load('flashes.xml');
