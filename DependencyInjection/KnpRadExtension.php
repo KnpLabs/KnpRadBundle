@@ -65,5 +65,6 @@ class KnpRadExtension extends Extension
         if ($config['flashes']['enabled']) {
             $loader->load('flashes.xml');
         }
+        $container->setParameter('knp_rad.decision_manager.id', $config['security']['decision_manager']);
     }
 }

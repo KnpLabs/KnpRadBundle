@@ -32,11 +32,13 @@ class RegisterSecurityVotersPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition('security.access.decision_manager')) {
+        $decisionManagerId = $container->getParameter('knp_rad.decision_manager.id');
+
+        if (false === $container->hasDefinition($decisionManagerId)) {
             return;
         }
 
-        $decisionManagerDef = $container->getDefinition('security.access.decision_manager');
+        $decisionManagerDef = $container->getDefinition($decisionManagerId);
 
         $directory = $this->bundle->getPath().'/Security';
         $namespace = $this->bundle->getNamespace().'\Security';

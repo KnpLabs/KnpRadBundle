@@ -54,6 +54,12 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('enabled')->defaultFalse()->end()
                         ->scalarNode('intention')->defaultValue('link')->end()
                     ->end()
+                ->end()
+                ->arrayNode('security')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('decision_manager')->defaultValue('security.access.decision_manager')->end()
+                    ->end()
             ->end()
         ;
 
