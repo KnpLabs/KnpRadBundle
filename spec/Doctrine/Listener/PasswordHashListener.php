@@ -94,27 +94,21 @@ class PasswordHashListener extends ObjectBehavior
     }
 
     /**
-     * @param Doctrine\ORM\Event\PreUpdateEventArgs     $args
-     * @param Knp\RadBundle\Security\UserInterface      $entity
-     * @param Doctrine\Common\Persistence\ObjectManager $em
-     * @param Doctrine\ORM\UnitOfWork                   $uow
-     * @param Doctrine\ORM\Mapping\ClassMetadata        $meta
+     * @param Doctrine\ORM\Event\PreUpdateEventArgs $args
+     * @param Knp\RadBundle\Security\UserInterface  $entity
      */
-    function its_preUpdate_should_rehash_user_password_if_new_password_providen($args, $entity,
-                                                                                $em, $uow, $meta)
+    function its_preUpdate_should_rehash_user_password_if_new_password_providen($args, $entity)
     {
         $args->getEntity()->willReturn($entity);
-        $args->getEntityManager()->willReturn($em);
-
-        $em->getUnitOfWork()->willReturn($uow);
-        $em->getClassMetadata(get_class($entity->getWrappedSubject()))->willReturn($meta);
 
         $entity->getPlainPassword()->willReturn('custom_pass');
         $entity->getSalt()->willReturn('some_salt');
 
         $entity->setPassword('custom_pass#some_salt')->shouldBeCalled();
         $entity->eraseCredentials()->shouldBeCalled();
-        $uow->recomputeSingleEntityChangeSet($meta, $entity)->shouldBeCalled();
+
+        $entity->getPassword()->willReturn('custom_pass#some_salt');
+        $args->setNewValue('password', 'custom_pass#some_salt')->shouldBeCalled();
 
         $this->preUpdate($args);
     }
@@ -122,18 +116,10 @@ class PasswordHashListener extends ObjectBehavior
     /**
      * @param Doctrine\ORM\Event\PreUpdateEventArgs           $args
      * @param Knp\RadBundle\Security\RecoverableUserInterface $entity
-     * @param Doctrine\Common\Persistence\ObjectManager       $em
-     * @param Doctrine\ORM\UnitOfWork                         $uow
-     * @param Doctrine\ORM\Mapping\ClassMetadata              $meta
      */
-    function its_preUpdate_should_erase_password_recovery_key_for_recoverable_user($args, $entity,
-                                                                                   $em, $uow, $meta)
+    function its_preUpdate_should_erase_password_recovery_key_for_recoverable_user($args, $entity)
     {
         $args->getEntity()->willReturn($entity);
-        $args->getEntityManager()->willReturn($em);
-
-        $em->getUnitOfWork()->willReturn($uow);
-        $em->getClassMetadata(get_class($entity->getWrappedSubject()))->willReturn($meta);
 
         $entity->getPlainPassword()->willReturn('custom_pass');
         $entity->getSalt()->willReturn('some_salt');

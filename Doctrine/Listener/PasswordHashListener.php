@@ -56,10 +56,7 @@ class PasswordHashListener implements EventSubscriber
 
         $this->updatePasswordHash($entity);
 
-        $em   = $args->getEntityManager();
-        $uow  = $em->getUnitOfWork();
-        $meta = $em->getClassMetadata(get_class($entity));
-        $uow->recomputeSingleEntityChangeSet($meta, $entity);
+        $args->setNewValue('password', $entity->getPassword());
     }
 
     private function updatePasswordHash(UserInterface $entity)
