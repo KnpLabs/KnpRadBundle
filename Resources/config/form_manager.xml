@@ -8,6 +8,8 @@
         <parameter key="knp_rad.form.manager.class">Knp\RadBundle\Form\FormManager</parameter>
         <parameter key="knp_rad.form.type_creator.class">Knp\RadBundle\Form\FormTypeCreator</parameter>
         <parameter key="knp_rad.form.default_creator.class">Knp\RadBundle\Form\DefaultFormCreator</parameter>
+        <parameter key="knp_rad.form.type_guesser.data.class">Knp\RadBundle\Form\DataTypeGuesser</parameter>
+        <parameter key="knp_rad.form.type_extension.data.class">Knp\RadBundle\Form\FormTypeExtension</parameter>
 
         <parameter key="knp_rad.reflection.metadata_fetcher.class">Knp\RadBundle\Reflection\ClassMetadataFetcher</parameter>
     </parameters>
@@ -28,9 +30,19 @@
         <service id="knp_rad.form.default_creator" class="%knp_rad.form.default_creator.class%" public="false">
             <argument type="service" id="knp_rad.reflection.metadata_fetcher" />
             <argument type="service" id="form.factory"/>
+            <argument type="service" id="knp_rad.form.type_guesser.data"/>
             <tag name="knp_rad.form.creator" priority="1"/>
         </service>
         <service id="knp_rad.reflection.metadata_fetcher" class="%knp_rad.reflection.metadata_fetcher.class%" public="false"></service>
+
+        <service id="knp_rad.form.type_guesser.data" class="%knp_rad.form.type_guesser.data.class%">
+            <tag name="form.type_guesser"/>
+        </service>
+
+        <service id="knp_rad.form.type_extension.data" class="%knp_rad.form.type_extension.data.class%">
+            <argument type="service" id="knp_rad.form.default_creator"/>
+            <tag name="form.type_extension" alias="form"/>
+        </service>
     </services>
 
 </container>
