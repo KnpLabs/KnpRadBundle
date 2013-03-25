@@ -4,8 +4,9 @@ namespace Knp\RadBundle\Doctrine;
 
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Common\Util\Inflector;
 
-abstract class EntityRepository extends BaseEntityRepository
+class EntityRepository extends BaseEntityRepository
 {
     public function __call($method, $arguments)
     {
@@ -37,10 +38,8 @@ abstract class EntityRepository extends BaseEntityRepository
 
     protected function getAlias()
     {
-        $reflection = new \ReflectionObject($this);
+        $name = basename(str_replace('\\', '/', $this->getClassName()));
 
-        return strtolower(
-            preg_replace(array('/Repository$/', '/[a-z0-9]/'), '', $reflection->getShortName())
-        );
+        return Inflector::tableize($name);
     }
 }
