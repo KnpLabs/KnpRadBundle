@@ -3,37 +3,63 @@
 namespace Knp\RadBundle\Form;
 
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\Event\DataEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Form\FormEvents;
+
 use Knp\RadBundle\Reflection\ClassMetadataFetcher;
 
-class DefaultFormCreator implements FormCreatorInterface
+class DefaultFormCreator implements FormCreatorInterface, EventSubscriberInterface
 {
     private $fetcher;
     private $factory;
+    private $dataTypeGuesser;
 
-    public function __construct(ClassMetadataFetcher $fetcher = null, FormFactoryInterface $factory)
+
+    public function __construct(ClassMetadataFetcher $fetcher = null, FormFactoryInterface $factory, DataTypeGuesser $dataTypeGuesser)
     {
         $this->fetcher = $fetcher ?: new ClassMetadataFetcher;
         $this->factory = $factory;
+        $this->dataTypeGuesser = $dataTypeGuesser;
+    }
+
+    public static function getSubscribedEvents()
+    {
+        return array(
+            FormEvents::PRE_SET_DATA => 'preSetData'
+        );
     }
 
     public function create($object, $purpose = null, array $options = array())
     {
         $builder = $this->factory->createBuilder('form', $object, $options);
 
+        return $builder->getForm();
+    }
+
+    public function preSetData(DataEvent $event)
+    {
+        $object = $event->getData();
+        $form = $event->getForm();
+
+        if (!is_object($object)) {
+            return;
+        }
+
+        $this->dataTypeGuesser->setData($object);
+
         foreach ($this->fetcher->getMethods($object) as $method) {
             if (0 === strpos($method, 'get') || 0 === strpos($method, 'is')) {
                 $propertyName = $this->extractPropertyName($method);
                 if ($this->hasRelatedSetter($object, $propertyName)) {
-                    $builder->add($propertyName);
+                    $form->add($this->factory->createForProperty(get_class($object), $propertyName));
                 }
             }
         }
 
         foreach ($this->fetcher->getProperties($object) as $property) {
-            $builder->add($property);
+            $form->add($this->factory->createForProperty(get_class($object), $property));
         }
-
-        return $builder->getForm();
     }
 
     private function extractPropertyName($methodName)
