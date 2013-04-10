@@ -11,14 +11,12 @@
 {% endblock %}
 
 {% block flashes %}
-    <div class="knprad-flashes" style="position:absolute;width:500px;z-index:1000;left:50%;margin-left:-250px;top:10px;">
-    {% for name, flash in app.session.flashes %}
-        <div class="alert alert-block alert-{{ name }}">
-            <button type="button" class="close" data-dismiss="alert">×</button>
-            {{ flash.message|default(flash)|trans(flash.parameters|default({}))|raw }}
+    {% flashes %}
+        <div class="alert alert-{{ type }}">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
         </div>
-    {% endfor %}
-    </div>
+    {% endflashes %}
 {% endblock %}
 
 {% block body %}
