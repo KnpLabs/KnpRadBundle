@@ -12,11 +12,15 @@ class PathDeducer
 {
     private $nameParser;
     private $pathExpander;
+    private $logicalNames = array();
+    private $defaultLogicalName;
 
-    public function __construct(TemplateNameParserInterface $nameParser, PathExpander $pathExpander)
+    public function __construct(TemplateNameParserInterface $nameParser, PathExpander $pathExpander, array $logicalNames, $defaultLogicalName)
     {
         $this->nameParser   = $nameParser;
         $this->pathExpander = $pathExpander;
+        $this->logicalNames = $logicalNames;
+        $this->defaultLogicalName = $defaultLogicalName;
     }
 
     /**
@@ -31,5 +35,16 @@ class PathDeducer
         $path = $this->nameParser->parse($logicalName)->getPath();
 
         return $this->pathExpander->expand($path);
+    }
+
+    public function deduceViewLogicalName($logicalName)
+    {
+        $name = $this->nameParser->parse($logicalName)->get('name');
+
+        if (isset($this->logicalNames[$name])) {
+            return $this->logicalNames[$name];
+        }
+
+        return $this->defaultLogicalName;
     }
 }
