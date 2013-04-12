@@ -33,6 +33,7 @@ class DefaultFormCreator implements FormCreatorInterface, EventSubscriberInterfa
     public function create($object, $purpose = null, array $options = array())
     {
         $builder = $this->factory->createBuilder('form', $object, $options);
+        $builder->addEventSubscriber($this);
 
         return $builder->getForm();
     }
