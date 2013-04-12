@@ -10,12 +10,10 @@ class AssistantController extends Controller
     public function missingViewAction($viewName, $viewParams)
     {
         $viewPath = $this->get('knp_rad.view.path_deducer')->deducePath($viewName);
-        $viewBody = $this->renderView(
-            'KnpRadBundle:Assistant:_viewBody.twig.twig',
-            array(
-                'viewParams' => $viewParams
-            )
-        );
+        $viewLogicalName = $this->get('knp_rad.view.path_deducer')->deduceViewLogicalName($viewName);
+        $viewBody = $this->renderView($viewLogicalName, array(
+            'viewParams' => $viewParams
+        ));
 
         return $this->render(
             'KnpRadBundle:Assistant:missingView.html.twig',

@@ -1,0 +1,16 @@
+{%- verbatim -%}
+{% extends '::base.html.twig' %}
+
+{% block body %}
+{#
+    Available variables:
+{%- endverbatim -%}
+{% for name, param in viewParams %}
+        - {{ name }} {# todo: add type #}
+{% endfor %}
+{%- verbatim %}
+#}
+
+{% endblock body %}
+
+{%- endverbatim -%}
