@@ -1,0 +1,13 @@
+{% verbatim -%}
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+<form method="PUT" action="" {{ form_enctype(form) }} class="form form-horizontal">
+    {{ form_widget(form) }}
+    <input type="submit" />
+</form>
+
+{% endblock body %}
+
+{%- endverbatim -%}

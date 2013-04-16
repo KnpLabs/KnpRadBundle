@@ -8,6 +8,13 @@
         <parameter key="knp_rad.view.listener.class">Knp\RadBundle\EventListener\ViewListener</parameter>
         <parameter key="knp_rad.filesystem.path_expander.class">Knp\RadBundle\Filesystem\PathExpander</parameter>
         <parameter key="knp_rad.view.path_deducer.class">Knp\RadBundle\View\PathDeducer</parameter>
+        <parameter key="knp_rad.view.path_deducer.logicalNames" type="collection">
+            <parameter key="index">KnpRadBundle:Assistant/skeleton:_index.html.twig</parameter>
+            <parameter key="show">KnpRadBundle:Assistant/skeleton:_show.html.twig</parameter>
+            <parameter key="new">KnpRadBundle:Assistant/skeleton:_new.html.twig</parameter>
+            <parameter key="edit">KnpRadBundle:Assistant/skeleton:_edit.html.twig</parameter>
+        </parameter>
+        <parameter key="knp_rad.view.path_deducer.defaultLogicalName">KnpRadBundle:Assistant/skeleton:_viewBody.html.twig</parameter>
     </parameters>
 
     <services>
@@ -22,6 +29,8 @@
         <service id="knp_rad.view.path_deducer" class="%knp_rad.view.path_deducer.class%">
             <argument type="service" id="templating.name_parser" />
             <argument type="service" id="knp_rad.filesystem.path_expander" />
+            <argument>%knp_rad.view.path_deducer.logicalNames%</argument>
+            <argument>%knp_rad.view.path_deducer.defaultLogicalName%</argument>
         </service>
 
         <service id="knp_rad.filesystem.path_expander" class="%knp_rad.filesystem.path_expander.class%">

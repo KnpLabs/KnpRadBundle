@@ -1,0 +1,18 @@
+{% verbatim -%}
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+{%- endverbatim %}
+
+{%- for viewParamName,viewParam in viewParams %}
+
+{{ '{{' }} {{ viewParamName }} {{ '}}' -}}
+
+{%- endfor -%}
+
+{% verbatim %}
+
+{% endblock body %}
+
+{%- endverbatim -%}
