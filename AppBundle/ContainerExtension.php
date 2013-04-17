@@ -54,5 +54,11 @@ class ContainerExtension extends Extension
                 $container->addResource(new DirectoryResource($dirPath));
             }
         }
+
+        foreach ($configs as $config) {
+            foreach ($config as $name => $value) {
+                $container->setParameter(sprintf('%s.%s', $this->getAlias(), $name), $value);
+            }
+        }
     }
 }
