@@ -23,11 +23,11 @@ class ContainerExtension extends ObjectBehavior
     {
         $container->getParameter('kernel.environment')->willReturn('dev');
         $container->setParameter('app.foo', 'bar')->shouldBeCalled();
-        $container->setParameter('app.baz', ['boz' => 'for'])->shouldBeCalled();
+        $container->setParameter('app.baz', array('boz' => 'for'))->shouldBeCalled();
 
-        $this->load([[
+        $this->load(array(array(
             'foo' => 'bar',
-            'baz' => ['boz' => 'for']
-        ]], $container);
+            'baz' => array('boz' => 'for')
+        )), $container);
     }
 }
