@@ -27,7 +27,7 @@ class RegisterFormTypeExtensionsPass extends ObjectBehavior
             'App\Form\Extension\MouseTypeExtension',
         );
         $classFinder->findClassesMatching('/my/project/src/App/Form/Extension', 'App\Form\Extension', 'Extension$')->willReturn($classes);
-        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Form\AbstractTypeExtension')->willReturn($classes);
+        $classFinder->filterClassesSubclassing($classes, 'Symfony\Component\Form\AbstractTypeExtension')->willReturn($classes);
 
         $servIdGen->generateForBundleClass($bundle, 'App\Form\Extension\CheeseTypeExtension')->willReturn('app.form.extension.cheese_type_extension');
         $servIdGen->generateForBundleClass($bundle, 'App\Form\Extension\EditCheeseTypeExtension')->willReturn('app.form.extension.edit_cheese_type_extension');

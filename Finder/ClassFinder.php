@@ -49,12 +49,12 @@ class ClassFinder
         return array_values(array_filter($this->findClasses($directory, $namespace), $matches));
     }
 
-    public function filterClassesImplementing(array $classes, $interface)
+    public function filterClassesSubclassing(array $classes, $superclass)
     {
         $reflectionFactory = $this->reflectionFactory;
 
-        return array_filter($classes, function($class) use($interface, $reflectionFactory) {
-            return $reflectionFactory->createReflectionClass($class)->isSubclassOf($interface);
+        return array_filter($classes, function($class) use($superclass, $reflectionFactory) {
+            return $reflectionFactory->createReflectionClass($class)->isSubclassOf($superclass);
         });
     }
 }

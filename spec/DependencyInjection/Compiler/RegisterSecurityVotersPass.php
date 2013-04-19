@@ -48,7 +48,7 @@ class RegisterSecurityVotersPass extends ObjectBehavior
 
         $classFinder->findClassesMatching('/my/project/src/App/Security', 'App\Security', 'Voter$')->willReturn($classes);
 
-        $classFinder->filterClassesImplementing(
+        $classFinder->filterClassesSubclassing(
             $classes,
             'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface')
             ->willReturn(array(
@@ -96,7 +96,7 @@ class RegisterSecurityVotersPass extends ObjectBehavior
 
         $classFinder->findClassesMatching('/my/project/src/App/Security', 'App\Security', 'Voter$')->willReturn($classes);
 
-        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface')
+        $classFinder->filterClassesSubclassing($classes, 'Symfony\Component\Security\Core\Authorization\Voter\VoterInterface')
             ->willReturn(array(
                 'App\Security\Voter\CustomerVoter',
             )
