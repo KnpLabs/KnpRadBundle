@@ -1,7 +1,9 @@
 <thead>
-    {% for id, title in elements|toHeadersArray(options) %}
-        {% block thead %}<th id="header-{{ id }}">{{ title }}</th>{% endblock %}
-    {% endfor %}
+    <tr>
+        {% for id, title in elements|toHeadersArray(options) %}
+            {% block thead %}<th id="header-{{ id }}">{{ title }}</th>{% endblock %}
+        {% endfor %}
+    </tr>
 </thead>
 <tbody>
     {% for element in elements %}
