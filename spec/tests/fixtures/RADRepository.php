@@ -32,9 +32,9 @@ class RADRepository extends ObjectBehavior
 
     function it_should_find_all_valid_entities($qb, $query)
     {
-        $query->getResult()->willReturn(['foo', 'bar']);
+        $query->getResult()->willReturn(array('foo', 'bar'));
 
-        $this->findValid()->shouldReturn(['foo', 'bar']);
+        $this->findValid()->shouldReturn(array('foo', 'bar'));
     }
 
     function it_should_find_only_one_result_when_method_contains_One($qb, $query)
