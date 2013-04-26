@@ -115,7 +115,8 @@ class ConventionalLoader extends YamlFileLoader
                 ));
                 $controllerCollection->add($name, $route);
             }
-            $collection->addCollection($controllerCollection, $prefix);
+            $controllerCollection->addPrefix($prefix);
+            $collection->addCollection($controllerCollection);
         }
 
         return $collection;
@@ -171,10 +172,10 @@ class ConventionalLoader extends YamlFileLoader
                 $options      = $getOr('options', array());
 
                 $this->setCurrentDir(dirname($path));
-                $collection->addCollection($this->import(
-                    $mapping['resource'], $type, false, $file), $prefix,
-                    $defaults, $requirements, $options
-                );
+                $resourceCollection = $this->import($mapping['resource'], $type, false, $file);
+                $resourceCollection->addPrefix($prefix, $defaults, $requirements);
+                $resourceCollection->addOptions($options);
+                $collection->addCollection($resourceCollection);
             }
         } else {
             $this->parseRoute($collection, $shortname, $mapping, $path);
