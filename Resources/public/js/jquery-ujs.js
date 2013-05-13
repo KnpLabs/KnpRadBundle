@@ -1,8 +1,8 @@
 (function($, undefined) {
     function confirmDeletion (event) {
-        var needConfirmation = !event.target.hasAttribute('data-no-confirm');
+        var needConfirmation = !event.currentTarget.hasAttribute('data-no-confirm');
 
-        if (needConfirmation && !confirm($(event.target).data('confirm') || 'Are you sure?')) {
+        if (needConfirmation && !confirm($(event.currentTarget).data('confirm') || 'Are you sure?')) {
             return false;
         }
 
