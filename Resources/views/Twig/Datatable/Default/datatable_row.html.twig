@@ -3,13 +3,13 @@
     {% set element = element|toArray(options) %}
     {% for id, title in headers %}
         <td>
-            {% if element[id] is defined %}{{ element[id] }}{% endif %}
+            {%- if element[id] is defined %}{{ element[id] }}{% endif -%}
         </td>
     {% endfor %}
     {% if routes|length > 0 %}
         <td>
 
-            {% if routes.show is defined %}
+            {%- if routes.show is defined %}
                 {% block route_show %}
                     {% set parameters = [] %}
                     {% for name, attrib in routes.show.parameters %}
@@ -21,9 +21,9 @@
                         {% endif %}
                     </a>
                 {% endblock %}
-            {% endif %}
+            {% endif -%}
 
-            {% if routes.edit is defined %}
+            {%- if routes.edit is defined %}
                 {% block route_edit %}
                     {% set parameters = [] %}
                     {% for name, attrib in routes.edit.parameters %}
@@ -35,9 +35,9 @@
                         {% endif %}
                     </a>
                 {% endblock %}
-            {% endif %}
+            {% endif -%}
 
-            {% if routes.delete is defined %}
+            {%- if routes.delete is defined %}
                 {% block route_delete %}
                 {% set parameters = [] %}
                 {% for name, attrib in routes.delete.parameters %}
@@ -52,7 +52,7 @@
                     </button>
                 </form>
                 {% endblock %}
-            {% endif %}
+            {% endif -%}
 
         </td>
     {% endif %}
