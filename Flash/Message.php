@@ -5,6 +5,8 @@ namespace Knp\RadBundle\Flash;
 class Message
 {
     private $template;
+    private $parameters;
+    private $pluralization;
 
     public function __construct($template, array $parameters = array(), $pluralization = null)
     {
