@@ -46,4 +46,9 @@ class Message extends ObjectBehavior
 
         $this->__toString()->shouldReturn('Hello John!');
     }
+
+    function it_should_be_serializable()
+    {
+        $this->shouldBeAnInstanceOf('Serializable');
+    }
 }

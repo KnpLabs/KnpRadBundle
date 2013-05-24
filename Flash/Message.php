@@ -2,7 +2,7 @@
 
 namespace Knp\RadBundle\Flash;
 
-class Message
+class Message implements \Serializable
 {
     private $template;
     private $parameters;
@@ -33,5 +33,23 @@ class Message
     public function __toString()
     {
         return strtr($this->template, $this->parameters);
+    }
+
+    public function serialize()
+    {
+        return serialize(array(
+            $this->template,
+            $this->parameters,
+            $this->pluralization
+        ));
+    }
+
+    public function unserialize($data)
+    {
+        list(
+            $this->template,
+            $this->parameters,
+            $this->pluralization
+        ) = unserialize($data);
     }
 }
