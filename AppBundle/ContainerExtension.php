@@ -7,16 +7,17 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\Config\Resource\DirectoryResource;
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 
 class ContainerExtension extends Extension
 {
     private $bundle;
 
-    public function __construct(Bundle $bundle)
+    public function __construct(ConfigurableBundleInterface $bundle, ConfigurationFactory $configFactory = null, Processor $configProcessor = null)
     {
         $this->bundle = $bundle;
+        $this->configFactory = $configFactory ?: new ConfigurationFactory;
+        $this->configProcessor = $configProcessor ?: new Processor;
     }
 
     public function getAlias()
@@ -60,17 +61,17 @@ class ContainerExtension extends Extension
         }
     
         $configuration = $this->getConfiguration($configs, $container);
+        $config = $this->configProcessor->processConfiguration($configuration, $configs);
 
-        $configurationProcessor = new Processor();
-
-        $parsedConfig = $configurationProcessor
-            ->processConfiguration($configuration, $configs);
-
-        $this->bundle->buildContainer($parsedConfig, $container);
+        $this->bundle->buildContainer($config, $container);
     }
 
     public function getConfiguration(array $configs, ContainerBuilder $container)
     {
-        return new Configuration($this->bundle);
+        return $this->configFactory->createConfiguration(
+            $this->bundle,
+            $configs,
+            $container
+        );
     }
 }
