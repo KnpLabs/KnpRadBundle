@@ -7,20 +7,20 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class Configuration implements ConfigurationInterface
 {
-	private $bundle;
+    private $bundle;
 
-	public function getConfigTreeBuilder()
-	{
-		$treeBuilder = new TreeBuilder();
+    public function __construct(Bundle $bundle)
+    {
+        $this->bundle = $bundle;
+    }
+
+    public function getConfigTreeBuilder()
+    {
+        $treeBuilder = new TreeBuilder();
 
         $rootNode = $treeBuilder->root('app');
         $this->bundle->buildConfiguration($rootNode);
 
         return $treeBuilder;
-	}
-
-	public function __construct(Bundle $bundle)
-	{
-		$this->bundle = $bundle;
-	}
+    }
 }

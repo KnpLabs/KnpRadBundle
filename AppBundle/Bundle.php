@@ -35,11 +35,9 @@ class Bundle extends BaseBundle implements ConfigurableBundleInterface
 
     public function buildConfiguration(NodeParentInterface $rootNode)
     {
-        return;
     }
 
     public function buildContainer(array $config, ContainerBuilder $container)
     {
-        return;
     }
 }
