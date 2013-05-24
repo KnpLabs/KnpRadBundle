@@ -1,0 +1,56 @@
+<?php
+
+namespace spec\Knp\RadBundle\tests\fixtures;
+
+use PhpSpec\ObjectBehavior;
+use Doctrine\ORM\NonUniqueResultException;
+
+class RADRepositorySpec extends ObjectBehavior
+{
+    /**
+     * @param Doctrine\ORM\EntityManager         $em
+     * @param Doctrine\ORM\Mapping\ClassMetadata $class
+     * @param Doctrine\ORM\QueryBuilder          $qb
+     * @param Doctrine\ORM\AbstractQuery         $query
+     */
+    function let($em, $class, $qb, $query)
+    {
+        $em->createQueryBuilder()->willReturn($qb);
+        $qb->select(\Prophecy\Argument::any())->willReturn($qb);
+        $qb->from(\Prophecy\Argument::cetera())->willReturn($qb);
+        $qb->where('rad.foo = bar')->willReturn($qb);
+        $class->name = 'rad';
+        $qb->getQuery()->willReturn($query);
+
+        $this->beConstructedWith($em, $class);
+    }
+
+    function it_should_be_a_rad_entity_repository()
+    {
+        $this->shouldHaveType('Knp\RadBundle\Doctrine\EntityRepository');
+    }
+
+    function it_should_find_all_valid_entities($qb, $query)
+    {
+        $query->getResult()->willReturn(array('foo', 'bar'));
+
+        $this->findValid()->shouldReturn(array('foo', 'bar'));
+    }
+
+    function it_should_find_only_one_result_when_method_contains_One($qb, $query)
+    {
+        $qb->where('rad.id = 1')->willReturn($qb);
+        $query->getOneOrNullResult()->willReturn('foo');
+        $query->getResult()->shouldNotBeCalled();
+
+        $this->findOneValid(1)->shouldReturn('foo');
+    }
+
+    function it_should_throw_non_unique_result_exception_when_finding_one_entity_and_multiple_results_were_found($qb, $query)
+    {
+        $qb->where('rad.id = 1')->willReturn($qb);
+        $query->getOneOrNullResult()->willThrow(new NonUniqueResultException);
+
+        $this->shouldThrow(new NonUniqueResultException)->duringFindOneValid(1);
+    }
+}
