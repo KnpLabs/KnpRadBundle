@@ -62,6 +62,8 @@ class PasswordHashListenerSpec extends ObjectBehavior
         $entity->getSalt()->willReturn('some_salt');
 
         $entity->erasePasswordRecoveryKey()->shouldBeCalled();
+        $entity->setPassword('custom_pass#some_salt')->shouldBeCalled();
+        $entity->eraseCredentials()->shouldBeCalled();
 
         $this->prePersist($args);
     }
@@ -88,7 +90,6 @@ class PasswordHashListenerSpec extends ObjectBehavior
     function its_prePersist_should_not_touch_entities_without_interface($args, $entity)
     {
         $args->getEntity()->willReturn($entity);
-        $entity->setPassword(\Prophecy\Argument::any())->shouldNotBeCalled();
 
         $this->prePersist($args);
     }
@@ -120,10 +121,14 @@ class PasswordHashListenerSpec extends ObjectBehavior
     function its_preUpdate_should_erase_password_recovery_key_for_recoverable_user($args, $entity)
     {
         $args->getEntity()->willReturn($entity);
+        $args->setNewValue('password', 'custom_pass#some_salt')->shouldBeCalled();
 
         $entity->getPlainPassword()->willReturn('custom_pass');
         $entity->getSalt()->willReturn('some_salt');
+        $entity->getPassword()->willReturn('custom_pass#some_salt');
 
+        $entity->setPassword('custom_pass#some_salt')->shouldBeCalled();
+        $entity->eraseCredentials()->shouldBeCalled();
         $entity->erasePasswordRecoveryKey()->shouldBeCalled();
 
         $this->preUpdate($args);
@@ -151,7 +156,6 @@ class PasswordHashListenerSpec extends ObjectBehavior
     function its_preUpdate_should_not_touch_entities_without_interface($args, $entity)
     {
         $args->getEntity()->willReturn($entity);
-        $entity->setPassword(\Prophecy\Argument::any())->shouldNotBeCalled();
 
         $this->preUpdate($args);
     }
