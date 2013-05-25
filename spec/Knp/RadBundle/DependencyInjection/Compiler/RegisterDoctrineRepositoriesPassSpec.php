@@ -25,7 +25,7 @@ class RegisterDoctrineRepositoriesPassSpec extends ObjectBehavior
 
     /**
      * @param Doctrine\ORM\EntityManager $entityManager
-     * @param Doctrine\DBAL\Connection $configuration
+     * @param Doctrine\ORM\Configuration $configuration
      * @param Doctrine\ORM\Mapping\Driver\DatabaseDriver $driverImpl
      * @param Symfony\Component\DependencyInjection\Definition $cheeseDef
      * @param Symfony\Component\DependencyInjection\Definition $customerDef
@@ -58,7 +58,7 @@ class RegisterDoctrineRepositoriesPassSpec extends ObjectBehavior
 
     /**
      * @param Doctrine\ORM\EntityManager $entityManager
-     * @param Doctrine\DBAL\Connection $configuration
+     * @param Doctrine\ORM\Configuration $configuration
      * @param Doctrine\ORM\Mapping\Driver\DatabaseDriver $driverImpl
      * @param Symfony\Component\DependencyInjection\Definition $cheeseDef
      * @param Symfony\Component\DependencyInjection\Definition $customerDef
