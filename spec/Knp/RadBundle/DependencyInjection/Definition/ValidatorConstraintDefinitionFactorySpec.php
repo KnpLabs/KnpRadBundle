@@ -43,6 +43,6 @@ class ValidatorConstraintDefinitionFactorySpec extends ObjectBehavior
         $definition->getClass()->shouldBe('App\Validator\Constraints\WhateverValidator');
         $definition->isPublic()->shouldBe(true);
         $definition->hasTag('validator.constraint_validator')->shouldBe(true);
-        $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedSubject()))));
+        $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedObject()))));
     }
 }

@@ -43,6 +43,6 @@ class TwigExtensionFactorySpec extends ObjectBehavior
         $definition->getClass()->shouldReturn('App\Twig\BreadExtension');
         $definition->isPublic()->shouldReturn(false);
         $definition->hasTag('twig.extension')->shouldBe(true);
-        $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedSubject()))));
+        $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedObject()))));
     }
 }

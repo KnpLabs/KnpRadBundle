@@ -43,6 +43,6 @@ class FormTypeExtensionDefinitionFactorySpec extends ObjectBehavior
         $definition->getClass()->shouldBe('App\Form\Extension\WhateverTypeExtension');
         $definition->isPublic()->shouldBe(true);
         $definition->hasTag('form.type_extension')->shouldBe(true);
-        $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedSubject()))));
+        $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedObject()))));
     }
 }

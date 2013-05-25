@@ -43,6 +43,6 @@ class FormTypeDefinitionFactorySpec extends ObjectBehavior
         $definition->getClass()->shouldBe('App\Form\WhateverType');
         $definition->isPublic()->shouldBe(true);
         $definition->hasTag('form.type')->shouldBe(true);
-        $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedSubject()))));
+        $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedObject()))));
     }
 }

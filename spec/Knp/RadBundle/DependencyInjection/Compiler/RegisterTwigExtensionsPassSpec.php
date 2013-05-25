@@ -61,8 +61,8 @@ class RegisterTwigExtensionsPassSpec extends ObjectBehavior
         $referenceFactory->createReference('app.twig.bread_extension')->shouldBeCalled()->willReturn($breadRef);
         $referenceFactory->createReference('app.twig.wine_extension')->shouldBeCalled()->willReturn($wineRef);
 
-        $twigDef->addMethodCall('addExtension', array($breadRef->getWrappedSubject()))->shouldBeCalled();
-        $twigDef->addMethodCall('addExtension', array($wineRef->getWrappedSubject()))->shouldBeCalled();
+        $twigDef->addMethodCall('addExtension', array($breadRef->getWrappedObject()))->shouldBeCalled();
+        $twigDef->addMethodCall('addExtension', array($wineRef->getWrappedObject()))->shouldBeCalled();
 
         $this->process($container);
     }
@@ -100,8 +100,8 @@ class RegisterTwigExtensionsPassSpec extends ObjectBehavior
         $referenceFactory->createReference('app.twig.bread_extension')->shouldNotBeCalled();
         $referenceFactory->createReference('app.twig.wine_extension')->shouldBeCalled()->willReturn($wineRef);
 
-        $twigDef->addMethodCall('addExtension', array($breadRef->getWrappedSubject()))->shouldNotBeCalled();
-        $twigDef->addMethodCall('addExtension', array($wineRef->getWrappedSubject()))->shouldBeCalled();
+        $twigDef->addMethodCall('addExtension', array($breadRef->getWrappedObject()))->shouldNotBeCalled();
+        $twigDef->addMethodCall('addExtension', array($wineRef->getWrappedObject()))->shouldBeCalled();
 
         $this->process($container);
     }

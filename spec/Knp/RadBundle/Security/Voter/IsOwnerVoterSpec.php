@@ -90,7 +90,7 @@ class IsOwnerVoterSpec extends ObjectBehavior
     {
         $token->getUser()->willReturn($user);
         $object->getOwner()->willReturn($equatableUser);
-        $user->isEqualTo($equatableUser->getWrappedSubject())->willReturn(true);
+        $user->isEqualTo($equatableUser->getWrappedObject())->willReturn(true);
 
         $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_GRANTED);
     }
@@ -104,7 +104,7 @@ class IsOwnerVoterSpec extends ObjectBehavior
     {
         $token->getUser()->willReturn($user);
         $object->getOwner()->willReturn($equatableUser);
-        $user->isEqualTo($equatableUser->getWrappedSubject())->willReturn(false);
+        $user->isEqualTo($equatableUser->getWrappedObject())->willReturn(false);
 
         $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_DENIED);
     }
@@ -118,7 +118,7 @@ class IsOwnerVoterSpec extends ObjectBehavior
     {
         $token->getUser()->willReturn($user);
         $object->getOwner()->willReturn($equatableUser);
-        $user->isEqualTo($equatableUser->getWrappedSubject())->shouldBeCalled();
+        $user->isEqualTo($equatableUser->getWrappedObject())->shouldBeCalled();
 
         $this->vote($token, $object, array('IS_OWNER'))->shouldReturn(VoterInterface::ACCESS_DENIED);
     }

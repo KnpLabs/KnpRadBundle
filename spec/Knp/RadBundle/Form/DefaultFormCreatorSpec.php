@@ -73,7 +73,7 @@ class DefaultFormCreatorSpec extends ObjectBehavior
         $factory->createBuilder('form', $object, array())->willReturn($builder)->shouldBeCalled();
 
         $dataEvent->getData()->willReturn($object);
-        $dataEvent->getForm()->willReturn($form->getWrappedSubject());
+        $dataEvent->getForm()->willReturn($form->getWrappedObject());
 
         $factory->createForProperty(\Prophecy\Argument::any(), 'termOfService')->shouldBeCalled()->willReturn($subForm1);
         $factory->createForProperty(\Prophecy\Argument::any(), 'locked')->shouldBeCalled()->willReturn($subForm2);

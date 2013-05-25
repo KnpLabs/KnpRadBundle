@@ -37,6 +37,6 @@ class SecurityVoterFactorySpec extends ObjectBehavior
         $definition = $this->createDefinition('App\Security\CheeseVoter');
         $definition->shouldBeAnInstanceOf('Symfony\Component\DependencyInjection\Definition');
         $definition->getClass()->shouldReturn('App\Security\CheeseVoter');
-        $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedSubject()))));
+        $definition->getMethodCalls()->shouldReturn(array(array('setContainer', array($containerRef->getWrappedObject()))));
     }
 }
