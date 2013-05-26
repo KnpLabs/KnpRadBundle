@@ -3,7 +3,7 @@
 namespace Knp\RadBundle\Form;
 
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\Event\DataEvent;
+use Symfony\Component\Form\FormEvent;;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvents;
 
@@ -38,7 +38,7 @@ class DefaultFormCreator implements FormCreatorInterface, EventSubscriberInterfa
         return $builder->getForm();
     }
 
-    public function preSetData(DataEvent $event)
+    public function preSetData(FormEvent $event)
     {
         $object = $event->getData();
         $form = $event->getForm();
