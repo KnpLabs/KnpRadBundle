@@ -3,6 +3,7 @@
 namespace spec\Knp\RadBundle\Twig;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 class FlashesTokenParserSpec extends ObjectBehavior
 {
@@ -49,21 +50,15 @@ class FlashesTokenParserSpec extends ObjectBehavior
         $parser, $exprParser, $stream, $body, $nodeFactory, $node, $token, $types, $catalog
     )
     {
-        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(false);
         $stream->test(\Twig_Token::BLOCK_END_TYPE)->willReturn(false);
-        $exprParser->parseExpression()->willReturn($types);
+        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(false, true);
 
-        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(true);
-        $stream->expect(\Twig_Token::NAME_TYPE, 'using');
-        $stream->expect(\Twig_Token::NAME_TYPE, 'catalog');
+        $stream->expect(Argument::any())->will(function() {});
+        $stream->expect(Argument::cetera())->will(function() {});
 
-        $exprParser->parseExpression()->willReturn($catalog);
-
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+        $exprParser->parseExpression()->willReturn($types, $catalog);
 
         $parser->subparse(array($this, 'isEndTag'), true)->willReturn($body);
-
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
         $nodeFactory->createFlashesNode($types, $catalog, $body, 123)->willReturn($node);
 
@@ -81,17 +76,14 @@ class FlashesTokenParserSpec extends ObjectBehavior
         $parser, $exprParser, $stream, $body, $nodeFactory, $node, $token, $types
     )
     {
-        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(false);
+        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(false, false);
         $stream->test(\Twig_Token::BLOCK_END_TYPE)->willReturn(false);
+
         $exprParser->parseExpression()->willReturn($types);
 
-        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(false);
-
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(\Twig_Token::BLOCK_END_TYPE)->will(function() {});
 
         $parser->subparse(array($this, 'isEndTag'), true)->willReturn($body);
-
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
         $nodeFactory->createFlashesNode($types, null, $body, 123)->willReturn($node);
 
@@ -109,19 +101,14 @@ class FlashesTokenParserSpec extends ObjectBehavior
         $parser, $exprParser, $stream, $body, $nodeFactory, $node, $token, $catalog
     )
     {
-        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(true);
-
-        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(true);
-        $stream->expect(\Twig_Token::NAME_TYPE, 'using');
-        $stream->expect(\Twig_Token::NAME_TYPE, 'catalog');
+        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(true, true);
+        $stream->expect(\Twig_Token::NAME_TYPE, 'using')->will(function() {});
+        $stream->expect(\Twig_Token::NAME_TYPE, 'catalog')->will(function() {});
+        $stream->expect(\Twig_Token::BLOCK_END_TYPE)->will(function() {});
 
         $exprParser->parseExpression()->willReturn($catalog);
 
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
-
         $parser->subparse(array($this, 'isEndTag'), true)->willReturn($body);
-
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
         $nodeFactory->createFlashesNode(null, $catalog, $body, 123)->willReturn($node);
 
@@ -137,16 +124,12 @@ class FlashesTokenParserSpec extends ObjectBehavior
         $parser, $exprParser, $stream, $body, $nodeFactory, $node, $token
     )
     {
-        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(false);
+        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(false, false);
         $stream->test(\Twig_Token::BLOCK_END_TYPE)->willReturn(true);
 
-        $stream->test(\Twig_Token::NAME_TYPE, 'using')->willReturn(false);
-
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
+        $stream->expect(\Twig_Token::BLOCK_END_TYPE)->will(function() {});
 
         $parser->subparse(array($this, 'isEndTag'), true)->willReturn($body);
-
-        $stream->expect(\Twig_Token::BLOCK_END_TYPE);
 
         $nodeFactory->createFlashesNode(null, null, $body, 123)->willReturn($node);
 
