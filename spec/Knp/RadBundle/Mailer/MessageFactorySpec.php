@@ -67,7 +67,7 @@ class MessageFactorySpec extends ObjectBehavior
     }
 
     /**
-     * @param  Swift_Mime_Message $message
+     * @param  Swift_Message      $message
      * @param  Twig_Template      $template1
      * @param  Twig_Template      $template2
      * @param  stdClass           $subject1
