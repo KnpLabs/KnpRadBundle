@@ -21,6 +21,7 @@ class ClassFinderSpec extends ObjectBehavior
     {
         $filesystem->exists('/my/project/src/App/Entity')->willReturn(true);
 
+        $finder->files()->shouldBeCalled();
         $finder->name('*.php')->shouldBeCalled();
         $finder->in('/my/project/src/App/Entity')->shouldBeCalled();
         $finder->getIterator()->willReturn(array(
@@ -54,6 +55,7 @@ class ClassFinderSpec extends ObjectBehavior
     {
         $filesystem->exists('/my/project/src/App/Entity')->willReturn(true);
 
+        $finder->files()->shouldBeCalled();
         $finder->name('*.php')->shouldBeCalled();
         $finder->in('/my/project/src/App/Entity')->shouldBeCalled();
         $finder->getIterator()->willReturn(array(
