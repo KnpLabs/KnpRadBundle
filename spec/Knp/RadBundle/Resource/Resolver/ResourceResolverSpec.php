@@ -2,6 +2,8 @@
 
 namespace spec\Knp\RadBundle\Resource\Resolver;
 
+require __DIR__.'/Fixture/CheeseRepository.php';
+
 use PhpSpec\ObjectBehavior;
 
 class ResourceResolverSpec extends ObjectBehavior
@@ -10,7 +12,7 @@ class ResourceResolverSpec extends ObjectBehavior
      * @param Symfony\Component\DependencyInjection\ContainerInterface $container
      * @param Knp\RadBundle\Resource\Resolver\ArgumentResolver $argumentResolver
      * @param Symfony\Component\HttpFoundation\Request $request
-     * @param stdClass $cheeseRepository
+     * @param spec\Knp\RadBundle\Resource\Resolver\Fixture\CheeseRepository $cheeseRepository
      * @param stdClass $cheese
      */
     function let($container, $argumentResolver, $request, $cheese, $cheeseRepository)
@@ -21,7 +23,6 @@ class ResourceResolverSpec extends ObjectBehavior
 
     /**
      * @param stdClass $cheese
-     * @param stdClass $repository
      */
     function it_should_resolve_resource($request, $argumentResolver, $container, $cheese, $cheeseRepository)
     {
