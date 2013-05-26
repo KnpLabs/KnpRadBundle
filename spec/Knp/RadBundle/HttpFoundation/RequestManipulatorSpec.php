@@ -12,7 +12,7 @@ class RequestManipulatorSpec extends ObjectBehavior
      */
     function let($request, $attributesBag, $queryBag, $requestBag)
     {
-        $request->getWrappedSubject()->attributes = $attributesBag->getWrappedSubject();
+        $request->getWrappedObject()->attributes = $attributesBag->getWrappedObject();
     }
 
     function it_should_get_an_attribute_from_the_given_request($request, $attributesBag)
