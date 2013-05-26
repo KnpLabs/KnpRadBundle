@@ -12,9 +12,9 @@ class RegisterValidatorConstraintsPassSpec extends ObjectBehavior
      * @param Knp\RadBundle\Finder\ClassFinder                                                  $classFinder
      * @param Knp\RadBundle\DependencyInjection\Definition\ValidatorConstraintDefinitionFactory $definitionFactory
      * @param Knp\RadBundle\DependencyInjection\ServiceIdGenerator                              $servIdGen
-     * @param Symfony\Bundle\FrameworkBundle\Validator\ConstraintValidatorFactory               $validatorFactory
+     * @param Symfony\Component\DependencyInjection\Definition                                  $validatorFactoryDef
      */
-    function let($bundle, $classFinder, $definitionFactory, $container, $servIdGen, $validatorFactory)
+    function let($bundle, $classFinder, $definitionFactory, $container, $servIdGen, $validatorFactoryDef)
     {
         $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $servIdGen);
 
@@ -24,17 +24,18 @@ class RegisterValidatorConstraintsPassSpec extends ObjectBehavior
         $servIdGen->generateForBundleClass($bundle, 'App\Validator\Constraints\Taste', 'validator')->willReturn('app.validator.constraints.taste_validator');
         $servIdGen->generateForBundleClass($bundle, 'App\Validator\Constraints\MinimumHole', 'validator')->willReturn('app.validator.constraints.minimum_hole_validator');
 
-        $validatorFactory->getArgument(1)->willReturn(array());
+        $validatorFactoryDef->getArgument(1)->willReturn(array());
         $container->hasDefinition('validator.validator_factory')->willReturn(true);
-        $container->getDefinition('validator.validator_factory')->willReturn($validatorFactory);
+        $container->getDefinition('validator.validator_factory')->willReturn($validatorFactoryDef);
     }
 
     /**
      * @param Symfony\Component\DependencyInjection\Definition $tasteValidatorDef
      * @param Symfony\Component\DependencyInjection\Definition $minimumHoleValidatorDef
      **/
-    function it_should_add_tagged_service_for_each_validator_constraint($container, $classFinder, $definitionFactory, $tasteValidatorDef, $minimumHoleValidatorDef)
+    function it_should_add_tagged_service_for_each_validator_constraint($container, $classFinder, $definitionFactory, $tasteValidatorDef, $minimumHoleValidatorDef, $validatorFactoryDef)
     {
+        $validatorFactoryDef->replaceArgument(1, \Prophecy\Argument::any())->shouldBeCalled();
         $classes = array(
             'App\Validator\Constraints\Taste',
             'App\Validator\Constraints\MinimumHole',
@@ -56,8 +57,9 @@ class RegisterValidatorConstraintsPassSpec extends ObjectBehavior
     /**
      * @param Symfony\Component\DependencyInjection\Definition $tasteValidatorDef
      **/
-    function it_should_not_add_service_with_same_id_and_tag_alias($container, $classFinder, $definitionFactory, $tasteValidatorDef)
+    function it_should_not_add_service_with_same_id_and_tag_alias($container, $classFinder, $definitionFactory, $tasteValidatorDef, $validatorFactoryDef)
     {
+        $validatorFactoryDef->replaceArgument(1, \Prophecy\Argument::any())->shouldBeCalled();
         $classes = array(
             'App\Validator\Constraints\Taste',
             'App\Validator\Constraints\MinimumHole',
@@ -77,8 +79,9 @@ class RegisterValidatorConstraintsPassSpec extends ObjectBehavior
     /**
      * @param Symfony\Component\DependencyInjection\Definition $tasteValidatorDef
      **/
-    function it_should_not_add_service_for_classes_not_extending_constraint($container, $classFinder, $definitionFactory, $tasteValidatorDef)
+    function it_should_not_add_service_for_classes_not_extending_constraint($container, $classFinder, $definitionFactory, $tasteValidatorDef, $validatorFactoryDef)
     {
+        $validatorFactoryDef->replaceArgument(1, \Prophecy\Argument::any())->shouldBeCalled();
         $classes = array(
             'App\Validator\Constraints\Taste',
             'App\Validator\Constraints\MinimumHole',

@@ -42,9 +42,10 @@ class RegisterFormTypesPassSpec extends ObjectBehavior
      * @param Symfony\Component\DependencyInjection\Definition $editCheeseTypeDef
      * @param Symfony\Component\DependencyInjection\Definition $mouseTypeDef
      **/
-    function it_should_add_tagged_service_for_each_form_type($container, $classFinder, $definitionFactory, $cheeseTypeDef, $editCheeseTypeDef, $mouseTypeDef)
+    function it_should_add_tagged_service_for_each_form_type($container, $classFinder, $definitionFactory, $cheeseTypeDef, $editCheeseTypeDef, $mouseTypeDef, $formExtension)
     {
         $container->hasDefinition('form.extension')->willReturn(true);
+        $formExtension->replaceArgument(1, \Prophecy\Argument::any())->shouldBeCalled();
 
         $container->hasDefinition('app.form.cheese_type')->willReturn(false);
         $definitionFactory->createDefinition('App\Form\CheeseType')->shouldBeCalled()->willReturn($cheeseTypeDef);
@@ -66,9 +67,10 @@ class RegisterFormTypesPassSpec extends ObjectBehavior
      * @param Symfony\Component\DependencyInjection\Definition $editCheeseTypeDef
      * @param Symfony\Component\DependencyInjection\Definition $mouseTypeDef
      **/
-    function it_should_not_add_service_with_same_id_and_tag_alias($container, $classFinder, $definitionFactory, $cheeseTypeDef, $editCheeseTypeDef, $mouseTypeDef)
+    function it_should_not_add_service_with_same_id_and_tag_alias($container, $classFinder, $definitionFactory, $cheeseTypeDef, $editCheeseTypeDef, $mouseTypeDef, $formExtension)
     {
         $container->hasDefinition('form.extension')->willReturn(true);
+        $formExtension->replaceArgument(\Prophecy\Argument::cetera())->shouldBeCalled();
 
         $container->hasDefinition('app.form.cheese_type')->willReturn(false);
         $definitionFactory->createDefinition('App\Form\CheeseType')->shouldBeCalled()->willReturn($cheeseTypeDef);
