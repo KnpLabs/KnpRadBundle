@@ -28,6 +28,7 @@ class FlashesTokenParser extends Twig_TokenParser
         }
 
         $catalogExpr = null;
+
         if ($stream->test(Twig_Token::NAME_TYPE, 'using')) {
             $stream->expect(Twig_Token::NAME_TYPE, 'using');
             $stream->expect(Twig_Token::NAME_TYPE, 'catalog');

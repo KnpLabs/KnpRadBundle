@@ -32,7 +32,7 @@ class RegisterValidatorConstraintsPass implements CompilerPassInterface
         $namespace = $this->bundle->getNamespace().'\\Validator\\Constraints';
 
         $validators = $container->getDefinition('validator.validator_factory')->getArgument(1);
-        $potentialClasses= $this->classFinder->findClassesMatching($directory, $namespace, '(?<!Validator)$');
+        $potentialClasses = $this->classFinder->findClassesMatching($directory, $namespace, '(?<!Validator)$');
         $classes = $this->classFinder->filterClassesImplementing($potentialClasses, 'Symfony\Component\Validator\Constraint');
 
         foreach ($classes as $class) {
