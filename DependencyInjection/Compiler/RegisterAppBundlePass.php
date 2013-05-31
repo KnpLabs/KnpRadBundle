@@ -30,7 +30,7 @@ class RegisterAppBundlePass implements CompilerPassInterface
 
         if ($container->hasDefinition('knp_rad.view.listener')) {
             $viewListenerDef = $container->getDefinition('knp_rad.view.listener');
-            $viewListenerDef->replaceArgument(3, $this->bundle->getName());
+            $viewListenerDef->replaceArgument(4, $this->bundle->getName());
         }
 
         if ($container->hasDefinition('knp_rad.form.type_creator')) {

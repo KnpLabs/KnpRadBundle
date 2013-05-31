@@ -17,6 +17,7 @@ use Knp\RadBundle\HttpFoundation\RequestManipulator;
 class ViewListener
 {
     private $templating;
+    private $twigEnvironment;
     private $parser;
     private $engine;
     private $requestManipulator;
@@ -31,9 +32,10 @@ class ViewListener
      * @param MissingViewHandler   $missingViewHandler The handle to be used in case the view does not exist
      * @param RequestManipulator   $requestManipulator The request manipulator
      */
-    public function __construct(EngineInterface $templating, ControllerNameParser $parser, $engine, $bundleName, MissingViewHandler $missingViewHandler = null, RequestManipulator $requestManipulator = null)
+    public function __construct(EngineInterface $templating, \Twig_Environment $twigEnvironment, ControllerNameParser $parser, $engine, $bundleName, MissingViewHandler $missingViewHandler = null, RequestManipulator $requestManipulator = null)
     {
         $this->templating         = $templating;
+        $this->twigEnvironment    = $twigEnvironment;
         $this->parser             = $parser;
         $this->engine             = $engine;
         $this->bundleName         = $bundleName;
@@ -67,7 +69,7 @@ class ViewListener
         $viewName   = $this->deduceViewName($class, $method, $request->getRequestFormat());
         $viewParams = $event->getControllerResult() ?: array();
 
-        if ($this->templating->exists($viewName)) {
+        if ($this->templateExists($viewName)) {
             $response = $this->templating->renderResponse($viewName, $viewParams);
             $event->setResponse($response);
         } else {
@@ -82,5 +84,20 @@ class ViewListener
         $view  = preg_replace('/Action$/', '', $method);
 
         return sprintf('%s:%s:%s.%s.%s', $this->bundleName, $group, $view, $format, $this->engine);
+    }
+
+    public function templateExists($viewName)
+    {
+        try {
+            $this->twigEnvironment->loadTemplate($viewName);
+            return true;
+        }
+        catch (\Twig_Error_Loader $e) {
+            if (sprintf('Unable to find template "%s".', $viewName) === $e->getMessage()) {
+                return false;
+            }
+
+            throw $e;
+        }
     }
 }

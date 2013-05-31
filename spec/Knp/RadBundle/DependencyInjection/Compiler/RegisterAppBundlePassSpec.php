@@ -40,7 +40,7 @@ class RegisterAppBundlePassSpec extends ObjectBehavior
         $container->hasDefinition('knp_rad.mailer.message_factory')->willReturn(false);
         $container->getDefinition('knp_rad.view.listener')->willReturn($viewListenerDef);
 
-        $viewListenerDef->replaceArgument(3, 'TestBundle')->shouldBeCalled();
+        $viewListenerDef->replaceArgument(4, 'TestBundle')->shouldBeCalled();
 
         $this->process($container);
     }
