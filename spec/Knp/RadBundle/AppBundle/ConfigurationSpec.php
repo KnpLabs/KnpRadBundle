@@ -1,10 +1,10 @@
 <?php
-
 namespace spec\Knp\RadBundle\AppBundle;
 
-use PHPSpec2\ObjectBehavior;
+use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
-class Configuration extends ObjectBehavior
+class ConfigurationSpec extends ObjectBehavior
 {
     /**
      * @param Knp\RadBundle\AppBundle\ConfigurableBundleInterface $bundle
@@ -14,12 +14,12 @@ class Configuration extends ObjectBehavior
     {
         $this->beConstructedWith($bundle, $treeBuilderFactory);
     }
-
+    
     function it_should_have_bundle_accessor($bundle)
     {
         $this->getBundle()->shouldReturn($bundle);
     }
-
+    
     /**
      * @param Symfony\Component\DependencyInjection\Extension\ExtensionInterface $containerExtension
      * @param Symfony\Component\Config\Definition\Builder\TreeBuilder            $treeBuilder

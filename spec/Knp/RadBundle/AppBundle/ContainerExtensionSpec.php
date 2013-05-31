@@ -2,9 +2,10 @@
 
 namespace spec\Knp\RadBundle\AppBundle;
 
-use PHPSpec2\ObjectBehavior;
+use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
-class ContainerExtension extends ObjectBehavior
+class ContainerExtensionSpec extends ObjectBehavior
 {
     /**
      * @param Knp\RadBundle\AppBundle\ConfigurableBundleInterface    $bundle
@@ -31,11 +32,12 @@ class ContainerExtension extends ObjectBehavior
 
     function its_load_should_use_bundle_to_build_container($container, $bundle, $configFactory, $config, $configProcessor)
     {
-        $configFactory->createConfiguration(ANY_ARGUMENTS)->willReturn($config);
-        $configProcessor->processConfiguration(ANY_ARGUMENTS)->willReturn(array('processed', 'options'));
+        $configFactory->createConfiguration(Argument::cetera())->willReturn($config);
+        $configProcessor->processConfiguration(Argument::cetera())->willReturn(array('processed', 'options'));
 
         $bundle->buildContainer(array('processed', 'options'), $container)->shouldBeCalled();
 
         $this->load(array('not', 'processed', 'options'), $container);
     }
+
 }

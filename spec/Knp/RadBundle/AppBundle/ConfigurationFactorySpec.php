@@ -2,9 +2,9 @@
 
 namespace spec\Knp\RadBundle\AppBundle;
 
-use PHPSpec2\ObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
-class ConfigurationFactory extends ObjectBehavior
+class ConfigurationFactorySpec extends ObjectBehavior
 {
     /**
      * @param Knp\RadBundle\AppBundle\ConfigurableBundleInterface    $bundle
