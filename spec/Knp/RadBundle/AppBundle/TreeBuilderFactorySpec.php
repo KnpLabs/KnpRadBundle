@@ -2,9 +2,9 @@
 
 namespace spec\Knp\RadBundle\AppBundle;
 
-use PHPSpec2\ObjectBehavior;
+use PhpSpec\ObjectBehavior;
 
-class TreeBuilderFactory extends ObjectBehavior
+class TreeBuilderFactorySpec extends ObjectBehavior
 {
     function it_should_create_treeBuilder()
     {
