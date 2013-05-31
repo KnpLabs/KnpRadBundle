@@ -26,15 +26,21 @@ class AssistantController extends Controller
         );
     }
 
-    public function createViewAction(Request $request)
+    public function createViewAction()
     {
-        $viewName = $request->request->get('viewName');
-        $viewBody = $request->request->get('viewBody');
-        $viewPath = $this->get('knp_rad.view.path_deducer')->deducePath($viewName);
+        $request    = $this->getRequest();
+        $viewName   = $request->request->get('viewName');
+        $viewBody   = $request->request->get('viewBody');
+        $viewPath   = $this->get('knp_rad.view.path_deducer')->deducePath($viewName);
+        $filesystem = $this->get('filesystem');
 
-        // in case directory does not exist
-        $this->get('filesystem')->mkdir(dirname($viewPath));
+        if ($filesystem->exists($viewPath)) {
+            return new Response(sprintf(
+                'File "%s" already exists.', $viewPath
+            ), 409);
+        }
 
+        $filesystem->mkdir(dirname($viewPath));
         file_put_contents($viewPath, $viewBody);
 
         return new Response(null, 201);
