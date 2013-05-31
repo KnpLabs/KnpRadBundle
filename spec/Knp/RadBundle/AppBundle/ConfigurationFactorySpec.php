@@ -16,5 +16,4 @@ class ConfigurationFactorySpec extends ObjectBehavior
         $config->shouldBeAnInstanceOf('Knp\RadBundle\AppBundle\Configuration');
         $config->getBundle()->shouldReturn($bundle);
     }
-
 }

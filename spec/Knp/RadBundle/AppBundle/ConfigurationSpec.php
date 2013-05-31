@@ -8,7 +8,7 @@ class ConfigurationSpec extends ObjectBehavior
 {
     /**
      * @param Knp\RadBundle\AppBundle\ConfigurableBundleInterface $bundle
-     * @param Knp\RadBundle\AppBundle\TreeBuilderFactory $treeBuilderFactory
+     * @param Knp\RadBundle\AppBundle\TreeBuilderFactory          $treeBuilderFactory
      */
     function let($bundle, $treeBuilderFactory)
     {
@@ -37,5 +37,4 @@ class ConfigurationSpec extends ObjectBehavior
 
         $this->getConfigTreeBuilder()->shouldReturn($treeBuilder);
     }
-
 }
