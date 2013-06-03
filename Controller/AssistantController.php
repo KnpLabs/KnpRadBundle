@@ -26,9 +26,8 @@ class AssistantController extends Controller
         );
     }
 
-    public function createViewAction()
+    public function createViewAction(Request $request)
     {
-        $request    = $this->getRequest();
         $viewName   = $request->request->get('viewName');
         $viewBody   = $request->request->get('viewBody');
         $viewPath   = $this->get('knp_rad.view.path_deducer')->deducePath($viewName);
