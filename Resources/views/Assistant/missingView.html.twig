@@ -38,7 +38,7 @@
 jQuery(function ($) {
     var editor = ace.edit("viewBody");
     editor.setTheme("ace/theme/chrome");
-    editor.getSession().setMode("ace/mode/html");
+    editor.getSession().setMode("ace/mode/twig");
     editor.setShowPrintMargin(false);
     var $form = $('#view-file form');
     $form.on('submit', function (e) {
