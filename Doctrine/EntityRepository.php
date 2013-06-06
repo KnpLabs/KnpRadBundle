@@ -10,7 +10,7 @@ class EntityRepository extends BaseEntityRepository
 {
     public function __call($method, $arguments)
     {
-        $matches = [];
+        $matches = array();
 
         if (0 === strpos($method, 'find')) {
             if (method_exists($this, $builder = 'build'.substr($method, 4))) {
