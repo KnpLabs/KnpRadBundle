@@ -10,16 +10,28 @@ class EntityRepository extends BaseEntityRepository
 {
     public function __call($method, $arguments)
     {
+        $matches = [];
+
         if (0 === strpos($method, 'find')) {
             if (method_exists($this, $builder = 'build'.substr($method, 4))) {
                 $qb = call_user_func_array(array($this, $builder), $arguments);
 
                 if (0 === strpos(substr($method, 4), 'One')) {
+
                     return $qb->getQuery()->getOneOrNullResult();
                 }
 
                 return $qb->getQuery()->getResult();
+
+             } else if (preg_match('/^find(?P<limit>\d*)(?P<method>.*)$/', $method, $matches)) {
+                if (method_exists($this, $builder = 'build'.$matches['method'])) {
+                    $qb = call_user_func_array(array($this, $builder), $arguments);
+                    $qb->setMaxResults($matches['limit']);
+
+                    return $qb->getQuery()->getResult();
+                }
             }
+
         }
 
         return parent::__call($method, $arguments);
