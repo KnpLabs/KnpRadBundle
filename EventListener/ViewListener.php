@@ -86,18 +86,21 @@ class ViewListener
         return sprintf('%s:%s:%s.%s.%s', $this->bundleName, $group, $view, $format, $this->engine);
     }
 
-    public function templateExists($viewName)
+    private function templateExists($template)
     {
-        try {
-            $this->twigEnvironment->loadTemplate($viewName);
-            return true;
+        $loader = $this->twigEnvironment->getLoader();
+        if ($loader instanceof \Twig_ExistsLoaderInterface) {
+            return $loader->exists($template);
         }
-        catch (\Twig_Error_Loader $e) {
-            if (sprintf('Unable to find template "%s".', $viewName) === $e->getMessage()) {
-                return false;
-            }
 
+        try {
+            $loader->getSource($template);
+
+            return true;
+        } catch (\Twig_Error_Loader $e) {
             throw $e;
         }
+
+        return false;
     }
 }
