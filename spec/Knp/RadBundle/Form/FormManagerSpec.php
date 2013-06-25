@@ -81,7 +81,7 @@ class FormManagerSpec extends ObjectBehavior
     {
         $request->isMethodSafe()->willReturn(false);
         $creator2->create($object, null, array())->willReturn($form)->shouldBeCalled();
-        $form->bind($request)->shouldBeCalled();
+        $form->handleRequest($request)->shouldBeCalled();
 
         $this->createBoundObjectForm($object);
     }
