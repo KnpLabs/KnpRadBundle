@@ -31,7 +31,7 @@ class FormManager
         $form = $this->createObjectForm($object, $purpose, $options);
 
         if (!$this->request->isMethodSafe()) {
-            $form->bind($this->request);
+            $form->handleRequest($this->request);
         }
 
         return $form;
