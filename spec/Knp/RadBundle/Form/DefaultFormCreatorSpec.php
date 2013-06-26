@@ -42,9 +42,9 @@ class DefaultFormCreatorSpec extends ObjectBehavior
         $formEvent->getData()->willReturn($object);
         $formEvent->getForm()->willReturn($form);
 
-        $factory->createForProperty(\Prophecy\Argument::any(), 'name')->shouldBeCalled()->willReturn($subForm1);
-        $factory->createForProperty(\Prophecy\Argument::any(), 'admin')->shouldBeCalled()->willReturn($subForm2);
-        $factory->createForProperty(\Prophecy\Argument::any(), 'id')->shouldNotBeCalled();
+        $factory->createForProperty(\Prophecy\Argument::any(), 'name', null, array('auto_initialize' => false))->shouldBeCalled()->willReturn($subForm1);
+        $factory->createForProperty(\Prophecy\Argument::any(), 'admin', null, array('auto_initialize' => false))->shouldBeCalled()->willReturn($subForm2);
+        $factory->createForProperty(\Prophecy\Argument::any(), 'id', null, array('auto_initialize' => false))->shouldNotBeCalled();
 
         $form->add($subForm1)->shouldBeCalled();
         $form->add($subForm2)->shouldBeCalled();
@@ -78,8 +78,8 @@ class DefaultFormCreatorSpec extends ObjectBehavior
         $formEvent->getData()->willReturn($object);
         $formEvent->getForm()->willReturn($form->getWrappedObject());
 
-        $factory->createForProperty(\Prophecy\Argument::any(), 'termOfService')->shouldBeCalled()->willReturn($subForm1);
-        $factory->createForProperty(\Prophecy\Argument::any(), 'locked')->shouldBeCalled()->willReturn($subForm2);
+        $factory->createForProperty(\Prophecy\Argument::any(), 'termOfService', null, array('auto_initialize' => false))->shouldBeCalled()->willReturn($subForm1);
+        $factory->createForProperty(\Prophecy\Argument::any(), 'locked', null, array('auto_initialize' => false))->shouldBeCalled()->willReturn($subForm2);
 
         $form->add($subForm1)->shouldBeCalled();
         $form->add($subForm2)->shouldBeCalled();

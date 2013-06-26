@@ -53,13 +53,17 @@ class DefaultFormCreator implements FormCreatorInterface, EventSubscriberInterfa
             if (0 === strpos($method, 'get') || 0 === strpos($method, 'is')) {
                 $propertyName = $this->extractPropertyName($method);
                 if ($this->hasRelatedSetter($object, $propertyName)) {
-                    $form->add($this->factory->createForProperty(get_class($object), $propertyName));
+                    $form->add($this->factory->createForProperty(get_class($object), $propertyName, null, array(
+                        'auto_initialize' => false,
+                    )));
                 }
             }
         }
 
         foreach ($this->fetcher->getProperties($object) as $property) {
-            $form->add($this->factory->createForProperty(get_class($object), $property));
+            $form->add($this->factory->createForProperty(get_class($object), $property, null, array(
+                'auto_initialize' => false,
+            )));
         }
     }
 
