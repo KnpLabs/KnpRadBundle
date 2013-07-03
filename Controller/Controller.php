@@ -85,7 +85,11 @@ class Controller extends BaseController
             } elseif (is_object($entity) && $entity instanceof EntityRepository) {
                 $repository = $entity;
             } else {
-                throw new \InvalidArgumentException('The first parameter should be a Doctrine entity, an EntityRepository, an entity class name (ex: App/Entity/MyEntity) or a short entity name (ex: App:MyEntity).');
+                throw new \InvalidArgumentException(
+                    'The first parameter should be a Doctrine entity,
+                    an EntityRepository, an entity class name (ex: App/Entity/MyEntity)
+                    or a short entity name (ex: App:MyEntity).'
+                );
             }
 
             $result = $repository->findOneBy{!is_array($criterias) ? 'Id' : ''}($criterias);
