@@ -89,13 +89,7 @@ class Controller extends BaseController
                 throw new ParameterNotFoundException('The first parameter should be a Doctrine entity, an EntityRepository or an entity class name.');
             }
 
-            if (is_array($criterias)) {
-                $result = $repository->findOneBy($criterias);
-            } elseif (is_scalar($criterias)) {
-                $result = $repository->find($criterias);
-            } else {
-                throw new ParameterNotFoundException(sprintf('The second parameter should be an array or value or a scalar, "%s" given.', get_class($criterias)));
-            }
+            $result = $repository->find{is_array($criterias) ? 'OneBy' : ''}($criterias);
         }
 
         if (null !== $result){
