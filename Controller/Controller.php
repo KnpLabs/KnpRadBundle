@@ -7,7 +7,6 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityRepository;
 use Knp\RadBundle\Flash;
-use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
 class Controller extends BaseController
 {
@@ -89,7 +88,7 @@ class Controller extends BaseController
                 throw new \InvalidArgumentException('The first parameter should be a Doctrine entity, an EntityRepository, an entity class name (ex: App/Entity/MyEntity) or a short entity name (ex: App:MyEntity).');
             }
 
-            $result = $repository->find{is_array($criterias) ? 'OneBy' : ''}($criterias);
+            $result = $repository->findOneBy{!is_array($criterias) ? 'Id' : ''}($criterias);
         }
 
         if (null !== $result){
