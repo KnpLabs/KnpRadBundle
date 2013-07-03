@@ -75,14 +75,15 @@ class Controller extends BaseController
     protected function findOr404($entity, $criterias = array())
     {
         $result = null;
+        $findMethod = is_scalar($criterias) ? 'find' : 'findOneBy';
 
         if (is_object($entity) && $entity instanceof EntityRepository) {
-            $result = $entity->findOneBy($criterias);
+            $result = $entity->$findMethod($criterias);
         } elseif (is_object($entity) && $this->getEntityManager()->contains($entity)) {
             $result = $this->getEntityManager()->refresh($entity);
         } elseif (is_string($entity)) {
             $repository = $this->getRepository($entity);
-            $result     = $repository->findOneBy($criterias);
+            $result = $repository->$findMethod($criterias);
         }
 
         if (null !== $result){
