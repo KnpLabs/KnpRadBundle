@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityRepository;
 use Knp\RadBundle\Flash;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
 class Controller extends BaseController
 {
@@ -72,17 +73,29 @@ class Controller extends BaseController
         $this->getEntityManager()->flush($entity);
     }
 
-    protected function findOr404($entity, $criterias = array())
+    protected function findOr404($entity, $criterias)
     {
         $result = null;
 
-        if (is_object($entity) && $entity instanceof EntityRepository) {
-            $result = $entity->findOneBy($criterias);
-        } elseif (is_object($entity) && $this->getEntityManager()->contains($entity)) {
+        if (is_object($entity) && $this->getEntityManager()->contains($entity)) {
             $result = $this->getEntityManager()->refresh($entity);
-        } elseif (is_string($entity)) {
-            $repository = $this->getRepository($entity);
-            $result     = $repository->findOneBy($criterias);
+        } else {
+            $repository = null;
+            if (is_string($entity)) {
+                $repository = $this->getRepository($entity);
+            } elseif ($entity instanceof EntityRepository) {
+                $repository = $entity;
+            } else {
+                throw new ParameterNotFoundException('The first parameter should be a Doctrine entity, an EntityRepository or an entity class name.');
+            }
+
+            if (is_array($criterias)) {
+                $result = $repository->findOneBy($criterias);
+            } elseif (is_scalar($criterias)) {
+                $result = $repository->find($criterias);
+            } else {
+                throw new ParameterNotFoundException(sprintf('The second parameter should be an array or value or a scalar, "%s" given.', get_class($criterias)));
+            }
         }
 
         if (null !== $result){
