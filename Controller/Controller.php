@@ -22,7 +22,23 @@ class Controller extends BaseController
 
     protected function getRepository($entity)
     {
-        return $this->getEntityManager()->getRepository(is_object($entity) ? get_class($entity) : $entity);
+        if (is_object($entity) && $entity instanceof EntityRepository) {
+
+            return $entity;
+        } elseif (is_object($entity)) {
+
+            return $this->getEntityManager()->getRepository(get_class($entity));
+        } elseif (is_string($entity)) {
+
+            return $this->getEntityManager()->getRepository($entity);
+        }
+
+        throw new \InvalidArgumentException(
+            <<<MESSAGE The entity argument should be a Doctrine entity,
+            an EntityRepository, an entity class name (ex: App/Entity/MyEntity)
+            or a short entity name (ex: App:MyEntity).>>>
+        );
+
     }
 
     protected function isGranted($attributes, $object = null)
@@ -75,24 +91,13 @@ class Controller extends BaseController
     protected function findOr404($entity, $criterias)
     {
         $result = null;
+        $findMethod = is_scalar($criterias) ? 'find' : 'findOneBy';
 
         if (is_object($entity) && $this->getEntityManager()->contains($entity)) {
             $result = $this->getEntityManager()->refresh($entity);
         } else {
-            $repository = null;
-            if (is_string($entity)) {
-                $repository = $this->getRepository($entity);
-            } elseif (is_object($entity) && $entity instanceof EntityRepository) {
-                $repository = $entity;
-            } else {
-                throw new \InvalidArgumentException(
-                    'The first parameter should be a Doctrine entity,
-                    an EntityRepository, an entity class name (ex: App/Entity/MyEntity)
-                    or a short entity name (ex: App:MyEntity).'
-                );
-            }
-
-            $result = $repository->findOneBy{!is_array($criterias) ? 'Id' : ''}($criterias);
+            $repository = $this->getRepository($entity);
+            $result = $repository->$findMethod($criterias);
         }
 
         if (null !== $result){
