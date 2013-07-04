@@ -25,10 +25,14 @@ class Controller extends BaseController
         if (is_object($entity) && $entity instanceof EntityRepository) {
 
             return $entity;
-        } elseif (is_object($entity)) {
+        }
+
+        if (is_object($entity)) {
 
             return $this->getEntityManager()->getRepository(get_class($entity));
-        } elseif (is_string($entity)) {
+        }
+
+        if (is_string($entity)) {
 
             return $this->getEntityManager()->getRepository($entity);
         }
