@@ -34,9 +34,11 @@ class Controller extends BaseController
         }
 
         throw new \InvalidArgumentException(
-            <<<MESSAGE The entity argument should be a Doctrine entity,
-            an EntityRepository, an entity class name (ex: App/Entity/MyEntity)
-            or a short entity name (ex: App:MyEntity).>>>
+<<<MESSAGE
+The entity argument should be a Doctrine entity,
+an EntityRepository, an entity class name (ex: App/Entity/MyEntity)
+or a short entity name (ex: App:MyEntity).
+>>>
         );
 
     }
