@@ -34,7 +34,7 @@ class RegisterSecurityVotersPass implements CompilerPassInterface
     {
         $decisionManagerId = $container->getParameter('knp_rad.decision_manager.id');
 
-        if (false === $container->hasDefinition($decisionManagerId)) {
+        if (!$container->hasDefinition($decisionManagerId)) {
             return;
         }
 
