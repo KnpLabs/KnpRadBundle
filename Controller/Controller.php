@@ -22,7 +22,29 @@ class Controller extends BaseController
 
     protected function getRepository($entity)
     {
-        return $this->getEntityManager()->getRepository(is_object($entity) ? get_class($entity) : $entity);
+        if (is_object($entity) && $entity instanceof EntityRepository) {
+
+            return $entity;
+        }
+
+        if (is_object($entity)) {
+
+            return $this->getEntityManager()->getRepository(get_class($entity));
+        }
+
+        if (is_string($entity)) {
+
+            return $this->getEntityManager()->getRepository($entity);
+        }
+
+        throw new \InvalidArgumentException(
+<<<MESSAGE
+The entity argument should be a Doctrine entity,
+an EntityRepository, an entity class name (ex: App/Entity/MyEntity)
+or a short entity name (ex: App:MyEntity).
+MESSAGE
+        );
+
     }
 
     protected function isGranted($attributes, $object = null)
@@ -72,17 +94,16 @@ class Controller extends BaseController
         $this->getEntityManager()->flush($entity);
     }
 
-    protected function findOr404($entity, $criterias = array())
+    protected function findOr404($entity, $criterias)
     {
         $result = null;
+        $findMethod = is_scalar($criterias) ? 'find' : 'findOneBy';
 
-        if (is_object($entity) && $entity instanceof EntityRepository) {
-            $result = $entity->findOneBy($criterias);
-        } elseif (is_object($entity) && $this->getEntityManager()->contains($entity)) {
+        if (is_object($entity) && $this->getEntityManager()->contains($entity)) {
             $result = $this->getEntityManager()->refresh($entity);
-        } elseif (is_string($entity)) {
+        } else {
             $repository = $this->getRepository($entity);
-            $result     = $repository->findOneBy($criterias);
+            $result = $repository->$findMethod($criterias);
         }
 
         if (null !== $result){
