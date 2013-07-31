@@ -6,7 +6,7 @@ use Symfony\Component\Security\Core\User\UserInterface as BaseUserInterface;
 
 interface UserInterface extends BaseUserInterface
 {
-    public function setPassword();
+    public function setPassword($password);
 
     public function getPlainPassword();
 }
