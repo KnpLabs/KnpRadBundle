@@ -11,10 +11,10 @@ use Symfony\Component\Config\FileLocatorInterface;
 class ConventionalLoader extends YamlFileLoader
 {
     private static $supportedControllerKeys = array(
-        'prefix', 'defaults', 'requirements', 'collections', 'resources'
+        'prefix', 'defaults', 'requirements', 'options', 'collections', 'resources'
     );
     private static $supportedActionKeys = array(
-        'pattern', 'defaults', 'requirements'
+        'pattern', 'defaults', 'requirements', 'options'
     );
     private $yaml;
 
@@ -94,8 +94,10 @@ class ConventionalLoader extends YamlFileLoader
             $prefix                 = $this->getPatternPrefix($class, $mapping);
             $collectionDefaults     = $this->getDefaultsFromMapping($mapping, 'collections');
             $collectionRequirements = $this->getRequirementsFromMapping($mapping, 'collections');
+            $collectionOptions      = $this->getOptionsFromMapping($mapping, 'collections');
             $resourceDefaults       = $this->getDefaultsFromMapping($mapping, 'resources');
             $resourceRequirements   = $this->getRequirementsFromMapping($mapping, 'resources');
+            $resourceOptions        = $this->getOptionsFromMapping($mapping, 'resources');
 
             $collectionRoutes = $this->getCollectionRoutesFromMapping($shortname, $mapping, $bundle, $class);
             $resourceRoutes   = $this->getResourceRoutesFromMapping($shortname, $mapping, $bundle, $class);
@@ -106,12 +108,18 @@ class ConventionalLoader extends YamlFileLoader
                 $route->setRequirements(array_merge(
                     $collectionRequirements, $route->getRequirements()
                 ));
+                $route->setOptions(array_merge(
+                    $collectionOptions, $route->getOptions()
+                ));
                 $controllerCollection->add($name, $route);
             }
             foreach ($resourceRoutes as $name => $route) {
                 $route->setDefaults(array_merge($resourceDefaults, $route->getDefaults()));
                 $route->setRequirements(array_merge(
                     $resourceRequirements, $route->getRequirements()
+                ));
+                $route->setOptions(array_merge(
+                    $resourceOptions, $route->getOptions()
                 ));
                 $controllerCollection->add($name, $route);
             }
@@ -223,6 +231,27 @@ class ConventionalLoader extends YamlFileLoader
 
         return $requirements;
     }
+    
+    private function getOptionsFromMapping($mapping, $routeType = 'collections')
+    {
+        $options = array();
+
+        if (!is_array($mapping)) {
+            return $options;
+        }
+
+        if (isset($mapping['options'])) {
+            $options = $mapping['options'];
+        }
+
+        if (isset($mapping[$routeType]) && is_array($mapping[$routeType])) {
+            if (isset($mapping[$routeType]['options'])) {
+                $options = array_merge($options, $mapping[$routeType]['options']);
+            }
+        }
+
+        return $options;
+    }
 
     private function getCollectionRoutesFromMapping($shortname, $mapping, $bundle, $class)
     {
@@ -234,6 +263,7 @@ class ConventionalLoader extends YamlFileLoader
         $collections = $mapping['collections'];
         unset($collections['defaults']);
         unset($collections['requirements']);
+        unset($collections['options']);
 
         if (0 == count($collections)) {
             return $defaults;
@@ -271,6 +301,7 @@ class ConventionalLoader extends YamlFileLoader
         $resources = $mapping['resources'];
         unset($resources['defaults']);
         unset($resources['requirements']);
+        unset($resources['options']);
 
         if (0 == count($resources)) {
             return $defaults;
@@ -327,6 +358,9 @@ class ConventionalLoader extends YamlFileLoader
             }
             if (isset($params['requirements'])) {
                 $route->setRequirements($params['requirements']);
+            }
+            if (isset($params['options'])) {
+                $route->setOptions($params['options']);
             }
         }
     }
