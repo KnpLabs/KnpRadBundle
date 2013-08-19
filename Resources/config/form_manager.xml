@@ -16,6 +16,7 @@
     <services>
         <service id="knp_rad.form.manager" class="%knp_rad.form.manager.class%" scope="request">
             <argument type="service" id="request" />
+            <tag name="remove-when-missing" service="form.factory" />
         </service>
 
         <service id="knp_rad.form.type_creator" class="%knp_rad.form.type_creator.class%" public="false">
@@ -24,6 +25,7 @@
             <argument type="service" id="form.registry" />
             <argument type="string"></argument>
             <tag name="knp_rad.form.creator" priority="2"/>
+            <tag name="remove-when-missing" service="form.factory" />
         </service>
 
         <service id="knp_rad.form.default_creator" class="%knp_rad.form.default_creator.class%" public="false">
@@ -31,11 +33,13 @@
             <argument type="service" id="form.factory"/>
             <argument type="service" id="knp_rad.form.type_guesser.data"/>
             <tag name="knp_rad.form.creator" priority="1"/>
+            <tag name="remove-when-missing" service="form.factory" />
         </service>
         <service id="knp_rad.reflection.metadata_fetcher" class="%knp_rad.reflection.metadata_fetcher.class%" public="false"></service>
 
         <service id="knp_rad.form.type_guesser.data" class="%knp_rad.form.type_guesser.data.class%">
             <tag name="form.type_guesser"/>
+            <tag name="remove-when-missing" service="form.factory" />
         </service>
     </services>
 

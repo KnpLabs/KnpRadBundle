@@ -13,12 +13,14 @@
         <service id="knp_rad.flash.message_renderer" class="%knp_rad.flash.message_renderer.class%">
             <argument type="service" id="translator" />
             <argument>%knp_rad.flashes.trans_catalog%</argument>
+            <tag name="remove-when-missing" service="translator" />
         </service>
 
         <service id="knp_rad.twig.flash_extension" class="%knp_rad.twig.flash_extension.class%">
             <argument type="service" id="knp_rad.flash.message_renderer" />
             <argument type="service" id="session" />
             <tag name="twig.extension" />
+            <tag name="remove-when-missing" service="translator" />
         </service>
     </services>
 

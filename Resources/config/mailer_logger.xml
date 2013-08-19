@@ -15,14 +15,17 @@
         <service id="knp_rad.mailer.recorder" class="%knp_rad.mailer.recorder.class%" public="false">
             <argument type="service" id="knp_rad.mailer.logger" />
             <tag name="swiftmailer.plugin" />
+            <tag name="remove-when-missing" service="mailer" />
         </service>
 
         <service id="knp_rad.mailer.messages_store" class="%knp_rad.mailer.messages_store.class%">
             <argument>%kernel.cache_dir%/mailer_messsages_store.meta</argument>
+            <tag name="remove-when-missing" service="mailer" />
         </service>
 
         <service id="knp_rad.mailer.logger" class="%knp_rad.mailer.logger.class%">
             <argument type="service" id="knp_rad.mailer.messages_store" />
+            <tag name="remove-when-missing" service="mailer" />
         </service>
 
     </services>

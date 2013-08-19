@@ -12,6 +12,7 @@
 
         <service id="knp_rad.security.voter.is_owner" class="%knp_rad.security.voter.is_owner.class%">
             <tag name="security.voter" />
+            <tag name="remove-when-missing" service="security.context" />
         </service>
     </services>
 
