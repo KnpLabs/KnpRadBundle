@@ -14,12 +14,14 @@
             <argument type="service" id="form.csrf_provider" />
             <argument type="string">%knp_rad.csrf_link.intention%</argument>
             <tag name="twig.extension" />
+            <tag name="remove-when-missing" service="form.csrf_provider" />
         </service>
 
         <service id="knp_rad.csrf.listener" class="%knp_rad.csrf.listener.class%">
             <argument type="service" id="form.csrf_provider" />
             <argument type="string">%knp_rad.csrf_link.intention%</argument>
             <tag name="kernel.event_listener" event="kernel.request" />
+            <tag name="remove-when-missing" service="form.csrf_provider" />
         </service>
     </services>
 

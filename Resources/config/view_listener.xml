@@ -25,6 +25,8 @@
             <argument>twig</argument>
             <argument type="string"></argument>
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
+            <tag name="remove-when-missing" service="templating" />
+            <tag name="remove-when-missing" service="twig" />
         </service>
 
         <service id="knp_rad.view.path_deducer" class="%knp_rad.view.path_deducer.class%">
@@ -32,10 +34,13 @@
             <argument type="service" id="knp_rad.filesystem.path_expander" />
             <argument>%knp_rad.view.path_deducer.logicalNames%</argument>
             <argument>%knp_rad.view.path_deducer.defaultLogicalName%</argument>
+            <tag name="remove-when-missing" service="templating.name_parser" />
         </service>
 
         <service id="knp_rad.filesystem.path_expander" class="%knp_rad.filesystem.path_expander.class%">
             <argument type="service" id="kernel" />
+            <tag name="remove-when-missing" service="templating" />
+            <tag name="remove-when-missing" service="twig" />
         </service>
     </services>
 

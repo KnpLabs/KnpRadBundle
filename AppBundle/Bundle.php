@@ -14,7 +14,12 @@ class Bundle extends BaseBundle implements ConfigurableBundleInterface
 
     public function build(ContainerBuilder $container)
     {
-        $container->addCompilerPass(new Compiler\RegisterDoctrineRepositoriesPass($this), PassConfig::TYPE_OPTIMIZE);
+        $container->addCompilerPass(new Compiler\RemoveUnavailableServicesPass);
+        $container->addCompilerPass(
+            new Compiler\RegisterDoctrineRepositoriesPass($this),
+            PassConfig::TYPE_OPTIMIZE
+        );
+        $container->addCompilerPass(new Compiler\RegisterFormCreatorsPass);
         $container->addCompilerPass(new Compiler\RegisterTwigExtensionsPass($this));
         $container->addCompilerPass(new Compiler\RegisterSecurityVotersPass($this));
         $container->addCompilerPass(new Compiler\RegisterAppBundlePass($this));

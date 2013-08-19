@@ -13,6 +13,8 @@
         <service id="knp_rad.orm.user_listener" class="%knp_rad.orm.user_listener.class%" public="false">
             <argument type="service" id="security.encoder_factory" />
             <tag name="doctrine.event_subscriber" />
+            <tag name="remove-when-missing" service="doctrine" />
+            <tag name="remove-when-missing" service="security.encoder_factory" />
         </service>
 
     </services>
