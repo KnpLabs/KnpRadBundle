@@ -80,8 +80,10 @@ class FormManagerSpec extends ObjectBehavior
     function it_should_be_able_to_bind_unsafe_requests($object, $request, $form, $creator2)
     {
         $request->isMethodSafe()->willReturn(false);
-        $creator2->create($object, null, array())->willReturn($form)->shouldBeCalled();
+        $request->getMethod()->willReturn('PUT');
+        $creator2->create($object, null, array('method' => 'PUT'))->willReturn($form)->shouldBeCalled();
         $form->handleRequest($request)->shouldBeCalled();
+        $form->submit($request)->shouldNotBeCalled();
 
         $this->createBoundObjectForm($object);
     }
@@ -93,8 +95,10 @@ class FormManagerSpec extends ObjectBehavior
     function it_should_not_bind_get_safe_requests($object, $request, $form, $creator2)
     {
         $request->isMethodSafe()->willReturn(true);
+        $request->getMethod()->willReturn('GET');
         $creator2->create($object, null, array())->willReturn($form)->shouldBeCalled();
-        $form->bind($request)->shouldNotBeCalled();
+        $form->handleRequest($request)->shouldBeCalled();
+        $form->submit($request)->shouldNotBeCalled();
 
         $this->createBoundObjectForm($object);
     }

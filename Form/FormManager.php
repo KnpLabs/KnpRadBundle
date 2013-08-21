@@ -28,11 +28,11 @@ class FormManager
 
     public function createBoundObjectForm($object, $purpose = null, array $options = array())
     {
-        $form = $this->createObjectForm($object, $purpose, $options);
-
         if (!$this->request->isMethodSafe()) {
-            $form->handleRequest($this->request);
+            $options = array_merge(array('method' => $this->request->getMethod()), $options);
         }
+        $form = $this->createObjectForm($object, $purpose, $options);
+        $form->handleRequest($this->request);
 
         return $form;
     }
