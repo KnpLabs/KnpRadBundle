@@ -10,4 +10,9 @@ class YamlParser
     {
         return Yaml::parse($file);
     }
+
+    public function dump($value, $file)
+    {
+        return file_put_contents($file, Yaml::dump($value));
+    }
 }
