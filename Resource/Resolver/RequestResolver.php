@@ -13,17 +13,35 @@ class RequestResolver
         $this->requestManipulator = $requestManipulator ?: new RequestManipulator();
     }
 
-    public function resolveRequest(Request $request)
+    public function resolveResource(Request $request, $name)
+    {
+        $options = $this->getResourceOptions($request, $name);
+        $resource = $this->resourceResolver->resolveResource($request, $options);
+        $this->setResource($request, $name, $resource);
+
+        return $resource;
+    }
+
+    public function hasResourceOptions(Request $request, $name)
     {
         if (false === $this->requestManipulator->hasAttribute($request, '_resources')) {
-            return;
+            return false;
         }
 
         $resources = $this->requestManipulator->getAttribute($request, '_resources');
 
-        foreach ($resources as $name => $options) {
-            $resource = $this->resourceResolver->resolveResource($request, $options);
-            $this->requestManipulator->setAttribute($request, $name, $resource);
-        }
+        return array_key_exists($name, $resources);
+    }
+
+    public function getResourceOptions(Request $request, $name)
+    {
+        $resources = $this->requestManipulator->getAttribute($request, '_resources');
+
+        return $resources[$name];
+    }
+
+    public function setResource(Request $request, $name, $resource)
+    {
+        $this->requestManipulator->setAttribute($request, $name, $resource);
     }
 }

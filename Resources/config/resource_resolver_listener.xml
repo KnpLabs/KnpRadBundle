@@ -26,7 +26,7 @@
 
         <service id="knp_rad.event_listener.resource_resolver" class="%knp_rad.event_listener.resource_resolver.class%">
             <argument type="service" id="knp_rad.resource.resolver.request" />
-            <tag name="kernel.event_listener" event="kernel.request" />
+            <tag name="kernel.event_listener" event="kernel.controller" />
         </service>
     </services>
 
