@@ -30,6 +30,6 @@ class RequestResolverSpec extends ObjectBehavior
 
         $requestManipulator->setAttribute($request, 'cheese', $cheese)->shouldBeCalled();
 
-        $this->resolveRequest($request);
+        $this->resolveResource($request, 'cheese');
     }
 }

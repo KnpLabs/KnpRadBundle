@@ -32,14 +32,18 @@ class ArgumentResolver
             throw new \InvalidArgumentException(
                 'You must pass either a `name` or a `value` option, but not both.'
             );
-        } elseif ($hasName) {
-            return $this->requestManipulator->getAttribute($request, $options['name']);
-        } elseif ($hasValue) {
-            return $options['value'];
-        } else {
-            throw new \InvalidArgumentException(
-                'You must path either a `name` or a `value` option.'
-            );
         }
+
+        if ($hasName) {
+            return $this->requestManipulator->getAttribute($request, $options['name']);
+        }
+
+        if ($hasValue) {
+            return $options['value'];
+        }
+
+        throw new \InvalidArgumentException(
+            'You must path either a `name` or a `value` option.'
+        );
     }
 }
