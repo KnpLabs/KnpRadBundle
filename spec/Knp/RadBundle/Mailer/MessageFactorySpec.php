@@ -3,6 +3,7 @@
 namespace spec\Knp\RadBundle\Mailer;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 class MessageFactorySpec extends ObjectBehavior
 {
@@ -10,12 +11,17 @@ class MessageFactorySpec extends ObjectBehavior
      * @param  Swift_Mailer               $mailer
      * @param  Twig_Environment           $twig
      * @param  Twig_ExistsLoaderInterface $loader
+     * @param  Knp\RadBundle\AppBundle\BundleGuesser $bundleGuesser
+     * @param  Symfony\Component\HttpKernel\Bundle\BundleInterface $bundle
      */
-    function let($mailer, $twig, $loader)
+    function let($mailer, $twig, $loader, $bundleGuesser, $bundle)
     {
         $twig->getLoader()->willReturn($loader);
 
-        $this->beConstructedWith($mailer, $twig, 'App');
+        $this->beConstructedWith($mailer, $twig, $bundleGuesser);
+
+        $bundleGuesser->getBundleForClass(Argument::any())->willReturn($bundle);
+        $bundle->getName()->willReturn('App');
     }
 
     /**
@@ -39,7 +45,7 @@ class MessageFactorySpec extends ObjectBehavior
         $message->setSubject($subject)->shouldBeCalled();
         $message->setBody($body, 'text/plain')->shouldBeCalled();
 
-        $this->createMessage('contact_message', array('foo' => 'bar'))->shouldReturn($message);
+        $this->createMessage('App\Controller\Message', 'contact_message', array('foo' => 'bar'))->shouldReturn($message);
     }
 
     /**
@@ -63,7 +69,7 @@ class MessageFactorySpec extends ObjectBehavior
         $message->setSubject($subject)->shouldBeCalled();
         $message->setBody($body, 'text/html')->shouldBeCalled();
 
-        $this->createMessage('contact_message', array('foo' => 'bar'))->shouldReturn($message);
+        $this->createMessage('App\Controller\Test', 'contact_message', array('foo' => 'bar'))->shouldReturn($message);
     }
 
     /**
@@ -95,7 +101,7 @@ class MessageFactorySpec extends ObjectBehavior
         $message->setBody($body1, 'text/plain')->shouldBeCalled();
         $message->addPart($body2, 'text/html')->shouldBeCalled();
 
-        $this->createMessage('contact_message', array('foo' => 'bar'))->shouldReturn($message);
+        $this->createMessage('App\Controller\Message', 'contact_message', array('foo' => 'bar'))->shouldReturn($message);
     }
 
     /**
@@ -108,7 +114,7 @@ class MessageFactorySpec extends ObjectBehavior
         $loader->exists('App:Mails:contact_message.txt.twig')->willReturn(false);
         $loader->exists('App:Mails:contact_message.html.twig')->willReturn(false);
 
-        $this->shouldThrow('Twig_Error_Loader')->duringCreateMessage('contact_message', array());
+        $this->shouldThrow('Twig_Error_Loader')->duringCreateMessage('App\Controller\Test', 'contact_message', array());
     }
 
     /**
@@ -135,7 +141,7 @@ class MessageFactorySpec extends ObjectBehavior
         $template2->renderBlock('subject', array('foo' => 'bar'))->willReturn(null);
         $template2->renderBlock('body', array('foo' => 'bar'))->willReturn(null);
 
-        $this->shouldThrow('Twig_Error_Loader')->duringCreateMessage('contact_message', array(
+        $this->shouldThrow('Twig_Error_Loader')->duringCreateMessage('App\Controller\Test', 'contact_message', array(
             'foo' => 'bar'
         ));
     }

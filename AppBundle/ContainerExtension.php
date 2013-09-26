@@ -22,7 +22,7 @@ class ContainerExtension extends Extension
 
     public function getAlias()
     {
-        return 'app';
+        return strtolower(str_replace('Bundle', '', $this->bundle->getName()));
     }
 
     /**
@@ -59,7 +59,7 @@ class ContainerExtension extends Extension
                 $container->addResource(new DirectoryResource($dirPath));
             }
         }
-    
+
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->configProcessor->processConfiguration($configuration, $configs);
 

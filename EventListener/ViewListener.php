@@ -9,6 +9,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser;
 use Knp\RadBundle\HttpFoundation\RequestManipulator;
+use Knp\RadBundle\AppBundle\BundleGuesser;
 
 /**
  * Adds Response event listener to render no-Response
@@ -21,7 +22,7 @@ class ViewListener
     private $parser;
     private $engine;
     private $requestManipulator;
-    private $bundleName;
+    private $bundleGuesser;
 
     /**
      * Initializes listener.
@@ -29,16 +30,17 @@ class ViewListener
      * @param EngineInterface      $templating         Templating engine
      * @param ControllerNameParser $parser             Controller name parser
      * @param string               $engine             Default engine name
+     * @param BundleGuesser        $bundleGuesser      To guess the current rad bundle
      * @param MissingViewHandler   $missingViewHandler The handle to be used in case the view does not exist
      * @param RequestManipulator   $requestManipulator The request manipulator
      */
-    public function __construct(EngineInterface $templating, \Twig_Environment $twigEnvironment, ControllerNameParser $parser, $engine, $bundleName, MissingViewHandler $missingViewHandler = null, RequestManipulator $requestManipulator = null)
+    public function __construct(EngineInterface $templating, \Twig_Environment $twigEnvironment, ControllerNameParser $parser, $engine, BundleGuesser $bundleGuesser, MissingViewHandler $missingViewHandler = null, RequestManipulator $requestManipulator = null)
     {
         $this->templating         = $templating;
         $this->twigEnvironment    = $twigEnvironment;
         $this->parser             = $parser;
         $this->engine             = $engine;
-        $this->bundleName         = $bundleName;
+        $this->bundleGuesser      = $bundleGuesser;
         $this->missingViewHandler = $missingViewHandler ?: new MissingViewHandler();
         $this->requestManipulator = $requestManipulator ?: new RequestManipulator();
     }
@@ -62,7 +64,7 @@ class ViewListener
         }
 
         list($class, $method) = explode('::', $controller, 2);
-        if (false === strpos($class, 'App\\')) {
+        if (!$this->bundleGuesser->hasBundleForClass($class)) {
             return;
         }
 
@@ -82,8 +84,9 @@ class ViewListener
         $group = preg_replace(array('#^.*\\Controller\\\\#', '#Controller$#'), '', $class);
         $group = str_replace('\\', '/', $group);
         $view  = preg_replace('/Action$/', '', $method);
+        $bundle = $this->bundleGuesser->getBundleForClass($class);
 
-        return sprintf('%s:%s:%s.%s.%s', $this->bundleName, $group, $view, $format, $this->engine);
+        return sprintf('%s:%s:%s.%s.%s', $bundle->getName(), $group, $view, $format, $this->engine);
     }
 
     private function templateExists($template)
