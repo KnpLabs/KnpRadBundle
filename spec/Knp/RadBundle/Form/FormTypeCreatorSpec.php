@@ -3,6 +3,7 @@
 namespace spec\Knp\RadBundle\Form;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 class FormTypeCreatorSpec extends ObjectBehavior
 {
@@ -10,10 +11,14 @@ class FormTypeCreatorSpec extends ObjectBehavior
      * @param Knp\RadBundle\Reflection\ClassMetadataFetcher $fetcher
      * @param Symfony\Component\Form\FormRegistryInterface $formRegistry
      * @param Symfony\Component\Form\FormFactoryInterface $factory
+     * @param Knp\RadBundle\AppBundle\BundleGuesser $bundleGuesser
+     * @param Symfony\Component\HttpKernel\Bundle\BundleInterface $bundle
      */
-    function let($fetcher, $factory, $formRegistry)
+    function let($fetcher, $factory, $formRegistry, $bundleGuesser, $bundle)
     {
-        $this->beConstructedWith($fetcher, $factory, $formRegistry, 'App');
+        $bundleGuesser->getBundleForClass(Argument::any())->willReturn($bundle);
+        $bundle->getNamespace()->willReturn('App');
+        $this->beConstructedWith($fetcher, $factory, $formRegistry, $bundleGuesser);
     }
 
     function it_should_implement_form_creator_interface()
@@ -106,9 +111,9 @@ class FormTypeCreatorSpec extends ObjectBehavior
      * @param stdClass $formType
      * @param Symfony\Component\Form\Form $form
      */
-    function it_should_get_form_for_other_rad_bundle_name($object, $fetcher, $factory, $formType, $form, $formRegistry)
+    function it_should_get_form_for_other_rad_bundle_name($object, $fetcher, $factory, $formType, $form, $formRegistry, $bundle)
     {
-        $this->beConstructedWith($fetcher, $factory, $formRegistry, 'TestBundle');
+        $bundle->getNamespace()->willReturn('TestBundle');
         $fetcher->getShortClassName($object)->willReturn('Cheese');
         $fetcher->getShortClassName('TestBundle\Entity\Cheese')->willReturn('Cheese');
         $fetcher->getClass('TestBundle\Entity\Cheese')->willReturn('TestBundle\Entity\Cheese');

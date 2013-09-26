@@ -10,8 +10,6 @@ use Symfony\Component\Config\Definition\Builder\NodeParentInterface;
 
 class Bundle extends BaseBundle implements ConfigurableBundleInterface
 {
-    protected $name = 'App';
-
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new Compiler\RemoveUnavailableServicesPass);
