@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\RadBundle\Routing\Loader\Resolver;
+namespace Knp\RadBundle\Routing\Resolver;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
@@ -40,9 +40,9 @@ class RouteResolver implements LoaderResolverInterface
     public function resolve($resource, $type = null)
     {
         foreach ($this->loaders as $loader) {
-            if ($loader->supports($type)) {
+            if ($loader->supports($resource, $type)) {
 
-                return $loader->load(array($type => $resource));
+                return $loader->load($resource, $type);
             }
         }
 

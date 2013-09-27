@@ -36,7 +36,7 @@ class ConventionalLoaderSpec extends ObjectBehavior
     }
 
     /**
-     * @param Knp\RadBundle\Routing\Loader\Resolver\RouteResolver $resolver
+     * @param Knp\RadBundle\Routing\Resolver\RouteResolver $resolver
      */
     function its_load_should_use_resolver_and_return_route_collection($resolver, $yaml)
     {
@@ -52,7 +52,7 @@ class ConventionalLoaderSpec extends ObjectBehavior
     }
 
     /**
-     * @param Knp\RadBundle\Routing\Loader\Resolver\RouteResolver $resolver
+     * @param Knp\RadBundle\Routing\Resolver\RouteResolver $resolver
      */
     function its_load_should_throw_an_exception_if_resolver_does_not_return_a_RouteCollection($resolver)
     {
