@@ -13,10 +13,10 @@ class ResourceResolverListener
     private $requestResolver;
     private $reflectionFactory;
 
-    public function __construct(RequestResolver $requestResolver, ReflectionFactory $reflectionFactory)
+    public function __construct(RequestResolver $requestResolver, ReflectionFactory $reflectionFactory = null)
     {
         $this->requestResolver = $requestResolver;
-        $this->reflectionFactory = $reflectionFactory;
+        $this->reflectionFactory = null !== $reflectionFactory ? $reflectionFactory : new ReflectionFactory;
     }
 
     public function onKernelController(FilterControllerEvent $event)
