@@ -3,6 +3,7 @@
 namespace Knp\RadBundle\Routing\Builder;
 
 use Knp\RadBundle\Routing\Loader\RadLoader;
+use Symfony\Component\Routing\Route;
 
 class MethodPartBuilder implements RoutePartBuilderInterface
 {
@@ -19,8 +20,13 @@ class MethodPartBuilder implements RoutePartBuilderInterface
             return $route;
         }
 
+        if (null !== $parent and isset($parent['methods'])) {
+            $route->setMethods($parent['methods']);
+            return $route;
+        }
+
         if (in_array($actionName, RadLoader::getDefaultActions())) {
-            $route->setMethods($this->getDefaultMethod($actionName))
+            $route->setMethods($this->getDefaultMethod($actionName));
         } else {
             $route->setMethods('GET');
         }

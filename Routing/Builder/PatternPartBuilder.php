@@ -16,8 +16,12 @@ class PatternPartBuilder implements RoutePartBuilderInterface
         array $actionDefinition = null,
         array $parent = null
     ) {
+        $parentPattern = (null !== $parent and isset($parent['pattern'])) ?
+            $parent['pattern'] :
+            null
+        ;
         if (null !== $actionDefinition and isset($actionDefinition['pattern'])) {
-            return $this->setPattern($route, $actionDefinition['pattern']);
+            return $this->setPattern($route, $parentPattern.$actionDefinition['pattern']);
         }
 
         $resources = explode(':', $resource);
@@ -44,7 +48,7 @@ class PatternPartBuilder implements RoutePartBuilderInterface
             $pattern = $this->createDefaultPattern($actionName, $resources[1]);
         }
 
-        return $this->setPattern($route, $pattern);
+        return $this->setPattern($route, $parentPattern.$pattern);
     }
 
     private function setPattern(Route $route, $pattern)
