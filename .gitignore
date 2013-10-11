@@ -1,5 +1,4 @@
 composer.lock
 vendor
 bin
-features/contexts/fixtures/tmp/*
 features/contexts/fixtures/cache/*
