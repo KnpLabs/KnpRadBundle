@@ -29,7 +29,7 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function iWriteIn($path, PyStringNode $class)
     {
-        $path = __DIR__.'/fixtures/tmp/'.$path;
+        $path = __DIR__.'/fixtures/'.$path;
         $this->fs->mkdir(dirname($path));
         file_put_contents($path, $class);
         require $path;
