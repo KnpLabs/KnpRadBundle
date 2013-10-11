@@ -43,4 +43,20 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
         $this->app->boot();
         $this->app->getContainer()->get('form.factory')->create($alias);
     }
+
+    /**
+     * @Then :alias should not be a registered form type
+     */
+    public function shouldNotBeARegisteredFormType($alias)
+    {
+        $this->app->boot();
+        try {
+            $this->app->getContainer()->get('form.factory')->create($alias);
+        } catch (\Exception $e) {
+            // all good
+            return;
+        }
+
+        throw new \LogicException(sprintf('Form type with alias %s was found', $alias));
+    }
 }

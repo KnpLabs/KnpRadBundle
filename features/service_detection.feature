@@ -23,5 +23,20 @@ Feature: Auto detection of forms
         Then "test" should be a registered form type
 
     Scenario: FormType class that does not implement correct Interface is not registered
+      Given I write in "App/Form/InvalidFormType.php":
+      """
+      <?php
+
+        namespace App\Form;
+
+        class InvalidFormType
+        {
+            function getName() {
+                return 'invalid';
+            }
+        }
+        """
+      Then "invalid" should not be a registered form type
+
 
     Scenario: If FormType implements ContainerAwareInterface, it should have the container
