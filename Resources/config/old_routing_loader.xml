@@ -5,17 +5,11 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="knp_rad.routing.loader.class">Knp\RadBundle\Routing\Loader\ConventionalLoader</parameter>
-        <parameter key="knp_rad.routing.resolver.class">Knp\RadBundle\Routing\Resolver\RouteResolver</parameter>
+        <parameter key="knp_rad.routing.loader.class">Knp\RadBundle\Routing\Loader\OldConventionalLoader</parameter>
     </parameters>
     <services>
-        <service id="knp_rad.routing.resolver" class="%knp_rad.routing.resolver.class%" public="false">
-        </service>
         <service id="knp_rad.routing.loader" class="%knp_rad.routing.loader.class%" public="false">
             <argument type="service" id="file_locator" />
-            <call method="setResolver">
-                <argument type="service" id="knp_rad.routing.resolver" />
-            </call>
             <tag name="routing.loader" />
         </service>
     </services>
