@@ -1,0 +1,6 @@
+default:
+  autoload: %paths.base%/features/contexts
+  suites:
+    default:
+      path: %paths.base%/features
+      context: FeatureContext

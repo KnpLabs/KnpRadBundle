@@ -16,6 +16,7 @@
         "fzaninotto/faker":         "*"
     },
     "require-dev": {
+        "behat/behat":                        "~3@dev",
         "phpspec/phpspec":                    "~2@dev",
         "symfony/swiftmailer-bundle":         "~2.3",
         "doctrine/orm":                       "~2.4",
