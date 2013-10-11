@@ -3,7 +3,7 @@
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
-require __DIR__.'/App/App.php';
+require __DIR__.'/tmp/App/App.php';
 
 class AppKernel extends Kernel
 {
@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             $container->loadFromExtension('framework', array(
                 'session' => true,
                 'form' => true,
+                'router' => array('resource' => __DIR__.'/routing.yml'),
             ));
         });
     }
@@ -32,5 +33,15 @@ class AppKernel extends Kernel
         $parameters['kernel.secret'] = 'secret!';
 
         return $parameters;
+    }
+
+    public function getCacheDir()
+    {
+        return $this->rootDir.'/tmp/cache/'.$this->environment;
+    }
+
+    public function getLogDir()
+    {
+        return $this->rootDir.'/tmp/logs';
     }
 }

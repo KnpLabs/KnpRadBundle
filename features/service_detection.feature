@@ -5,7 +5,7 @@ Feature: Auto detection of forms
 
     Scenario: Add a Form type that exists
 
-        Given I write in "App/Form/TestType.php":
+        Given I write in "Form/TestType.php":
         """
         <?php
 
