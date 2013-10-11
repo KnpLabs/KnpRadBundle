@@ -25,6 +25,15 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
     }
 
     /**
+     * @beforeScenario
+     */
+    public function clearFixtures()
+    {
+        // @todo make this more abstract, move to /tmp
+        $this->fs->remove(__DIR__.'/fixtures/App/Form/');
+    }
+
+    /**
      * @Given I write in :path:
      */
     public function iWriteIn($path, PyStringNode $class)
