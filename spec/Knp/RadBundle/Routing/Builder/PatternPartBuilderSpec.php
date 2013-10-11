@@ -79,19 +79,17 @@ class PatternPartBuilderSpec extends ObjectBehavior
 
     function its_build_should_add_pattern_to_a_given_parent_pattern()
     {
+        $parent = new Route(null);
+        $parent->setPattern('/parent');
         $this
             ->build(new Route(null), 'base_name', 'App:Test', 'action', array(
                 'pattern' => '/actions'
-            ), array(
-                'pattern' => '/parent'
-            ))
+            ), $parent)
             ->getPath()
             ->shouldReturn('/parent/actions')
         ;
         $this
-            ->build(new Route(null), 'base_name', 'App:Test', 'update', null, array(
-                'pattern' => '/parent'
-            ))
+            ->build(new Route(null), 'base_name', 'App:Test', 'update', null, $parent)
             ->getPath()
             ->shouldReturn('/parent/tests/{TestId}')
         ;

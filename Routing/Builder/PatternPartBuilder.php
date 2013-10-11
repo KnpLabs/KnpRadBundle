@@ -14,12 +14,9 @@ class PatternPartBuilder implements RoutePartBuilderInterface
         $resource,
         $actionName,
         array $actionDefinition = null,
-        array $parent = null
+        Route $parent = null
     ) {
-        $parentPattern = (null !== $parent and isset($parent['pattern'])) ?
-            $parent['pattern'] :
-            null
-        ;
+        $parentPattern = null === $parent ? '': $this->getParentPattern($parent, $actionName);
         if (null !== $actionDefinition and isset($actionDefinition['pattern'])) {
             return $this->setPattern($route, $parentPattern.$actionDefinition['pattern']);
         }
@@ -62,6 +59,21 @@ class PatternPartBuilder implements RoutePartBuilderInterface
         return $route;
     }
 
+    private function getParentPattern(Route $parent, $actionName)
+    {
+        if (method_exists($parent, 'getPath')) {
+            $pattern = $parent->getPath();
+        } else {
+            $pattern = $parent->getPattern();
+        }
+
+        if (in_array($actionName, ['new', 'edit'])) {
+            return str_replace(array('/new', '/edit'), '', $pattern);
+        }
+
+        return $pattern;
+    }
+
     private function createDefaultPattern($actionName, $resource)
     {
         $basePattern = sprintf(
@@ -84,13 +96,13 @@ class PatternPartBuilder implements RoutePartBuilderInterface
             case 'create':
                 return $basePattern;
             case 'show':
-                return sprintf('%s/{%sId}', $basePattern, $entity);
+                return sprintf('%s/{%s_id}', $basePattern, $entity);
             case 'edit':
-                return sprintf('%s/{%sId}/edit', $basePattern, $entity);
+                return sprintf('%s/{%s_id}/edit', $basePattern, $entity);
             case 'update':
-                return sprintf('%s/{%sId}', $basePattern, $entity);
+                return sprintf('%s/{%s_id}', $basePattern, $entity);
             case 'delete':
-                return sprintf('%s/{%sId}', $basePattern, $entity);
+                return sprintf('%s/{%s_id}', $basePattern, $entity);
         }
     }
 }

@@ -33,17 +33,17 @@ class DefaultsPartBuilderSpec extends ObjectBehavior
 
     function its_build_should_defined_defalts_route_key_with_parent_value()
     {
+        $parent = new Route(null);
+        $parent->setDefaults(array(
+            'foo' => 'baz',
+            'bar' => 'foo',
+        ));
         $this
             ->build(new Route(null), 'base_name', 'App:Test', 'action', array(
                 'defaults' => array(
                     'foo' => 'bar'
                 )
-            ), array(
-                'defaults' => array(
-                    'foo' => 'baz',
-                    'bar' => 'foo',
-                )
-            ))
+            ), $parent)
             ->getDefaults()
             ->shouldReturn(array('foo' => 'bar', 'bar' => 'foo'))
        ;

@@ -26,8 +26,8 @@ class RegisterRoutePartBuilderPassSpec extends ObjectBehavior
         $definition
     )
     {
-        $container->hasDefinition('knp_rad.routing.resolver')->willReturn(true);
-        $container->getDefinition('knp_rad.routing.resolver')->willReturn($definition);
+        $container->hasDefinition('knp_rad.routing.rad_loader')->willReturn(true);
+        $container->getDefinition('knp_rad.routing.rad_loader')->willReturn($definition);
         $container->findTaggedServiceIds('knp_rad.routing.part_builder')->willReturn(array(
             'id' => array('some_attributes')
         ));
@@ -45,7 +45,7 @@ class RegisterRoutePartBuilderPassSpec extends ObjectBehavior
         $definition
     )
     {
-        $container->hasDefinition('knp_rad.routing.resolver')->willReturn(false);
+        $container->hasDefinition('knp_rad.routing.rad_loader')->willReturn(false);
         $definition->addMethodCall(Argument::cetera())->shouldNotBeCalled();
 
         $this->process($container);

@@ -33,17 +33,17 @@ class RequirementsPartBuilderSpec extends ObjectBehavior
 
     function its_build_should_set_up_requirements_with_parent()
     {
+        $parent = new Route(null);
+        $parent->setRequirements(array(
+            'bar' => '\w+',
+            'foo' => '[A-Z]+',
+        ));
         $this
             ->build(new Route(null), 'base_name', 'App:Test', 'action', array(
                 'requirements' => array(
                     'foo' => '\d+',
                 )
-            ), array(
-                'requirements' => array(
-                    'bar' => '\w+',
-                    'foo' => '[A-Z]+',
-                )
-            ))
+            ), $parent)
             ->getRequirements()
             ->shouldReturn(array('bar' => '\w+', 'foo' => '\d+'))
         ;

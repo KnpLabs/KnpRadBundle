@@ -77,19 +77,17 @@ class MethodPartBuilderSpec extends ObjectBehavior
 
     function its_build_should_take_parent_methods_if_no_methods_are_given()
     {
+        $parent = new Route(null);
+        $parent->setMethods('PUT');
         $this
-            ->build(new Route(null), 'base_name', 'App:Test', 'action', array(), array(
-                'methods' => 'PUT'
-            ))
+            ->build(new Route(null), 'base_name', 'App:Test', 'action', array(), $parent)
             ->getMethods()
             ->shouldReturn(array('PUT'))
         ;
         $this
             ->build(new Route(null), 'base_name', 'App:Test', 'action', array(
                 'methods' => 'GET'
-            ), array(
-                'methods' => 'PUT'
-            ))
+            ), $parent)
             ->getMethods()
             ->shouldReturn(array('GET'))
         ;

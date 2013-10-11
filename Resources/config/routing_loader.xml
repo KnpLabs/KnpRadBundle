@@ -6,6 +6,8 @@
 
     <parameters>
         <parameter key="knp_rad.routing.loader.class">Knp\RadBundle\Routing\Loader\ConventionalLoader</parameter>
+        <parameter key="knp_rad.routing.rad_loader.class">Knp\RadBundle\Routing\Loader\RadLoader</parameter>
+        <parameter key="knp_rad.routing.default_yaml_loader.class">Knp\RadBundle\Routing\Loader\DefaultYamlLoader</parameter>
         <parameter key="knp_rad.routing.resolver.class">Knp\RadBundle\Routing\Resolver\RouteResolver</parameter>
         <parameter key="knp_rad.routing.builder.pattern.class">Knp\RadBundle\Routing\Builder\PatternPartBuilder</parameter>
         <parameter key="knp_rad.routing.builder.method.class">Knp\RadBundle\Routing\Builder\MethodPartBuilder</parameter>
@@ -14,9 +16,21 @@
         <parameter key="knp_rad.routing.builder.requirements.class">Knp\RadBundle\Routing\Builder\RequirementsPartBuilder</parameter>
     </parameters>
     <services>
-        <service id="knp_rad.routing.resolver" class="%knp_rad.routing.resolver.class%" public="false">
+        <service id="knp_rad.routing.rad_loader" class="%knp_rad.routing.rad_loader.class%" public="true">
         </service>
-        <service id="knp_rad.routing.loader" class="%knp_rad.routing.loader.class%" public="false">
+        <service id="knp_rad.routing.default_yaml_loader" class="%knp_rad.routing.default_yaml_loader.class%" public="true">
+            <argument type="service" id="file_locator" />
+        </service>
+        <service id="knp_rad.routing.resolver" class="%knp_rad.routing.resolver.class%" public="true">
+            <call method="add">
+                <argument type="service" id="knp_rad.routing.rad_loader" />
+            </call>
+            <call method="add">
+                <argument type="service" id="knp_rad.routing.default_yaml_loader" />
+            </call>
+        </service>
+
+        <service id="knp_rad.routing.loader" class="%knp_rad.routing.loader.class%" public="true">
             <argument type="service" id="file_locator" />
             <call method="setResolver">
                 <argument type="service" id="knp_rad.routing.resolver" />
@@ -27,19 +41,15 @@
         <service id="knp_rad.routing.builder.pattern" class="%knp_rad.routing.builder.pattern.class%" public="false">
             <tag name="knp_rad.routing.part_builder" />
         </service>
-
         <service id="knp_rad.routing.builder.method" class="%knp_rad.routing.builder.method.class%" public="false">
             <tag name="knp_rad.routing.part_builder" />
         </service>
-
         <service id="knp_rad.routing.builder.controller" class="%knp_rad.routing.builder.controller.class%" public="false">
             <tag name="knp_rad.routing.part_builder" />
         </service>
-
         <service id="knp_rad.routing.builder.defaults" class="%knp_rad.routing.builder.defaults.class%" public="false">
             <tag name="knp_rad.routing.part_builder" />
         </service>
-
         <service id="knp_rad.routing.builder.requirements" class="%knp_rad.routing.builder.requirements.class%" public="false">
             <tag name="knp_rad.routing.part_builder" />
         </service>

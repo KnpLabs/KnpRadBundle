@@ -62,7 +62,12 @@ class ConventionalLoader implements LoaderInterface
 
     public function setResolver(LoaderResolverInterface $resolver)
     {
-        $this->resolver = $resolver;
+        // Here are a potential symfny issue. An other resolver is automticaly
+        // set by symfony internal. In order to avoid this problem, just ensure that
+        // the resolver is set once !
+        if (null === $this->resolver) {
+            $this->resolver = $resolver;
+        }
     }
 
     public function getResolver()
