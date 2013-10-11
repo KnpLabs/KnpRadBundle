@@ -36,11 +36,11 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
     }
 
     /**
-     * @Then it should be registered
+     * @Then :alias should be a registered form type
      */
-    public function itShouldBeRegistered()
+    public function shouldBeARegisteredFormType($alias)
     {
         $this->app->boot();
-        $this->app->getContainer()->get('form.factory')->create('test');
+        $this->app->getContainer()->get('form.factory')->create($alias);
     }
 }

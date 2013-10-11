@@ -20,7 +20,7 @@ Feature: Auto detection of forms
             }
         }
         """
-        Then it should be registered
+        Then "test" should be a registered form type
 
     Scenario: FormType class that does not implement correct Interface is not registered
 
