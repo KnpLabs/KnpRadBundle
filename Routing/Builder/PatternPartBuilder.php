@@ -61,6 +61,11 @@ class PatternPartBuilder implements RoutePartBuilderInterface
 
     private function getParentPattern(array $parents, $actionName)
     {
+        $defaults = RadLoader::getDefaultActions();
+        if (!in_array($actionName, $defaults) and isset($parents[$actionName])) {
+            return $this->getPattern($parents[$actionName]);
+        }
+
         if (isset($parents['show'])) {
             return $this->getPattern($parents['show']);
         }
