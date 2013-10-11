@@ -13,7 +13,7 @@ class ControllerPartBuilder implements RoutePartBuilderInterface
         $resource,
         $actionName,
         array $actionDefinition = null,
-        Route $parent = null
+        array $parents = null
     ) {
         if (null !== $actionDefinition and
             isset($actionDefinition['defaults']) and

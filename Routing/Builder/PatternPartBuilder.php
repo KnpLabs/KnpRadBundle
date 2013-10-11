@@ -14,9 +14,9 @@ class PatternPartBuilder implements RoutePartBuilderInterface
         $resource,
         $actionName,
         array $actionDefinition = null,
-        Route $parent = null
+        array $parents = null
     ) {
-        $parentPattern = null === $parent ? '': $this->getParentPattern($parent, $actionName);
+        $parentPattern = null === $parents ? '' : $this->getParentPattern($parents, $actionName);
         if (null !== $actionDefinition and isset($actionDefinition['pattern'])) {
             return $this->setPattern($route, $parentPattern.$actionDefinition['pattern']);
         }
@@ -59,19 +59,28 @@ class PatternPartBuilder implements RoutePartBuilderInterface
         return $route;
     }
 
-    private function getParentPattern(Route $parent, $actionName)
+    private function getParentPattern(array $parents, $actionName)
     {
-        if (method_exists($parent, 'getPath')) {
-            $pattern = $parent->getPath();
+        if (isset($parents['show'])) {
+            return $this->getPattern($parents['show']);
+        }
+        if (isset($parents['update'])) {
+            return $this->getPattern($parents['update']);
+        }
+        if (isset($parents['delete'])) {
+            return $this->getPattern($parents['delete']);
+        }
+
+        return '';
+    }
+
+    private function getPattern(Route $route)
+    {
+        if (method_exists($route, 'getPath')) {
+            return $route->getPath();
         } else {
-            $pattern = $parent->getPattern();
+            return $route->getPattern();
         }
-
-        if (in_array($actionName, ['new', 'edit'])) {
-            return str_replace(array('/new', '/edit'), '', $pattern);
-        }
-
-        return $pattern;
     }
 
     private function createDefaultPattern($actionName, $resource)

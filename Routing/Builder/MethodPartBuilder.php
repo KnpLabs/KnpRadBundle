@@ -13,15 +13,15 @@ class MethodPartBuilder implements RoutePartBuilderInterface
         $resource,
         $actionName,
         array $actionDefinition = null,
-        Route $parent = null
+        array $parents = null
     ) {
         if (null !== $actionDefinition and isset($actionDefinition['methods'])) {
             $route->setMethods($actionDefinition['methods']);
             return $route;
         }
 
-        if (null !== $parent) {
-            $route->setMethods($parent->getMethods());
+        if (null !== $parents and isset($parents[$actionName])) {
+            $route->setMethods($parents[$actionName]->getMethods());
             return $route;
         }
 

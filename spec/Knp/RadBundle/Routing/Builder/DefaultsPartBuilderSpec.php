@@ -43,7 +43,7 @@ class DefaultsPartBuilderSpec extends ObjectBehavior
                 'defaults' => array(
                     'foo' => 'bar'
                 )
-            ), $parent)
+            ), array('action' => $parent))
             ->getDefaults()
             ->shouldReturn(array('foo' => 'bar', 'bar' => 'foo'))
        ;

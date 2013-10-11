@@ -12,6 +12,6 @@ interface RoutePartBuilderInterface
         $resource,
         $actionName,
         array $actionDefinition = null,
-        Route $parent = null
+        array $parents = null
     );
 }

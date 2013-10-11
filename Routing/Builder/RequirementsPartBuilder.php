@@ -12,12 +12,12 @@ class RequirementsPartBuilder implements RoutePartBuilderInterface
         $resource,
         $actionName,
         array $actionDefinition = null,
-        Route $parent = null
+        array $parents = null
     ) {
         if (null !== $actionDefinition and isset($actionDefinition['requirements'])) {
-            if (null !== $parent) {
+            if (null !== $parents and isset($parents[$actionName])) {
                 return $route->addRequirements(array_merge(
-                    $parent->getRequirements(),
+                    $parents[$actionName]->getRequirements(),
                     $actionDefinition['requirements']
                 ));
             }

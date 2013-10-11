@@ -43,7 +43,7 @@ class RequirementsPartBuilderSpec extends ObjectBehavior
                 'requirements' => array(
                     'foo' => '\d+',
                 )
-            ), $parent)
+            ), array('action' => $parent))
             ->getRequirements()
             ->shouldReturn(array('bar' => '\w+', 'foo' => '\d+'))
         ;

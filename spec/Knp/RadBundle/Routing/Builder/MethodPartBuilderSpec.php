@@ -80,14 +80,14 @@ class MethodPartBuilderSpec extends ObjectBehavior
         $parent = new Route(null);
         $parent->setMethods('PUT');
         $this
-            ->build(new Route(null), 'base_name', 'App:Test', 'action', array(), $parent)
+            ->build(new Route(null), 'base_name', 'App:Test', 'action', array(), array('action' => $parent))
             ->getMethods()
             ->shouldReturn(array('PUT'))
         ;
         $this
             ->build(new Route(null), 'base_name', 'App:Test', 'action', array(
                 'methods' => 'GET'
-            ), $parent)
+            ), array('action' => $parent))
             ->getMethods()
             ->shouldReturn(array('GET'))
         ;

@@ -58,22 +58,22 @@ class PatternPartBuilderSpec extends ObjectBehavior
         $this
             ->build(new Route(null), 'base_name', 'App:Test', 'show')
             ->getPath()
-            ->shouldReturn('/tests/{TestId}')
+            ->shouldReturn('/tests/{Test_id}')
         ;
         $this
             ->build(new Route(null), 'base_name', 'App:Test', 'edit')
             ->getPath()
-            ->shouldReturn('/tests/{TestId}/edit')
+            ->shouldReturn('/tests/{Test_id}/edit')
         ;
         $this
             ->build(new Route(null), 'base_name', 'App:Test', 'update')
             ->getPath()
-            ->shouldReturn('/tests/{TestId}')
+            ->shouldReturn('/tests/{Test_id}')
         ;
         $this
             ->build(new Route(null), 'base_name', 'App:Test', 'delete')
             ->getPath()
-            ->shouldReturn('/tests/{TestId}')
+            ->shouldReturn('/tests/{Test_id}')
         ;
     }
 
@@ -84,14 +84,14 @@ class PatternPartBuilderSpec extends ObjectBehavior
         $this
             ->build(new Route(null), 'base_name', 'App:Test', 'action', array(
                 'pattern' => '/actions'
-            ), $parent)
+            ), array('action' => $parent))
             ->getPath()
             ->shouldReturn('/parent/actions')
         ;
         $this
-            ->build(new Route(null), 'base_name', 'App:Test', 'update', null, $parent)
+            ->build(new Route(null), 'base_name', 'App:Test', 'update', null, array('update' => $parent))
             ->getPath()
-            ->shouldReturn('/parent/tests/{TestId}')
+            ->shouldReturn('/parent/tests/{Test_id}')
         ;
     }
 

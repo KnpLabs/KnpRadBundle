@@ -13,15 +13,15 @@ class DefaultsPartBuilder implements RoutePartBuilderInterface
         $resource,
         $actionName,
         array $actionDefinition = null,
-        Route $parent = null
+        array $parents = null
     ) {
         if (null !== $actionDefinition and
             isset($actionDefinition['defaults']) and
             is_array($actionDefinition['defaults'])
         ) {
-            if (null !== $parent) {
+            if (null !== $parents and isset($parents[$actionName])) {
                 return $route->addDefaults(array_merge(
-                    $parent->getDefaults(),
+                    $parents[$actionName]->getDefaults(),
                     $actionDefinition['defaults']
                 ));
             } else {

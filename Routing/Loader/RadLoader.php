@@ -57,9 +57,9 @@ class RadLoader implements LoaderInterface
 
         foreach ($actions as $actionName => $actionDefinition) {
             $route = new Route(null);
-            $parentRoute = !isset($config['parent']) ?
+            $parents = !isset($config['parent']) ?
                 null :
-                $this->getParentRoute($config['parent'], $actionName)
+                $this->getParents($config['parent'])
             ;
             foreach ($this->builders as $builder) {
                 $builder->build(
@@ -68,7 +68,7 @@ class RadLoader implements LoaderInterface
                     $resource,
                     $actionName,
                     $actionDefinition,
-                    $parentRoute
+                    $parents
                 );
             }
             $routeName = sprintf(
@@ -160,16 +160,12 @@ class RadLoader implements LoaderInterface
         return array();
     }
 
-    private function getParentRoute($type, $action)
+    private function getParents($name)
     {
-        if (!isset($this->cache[$type])) {
+        if (!isset($this->cache[$name])) {
             return null;
         }
 
-        if (!isset($this->cache[$type][$action])) {
-            return null;
-        }
-
-        return $this->cache[$type][$action];
+        return $this->cache[$name];
     }
 }
