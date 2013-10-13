@@ -77,6 +77,20 @@ class PatternPartBuilderSpec extends ObjectBehavior
         ;
     }
 
+    function its_build_should_take_the_precised_property_for_build_parameter_name()
+    {
+        $route = new Route(null);
+        $route->addDefaults(array(
+            '_property' => 'bar',
+        ));
+
+        $this
+            ->build($route, 'base_name', 'App:Test', 'update')
+            ->getPath()
+            ->shouldReturn('/tests/{Test_bar}')
+        ;
+    }
+
     function its_build_should_add_pattern_to_a_given_parent_pattern()
     {
         $parent = new Route(null);
