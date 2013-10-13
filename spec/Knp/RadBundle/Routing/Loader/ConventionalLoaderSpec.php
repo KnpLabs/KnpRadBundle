@@ -20,9 +20,9 @@ class ConventionalLoaderSpec extends ObjectBehavior
         $this->beConstructedWith($locator, $yaml);
 
         $locator->locate('routing.yml')->willReturn('yaml file');
-        $yaml->parse('yaml file')->willReturn([
-            'route_key' => ['route configuration']
-        ]);
+        $yaml->parse('yaml file')->willReturn(array(
+            'route_key' => array('route configuration')
+        ));
     }
 
     function it_should_support_conventional_resources()
