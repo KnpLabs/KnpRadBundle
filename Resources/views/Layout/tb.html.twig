@@ -6,8 +6,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('bundles/knprad/common/js/jquery-1.8.2.min.js') }}"></script>
-    <script src="{{ asset('bundles/knprad/bootstrap/js/bootstrap.min.js') }}"></script>
+    {{ parent() }}
 {% endblock %}
 
 {% block flashes %}
