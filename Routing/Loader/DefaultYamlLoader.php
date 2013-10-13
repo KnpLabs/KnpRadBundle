@@ -11,10 +11,15 @@ class DefaultYamlLoader extends YamlFileLoader
     {
         $filename = tempnam(sys_get_temp_dir(), 'routing');
         file_put_contents(
-            Yaml::dump(array($type => $resource)),
-            $filename
+            $filename,
+            Yaml::dump(array($type => $resource))
         );
 
         return parent::load($filename, $type);
+    }
+
+    public function supports($resource, $type = null)
+    {
+        return true;
     }
 }

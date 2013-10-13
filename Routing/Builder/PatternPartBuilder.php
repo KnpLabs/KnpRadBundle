@@ -42,7 +42,9 @@ class PatternPartBuilder implements RoutePartBuilderInterface
                 Inflector::tableize($actionName)
             );
         } else {
-            $pattern = $this->createDefaultPattern($actionName, $resources[1]);
+            $defaults = $route->getDefaults();
+            $property = isset($defaults['_property']) ? $defaults['_property'] : 'id';
+            $pattern = $this->createDefaultPattern($actionName, $resources[1], $property);
         }
 
         return $this->setPattern($route, $parentPattern.$pattern);
@@ -88,7 +90,7 @@ class PatternPartBuilder implements RoutePartBuilderInterface
         }
     }
 
-    private function createDefaultPattern($actionName, $resource)
+    private function createDefaultPattern($actionName, $resource, $property = 'id')
     {
         $basePattern = sprintf(
             '/%s',
@@ -110,13 +112,13 @@ class PatternPartBuilder implements RoutePartBuilderInterface
             case 'create':
                 return $basePattern;
             case 'show':
-                return sprintf('%s/{%s_id}', $basePattern, $entity);
+                return sprintf('%s/{%s_%s}', $basePattern, $entity, $property);
             case 'edit':
-                return sprintf('%s/{%s_id}/edit', $basePattern, $entity);
+                return sprintf('%s/{%s_%s}/edit', $basePattern, $entity, $property);
             case 'update':
-                return sprintf('%s/{%s_id}', $basePattern, $entity);
+                return sprintf('%s/{%s_%s}', $basePattern, $entity, $property);
             case 'delete':
-                return sprintf('%s/{%s_id}', $basePattern, $entity);
+                return sprintf('%s/{%s_%s}', $basePattern, $entity, $property);
         }
     }
 }

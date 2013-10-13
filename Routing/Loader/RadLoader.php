@@ -57,6 +57,11 @@ class RadLoader implements LoaderInterface
 
         foreach ($actions as $actionName => $actionDefinition) {
             $route = new Route(null);
+            if (isset($config['property'])) {
+                $route->addDefaults(array(
+                    '_property' => $config['property'],
+                ));
+            }
             $parents = !isset($config['parent']) ?
                 null :
                 $this->getParents($config['parent'])
@@ -79,10 +84,11 @@ class RadLoader implements LoaderInterface
 
             $collection->add($routeName, $route);
 
-            if (!isset($this->cache[$type])) {
-                $this->cache[$type] = array();
+            $cacheName = str_replace('@', '', $type);
+            if (!isset($this->cache[$cacheName])) {
+                $this->cache[$cacheName] = array();
             }
-            $this->cache[$type][$actionName] = $route;
+            $this->cache[$cacheName][$actionName] = $route;
         }
 
         return $collection;
@@ -162,6 +168,7 @@ class RadLoader implements LoaderInterface
 
     private function getParents($name)
     {
+        $name = str_replace('@', '', $name);
         if (!isset($this->cache[$name])) {
             return null;
         }

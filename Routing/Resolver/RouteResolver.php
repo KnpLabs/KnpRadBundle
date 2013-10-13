@@ -47,7 +47,7 @@ class RouteResolver implements LoaderResolverInterface
         }
 
         throw new RouteNotFoundException(sprintf(
-            'The route with type %s does not have a matching loader :(',
+            'The route with type %s does not have a matching loader',
             $type
         ));
     }
