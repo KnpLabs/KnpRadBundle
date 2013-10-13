@@ -16,7 +16,7 @@ class RouteResolver implements LoaderResolverInterface
 
     public function __construct()
     {
-        $this->loaders = [];
+        $this->loaders = array();
     }
 
     /**
