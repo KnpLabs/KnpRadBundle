@@ -14,6 +14,7 @@
         <parameter key="knp_rad.routing.builder.controller.class">Knp\RadBundle\Routing\Builder\ControllerPartBuilder</parameter>
         <parameter key="knp_rad.routing.builder.defaults.class">Knp\RadBundle\Routing\Builder\DefaultsPartBuilder</parameter>
         <parameter key="knp_rad.routing.builder.requirements.class">Knp\RadBundle\Routing\Builder\RequirementsPartBuilder</parameter>
+        <parameter key="knp_rad.routing.old_loader.class">Knp\RadBundle\Routing\Loader\OldConventionalLoader</parameter>
     </parameters>
     <services>
         <service id="knp_rad.routing.rad_loader" class="%knp_rad.routing.rad_loader.class%" public="true">
@@ -30,6 +31,10 @@
             </call>
         </service>
 
+        <service id="knp_rad.routing.old_loader" class="%knp_rad.routing.old_loader.class%" public="false">
+            <argument type="service" id="file_locator" />
+            <tag name="routing.loader" />
+        </service>
         <service id="knp_rad.routing.loader" class="%knp_rad.routing.loader.class%" public="true">
             <argument type="service" id="file_locator" />
             <call method="setResolver">

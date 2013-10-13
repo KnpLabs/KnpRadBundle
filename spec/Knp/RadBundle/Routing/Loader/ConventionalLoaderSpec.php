@@ -27,7 +27,7 @@ class ConventionalLoaderSpec extends ObjectBehavior
 
     function it_should_support_conventional_resources()
     {
-        $this->supports('', 'rad_convention')->shouldReturn(true);
+        $this->supports('', '@rad_convention')->shouldReturn(true);
     }
 
     function it_should_not_support_other_resources()
