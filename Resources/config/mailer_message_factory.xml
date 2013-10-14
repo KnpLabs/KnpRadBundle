@@ -13,7 +13,7 @@
         <service id="knp_rad.mailer.message_factory" class="%knp_rad.mailer.message_factory.class%" public="true">
             <argument type="service" id="mailer" />
             <argument type="service" id="twig" />
-            <argument type="string"></argument>
+            <argument type="service" id="knp_rad.bundle.guesser" />
             <tag name="remove-when-missing" service="twig" />
             <tag name="remove-when-missing" service="mailer" />
         </service>

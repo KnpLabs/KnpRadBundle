@@ -23,7 +23,7 @@
             <argument type="service" id="twig" />
             <argument type="service" id="controller_name_converter" />
             <argument>twig</argument>
-            <argument type="string"></argument>
+            <argument type="service" id="knp_rad.bundle.guesser" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
             <tag name="remove-when-missing" service="templating" />
             <tag name="remove-when-missing" service="twig" />

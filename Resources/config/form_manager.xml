@@ -23,7 +23,7 @@
             <argument type="service" id="knp_rad.reflection.metadata_fetcher" />
             <argument type="service" id="form.factory" />
             <argument type="service" id="form.registry" />
-            <argument type="string"></argument>
+            <argument type="service" id="knp_rad.bundle.guesser" />
             <tag name="knp_rad.form.creator" priority="2"/>
             <tag name="remove-when-missing" service="form.factory" />
         </service>

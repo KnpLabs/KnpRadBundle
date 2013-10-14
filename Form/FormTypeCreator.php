@@ -5,20 +5,21 @@ namespace Knp\RadBundle\Form;
 use Knp\RadBundle\Reflection\ClassMetadataFetcher;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormRegistryInterface;
+use Knp\RadBundle\AppBundle\BundleGuesser;
 
 class FormTypeCreator implements FormCreatorInterface
 {
     private $fetcher;
     private $factory;
     private $formRegistry;
-    private $bundleNamespace;
+    private $bundleGuesser;
 
-    public function __construct(ClassMetadataFetcher $fetcher = null, FormFactoryInterface $factory, FormRegistryInterface $formRegistry, $bundleNamespace)
+    public function __construct(ClassMetadataFetcher $fetcher = null, FormFactoryInterface $factory, FormRegistryInterface $formRegistry, BundleGuesser $bundleGuesser)
     {
         $this->fetcher         = $fetcher ?: new ClassMetadataFetcher;
         $this->factory         = $factory;
         $this->formRegistry    = $formRegistry;
-        $this->bundleNamespace = $bundleNamespace;
+        $this->bundleGuesser   = $bundleGuesser;
     }
 
     public function create($object, $purpose = null, array $options = array())
@@ -33,9 +34,10 @@ class FormTypeCreator implements FormCreatorInterface
     private function getFormType($object, $purpose = null)
     {
         $currentPurpose = $purpose ? $purpose.'_' : '';
+        $bundle = $this->bundleGuesser->getBundleForClass($object);
 
         $id = sprintf('app.form.%s%s_type', $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
-        $class = sprintf('%s\\Form\\%s%sType', $this->bundleNamespace, ucfirst($purpose), $this->fetcher->getShortClassName($object));
+        $class = sprintf('%s\\Form\\%s%sType', $bundle->getNamespace(), ucfirst($purpose), $this->fetcher->getShortClassName($object));
         $type = $this->getAlias($class, $id);
 
         if (!$this->formRegistry->hasType($type)) {
