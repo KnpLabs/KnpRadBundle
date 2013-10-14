@@ -16,12 +16,19 @@ class ViewListenerSpec extends ObjectBehavior
      * @param Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent $event
      * @param Knp\RadBundle\EventListener\MissingViewHandler                         $mvh
      * @param Twig_ExistsLoaderInterface                                             $teli
+     * @param Knp\RadBundle\AppBundle\BundleGuesser                                  $bundleGuesser
+     * @param Symfony\Component\HttpKernel\Bundle\BundleInterface                    $bundle
      */
-    function let($request, $twig, $response, $engine, $cnp, $reqManip, $event, $mvh, $teli)
+    function let($request, $twig, $response, $engine, $cnp, $reqManip, $event, $mvh, $teli, $bundleGuesser, $bundle)
     {
-        $this->beConstructedWith($engine, $twig, $cnp, 'twig', 'App', $mvh, $reqManip);
-
         $event->getRequest()->willReturn($request);
+        $twig->getLoader()->willReturn($teli);
+
+        $bundleGuesser->hasBundleForClass(\Prophecy\Argument::any())->willReturn(true);
+        $bundleGuesser->getBundleForClass(\Prophecy\Argument::any())->willReturn($bundle);
+        $bundle->getName()->willReturn('App');
+
+        $this->beConstructedWith($engine, $twig, $cnp, 'twig', $bundleGuesser, $mvh, $reqManip);
     }
 
     function it_should_create_a_view_response_when_controller_did_not_return_any($request, $response, $reqManip, $engine, $twig, $event, $mvh, $teli)
@@ -31,7 +38,6 @@ class ViewListenerSpec extends ObjectBehavior
 
         $request->getRequestFormat()->willReturn('html');
 
-        $twig->getLoader()->willReturn($teli);
         $teli->exists('App:Cheese:eat.html.twig')->willReturn(true);
         $engine->renderResponse('App:Cheese:eat.html.twig', array('foo' => 'bar'))->willReturn($response);
 
@@ -125,7 +131,6 @@ class ViewListenerSpec extends ObjectBehavior
 
         $event->getControllerResult()->willReturn(array('foo' => 'bar'));
 
-        $twig->getLoader()->willReturn($teli);
         $teli->exists('App:Cheese:eat.html.twig')->willReturn(false);
 
         $mvh->handleMissingView($event, 'App:Cheese:eat.html.twig', array('foo' => 'bar'))->shouldBeCalled();
@@ -133,18 +138,15 @@ class ViewListenerSpec extends ObjectBehavior
         $this->onKernelView($event);
     }
 
-    function it_should_deduce_view_with_correct_bundle_name($request, $response, $reqManip, $engine, $twig, $event, $cnp, $mvh, $teli)
+    function it_should_deduce_view_with_correct_bundle_name($request, $response, $reqManip, $engine, $twig, $event, $cnp, $mvh, $teli, $bundle)
     {
-        $this->beConstructedWith($engine, $twig, $cnp, 'twig', 'TestBundle', $mvh, $reqManip);
-
+        $bundle->getName()->willReturn('TestBundle');
         $reqManip->hasAttribute($request, '_controller')->willReturn(true);
-        $reqManip->getAttribute($request, '_controller')->willReturn('App\Controller\CheeseController::eatAction');
+        $reqManip->getAttribute($request, '_controller')->willReturn('TestBundle\Controller\CheeseController::eatAction');
 
         $request->getRequestFormat()->willReturn('html');
-
         $event->getControllerResult()->willReturn(array('foo' => 'bar'));
 
-        $twig->getLoader()->willReturn($teli);
         $teli->exists('TestBundle:Cheese:eat.html.twig')->willReturn(false);
         $mvh->handleMissingView($event, 'TestBundle:Cheese:eat.html.twig', array('foo' => 'bar'))->shouldBeCalled();
 
@@ -171,7 +173,6 @@ class ViewListenerSpec extends ObjectBehavior
         $reqManip->getAttribute($request, '_controller')->willReturn('App\Controller\CheeseController::eatAction');
 
         $request->getRequestFormat()->willReturn('html');
-
         $event->getControllerResult()->willReturn(array('foo' => 'bar'));
 
         $twig->getLoader()->willReturn($tli);

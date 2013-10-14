@@ -32,7 +32,7 @@ class Controller extends BaseController
 
     protected function createMessage($name, array $parameters = array(), $from = null, $to = null)
     {
-        $message = $this->get('knp_rad.mailer.message_factory')->createMessage($name, $parameters);
+        $message = $this->get('knp_rad.mailer.message_factory')->createMessage(get_class($this), $name, $parameters);
 
         if ($from) {
             $message->setFrom($from);

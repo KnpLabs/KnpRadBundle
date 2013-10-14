@@ -16,7 +16,7 @@ class ResourceResolverListener
     public function __construct(RequestResolver $requestResolver, ReflectionFactory $reflectionFactory = null)
     {
         $this->requestResolver = $requestResolver;
-        $this->reflectionFactory = null !== $reflectionFactory ? $reflectionFactory : new ReflectionFactory;
+        $this->reflectionFactory = $reflectionFactory ?: new ReflectionFactory;
     }
 
     public function onKernelController(FilterControllerEvent $event)

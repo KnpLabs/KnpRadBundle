@@ -4,25 +4,27 @@ namespace Knp\RadBundle\Mailer;
 
 use Swift_Mailer;
 use Twig_Environment;
+use Knp\RadBundle\AppBundle\BundleGuesser;
 
 class MessageFactory
 {
     private $mailer;
     private $twig;
-    private $bundleName;
+    private $bundleGuesser;
 
-    public function __construct(Swift_Mailer $mailer, Twig_Environment $twig, $bundleName)
+    public function __construct(Swift_Mailer $mailer, Twig_Environment $twig, BundleGuesser $bundleGuesser)
     {
         $this->mailer     = $mailer;
         $this->twig       = $twig;
-        $this->bundleName = $bundleName;
+        $this->bundleGuesser = $bundleGuesser;
     }
 
-    public function createMessage($name, array $parameters)
+    public function createMessage($class, $name, array $parameters)
     {
         $subject = $txtBody = $htmlBody = null;
-        $txtTpl  = sprintf('%s:Mails:%s.txt.twig', $this->bundleName, $name);
-        $htmlTpl = sprintf('%s:Mails:%s.html.twig', $this->bundleName, $name);
+        $bundle  = $this->bundleGuesser->getBundleForClass($class);
+        $txtTpl  = sprintf('%s:Mails:%s.txt.twig', $bundle->getName(), $name);
+        $htmlTpl = sprintf('%s:Mails:%s.html.twig', $bundle->getName(), $name);
 
         if (true === $this->twig->getLoader()->exists($txtTpl)) {
             $template = $this->twig->loadTemplate($txtTpl);
