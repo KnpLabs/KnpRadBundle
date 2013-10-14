@@ -10,4 +10,6 @@ before_script:
   - composer install --prefer-source --dev
   - 'curl -H "Accept: text/plain" https://security.sensiolabs.org/check_lock -F lock=@composer.lock -s | grep "No known"'
 
-script: ./bin/phpspec run -fpretty
+script:
+    - ./bin/phpspec run -fpretty
+    - ./bin/behat
