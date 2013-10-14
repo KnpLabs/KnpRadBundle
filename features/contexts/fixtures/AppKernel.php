@@ -11,6 +11,7 @@ class AppKernel extends Kernel
     {
         return array(
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle,
+            new Symfony\Bundle\TwigBundle\TwigBundle,
             new \Knp\RadBundle\KnpRadBundle,
             new \App\App,
         );
@@ -23,6 +24,9 @@ class AppKernel extends Kernel
                 'session' => true,
                 'form' => true,
                 'router' => array('resource' => __DIR__.'/routing.yml'),
+                'templating' => array(
+                    'engines' => array('twig'),
+                ),
             ));
         });
     }
