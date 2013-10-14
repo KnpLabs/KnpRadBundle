@@ -22,6 +22,7 @@ class AppKernel extends Kernel
         $loader->load(function($container) {
             $container->loadFromExtension('framework', array(
                 'session' => true,
+                'secret' => '%kernel.secret%',
                 'form' => true,
                 'router' => array('resource' => __DIR__.'/routing.yml'),
                 'templating' => array(
