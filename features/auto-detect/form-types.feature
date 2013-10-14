@@ -15,7 +15,8 @@ Feature: Auto detection of forms
 
         class TestType extends AbstractType
         {
-            function getName() {
+            function getName()
+            {
                 return 'test';
             }
         }
@@ -23,7 +24,7 @@ Feature: Auto detection of forms
         Then "test" should be a registered form type
 
     Scenario: FormType class that does not implement correct Interface is not registered
-      Given I write in "App/Form/InvalidFormType.php":
+      Given I write in "Form/InvalidFormType.php":
       """
       <?php
 
@@ -31,12 +32,12 @@ Feature: Auto detection of forms
 
         class InvalidFormType
         {
-            function getName() {
+            function getName()
+            {
                 return 'invalid';
             }
         }
         """
       Then "invalid" should not be a registered form type
-
 
     Scenario: If FormType implements ContainerAwareInterface, it should have the container

@@ -28,17 +28,19 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
         $this->tmpDir = __DIR__.'/fixtures/tmp/App';
         require_once $this->tmpDir.'/../../AppKernel.php';
 
-        $this->app = new AppKernel('test', true);
+        $this->app = new AppKernel('test', false);
+        $this->app->boot();
         $this->fs = new Filesystem;
     }
 
     /**
-     * @beforeScenario
+     * @BeforeScenario
      */
     public function clearFixtures()
     {
-        // @todo make this more abstract, move to /tmp
-        $this->fs->remove(__DIR__.'/fixtures/App/Form/');
+        $this->fs->remove($this->tmpDir.'/Form');
+        $this->fs->remove($this->tmpDir.'/Controller');
+        $this->fs->remove($this->tmpDir.'/Resources');
     }
 
     /**
@@ -55,7 +57,6 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function shouldBeARegisteredFormType($alias)
     {
-        $this->app->boot();
         $this->app->getContainer()->get('form.factory')->create($alias);
     }
 
@@ -64,7 +65,6 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function shouldNotBeARegisteredFormType($alias)
     {
-        $this->app->boot();
         try {
             $this->app->getContainer()->get('form.factory')->create($alias);
         } catch (\Exception $e) {
@@ -80,16 +80,15 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function iAddRouteForController($controller)
     {
-        $this->app->boot();
         $this
             ->app
             ->getContainer()
             ->get('router')
             ->getRouteCollection()
-            ->add(
-                $controller,
-                new Route(str_replace(':', '/', strtolower($controller)), ['_controller' => $controller])
-            )
+            ->add($controller, new Route(
+                str_replace(':', '/', strtolower($controller)),
+                array('_controller' => $controller)
+            ))
         ;
     }
 
@@ -113,7 +112,6 @@ class {$controller}Controller extends Controller
 CONTROLLER;
 
         $this->writeContent($path, $code);
-        require $path;
     }
 
     /**
@@ -145,9 +143,12 @@ CONTROLLER;
         }
     }
 
-    private function writeContent($file, $content)
+    private function writeContent($path, $content)
     {
-        $this->fs->mkdir(dirname($file));
-        file_put_contents($file, $content);
+        $this->fs->mkdir(dirname($path));
+        file_put_contents($path, $content);
+        if ('.php' === substr($path, -4)) {
+            require $path;
+        }
     }
 }

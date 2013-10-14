@@ -10,7 +10,7 @@ Feature: Template resolution
             return array();
         }
         """
-        And I write in "Resources/Foo/bar.html.twig":
+        And I write in "Resources/views/Foo/bar.html.twig":
         """
         Hello from bar action.
         """
