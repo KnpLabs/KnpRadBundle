@@ -48,8 +48,6 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
     {
         $path = $this->tmpDir.'/'.$path;
         $this->writeContent($path, $class);
-
-        require $path;
     }
 
     /**
@@ -115,6 +113,7 @@ class {$controller}Controller extends Controller
 CONTROLLER;
 
         $this->writeContent($path, $code);
+        require $path;
     }
 
     /**
