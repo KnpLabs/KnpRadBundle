@@ -6,11 +6,20 @@
 
     <parameters>
         <parameter key="knp_rad.routing.loader.class">Knp\RadBundle\Routing\Loader\ConventionalLoader</parameter>
+        <parameter key="knp_rad.routing.loader.conventional.symfony22.class">Knp\RadBundle\Routing\Loader\ConventionalLoader\CollectionGenerator\Symfony22</parameter>
     </parameters>
     <services>
         <service id="knp_rad.routing.loader" class="%knp_rad.routing.loader.class%" public="false">
             <argument type="service" id="file_locator" />
+            <argument type="service" id="knp_rad.routing.loader.conventional.collection_generator" />
+            <argument type="service" id="routing.loader.yml" />
             <tag name="routing.loader" />
+        </service>
+
+        <service id="knp_rad.routing.loader.conventional.symfony22" class="%knp_rad.routing.loader.conventional.symfony22.class%" public="false">
+        </service>
+
+        <service id="knp_rad.routing.loader.conventional.collection_generator" alias="knp_rad.routing.loader.conventional.symfony22" public="false">
         </service>
     </services>
 
