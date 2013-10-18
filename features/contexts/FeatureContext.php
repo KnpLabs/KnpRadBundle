@@ -10,27 +10,25 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 
-/**
- * Behat context class.
- */
 class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
 {
     private $tmpDir;
+    private $wroteContents = array();
+    private $fs;
+    private $app;
     private $lastResponse;
 
     /**
-     * Initializes context. Every scenario gets it's own context object.
+     * Initializes context. Every scenario gets its own context object.
      *
      * @param array $parameters Suite parameters (set them up through behat.yml)
      */
     public function __construct(array $parameters)
     {
-        $this->tmpDir = __DIR__.'/fixtures/tmp/App';
-        require_once $this->tmpDir.'/../../AppKernel.php';
-
-        $this->app = new AppKernel('test', false);
-        $this->app->boot();
         $this->fs = new Filesystem;
+        $this->tmpDir = __DIR__.'/fixtures/tmp/App';
+        $this->app = new \App\AppKernel('test', true);
+        $this->app->boot();
     }
 
     /**
@@ -38,9 +36,9 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function clearFixtures()
     {
-        $this->fs->remove($this->tmpDir.'/Form');
-        $this->fs->remove($this->tmpDir.'/Controller');
-        $this->fs->remove($this->tmpDir.'/Resources');
+        foreach ($this->wroteContents as $path) {
+            $this->fs->remove($path);
+        }
     }
 
     /**
@@ -146,9 +144,8 @@ CONTROLLER;
     private function writeContent($path, $content)
     {
         $this->fs->mkdir(dirname($path));
-        file_put_contents($path, $content);
-        if ('.php' === substr($path, -4)) {
-            require $path;
+        if (file_put_contents($path, $content)) {
+            $this->wroteContents[] = $path;
         }
     }
 }
