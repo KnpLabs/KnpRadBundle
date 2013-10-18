@@ -12,8 +12,9 @@
     "require": {
         "php":                      ">=5.3.3",
         "symfony/symfony":          "~2.4",
-        "nelmio/alice":             "*",
-        "fzaninotto/faker":         "*"
+        "symfony/symfony":          "~2.3",
+        "nelmio/alice":             "~1.5",
+        "fzaninotto/faker":         "~1.2"
     },
     "require-dev": {
         "behat/behat":                        "~3@dev",
