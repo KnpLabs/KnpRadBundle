@@ -12,14 +12,14 @@
     "require": {
         "php":                      ">=5.3.3",
         "symfony/symfony":          "~2.3",
-        "nelmio/alice":             "*",
-        "fzaninotto/faker":         "*"
+        "nelmio/alice":             "~1.5",
+        "fzaninotto/faker":         "~1.2"
     },
     "require-dev": {
-        "behat/behat":                        "~3@dev",
-        "phpspec/phpspec":                    "~2@dev",
-        "symfony/swiftmailer-bundle":         "2.2.*",
-        "doctrine/orm":                       "~2.2,>=2.2.3",
+        "behat/behat":                        "~3.0@dev",
+        "phpspec/phpspec":                    "~2.0@dev",
+        "symfony/swiftmailer-bundle":         "~2.2",
+        "doctrine/orm":                       "~2.4",
         "doctrine/doctrine-fixtures-bundle":  "dev-master",
         "twig/twig":                          "~1.11"
     },
