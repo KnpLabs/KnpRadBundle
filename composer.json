@@ -35,7 +35,7 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Knp\\RadBundle": "", "App": "features/contexts/fixtures/tmp" }
+        "psr-0": { "Knp\\RadBundle": "" }
     },
     "target-dir": "Knp/RadBundle"
 }

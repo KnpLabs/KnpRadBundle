@@ -1,9 +1,9 @@
 <?php
 
+namespace App;
+
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
-
-require __DIR__.'/tmp/App/App.php';
 
 class AppKernel extends Kernel
 {
@@ -11,7 +11,7 @@ class AppKernel extends Kernel
     {
         return array(
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle,
-            new Symfony\Bundle\TwigBundle\TwigBundle,
+            new \Symfony\Bundle\TwigBundle\TwigBundle,
             new \Knp\RadBundle\KnpRadBundle,
             new \App\App,
         );
@@ -21,9 +21,12 @@ class AppKernel extends Kernel
     {
         $loader->load(function($container) {
             $container->loadFromExtension('framework', array(
-                'session' => true,
+                'test' => null,
+                'session' => array(
+                    'storage_id' => 'session.storage.mock_file',
+                ),
                 'secret' => '%kernel.secret%',
-                'form' => true,
+                'form' => null,
                 'router' => array('resource' => __DIR__.'/routing.yml'),
                 'templating' => array(
                     'engines' => array('twig'),
@@ -42,11 +45,11 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        return $this->rootDir.'/tmp/cache/'.$this->environment;
+        return $this->rootDir.'/../cache/'.$this->environment;
     }
 
     public function getLogDir()
     {
-        return $this->rootDir.'/tmp/logs';
+        return $this->rootDir.'/../logs';
     }
 }
