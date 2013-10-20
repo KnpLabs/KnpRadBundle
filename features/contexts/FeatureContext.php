@@ -13,7 +13,6 @@ use Symfony\Component\Routing\Route;
 class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
 {
     private $tmpDir;
-    private $wroteContents = array();
     private $fs;
     private $app;
     private $lastResponse;
@@ -29,30 +28,6 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
         $this->tmpDir = __DIR__.'/fixtures/tmp/App';
         $this->app = new \App\AppKernel('test', true);
         $this->app->boot();
-    }
-
-    /**
-     * @BeforeScenario
-     */
-    public function clearCache()
-    {
-        $this
-            ->app
-            ->getContainer()
-            ->get('cache_clearer')
-            ->clear($this->tmpDir.'/../cache/test')
-        ;
-        // $this->fs->remove($this->tmpDir.'/../cache/test');
-    }
-
-    /**
-     * @AfterScenario
-     */
-    public function clearFixtures()
-    {
-        foreach ($this->wroteContents as $path) {
-            $this->fs->remove($path);
-        }
     }
 
     /**
@@ -198,8 +173,6 @@ CONTROLLER;
     private function writeContent($path, $content)
     {
         $this->fs->mkdir(dirname($path));
-        if (file_put_contents($path, $content)) {
-            $this->wroteContents[] = $path;
-        }
+        file_put_contents($path, $content);
     }
 }
