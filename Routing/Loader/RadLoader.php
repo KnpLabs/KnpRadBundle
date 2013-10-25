@@ -66,6 +66,7 @@ class RadLoader implements LoaderInterface
                 null :
                 $this->getParents($config['parent'])
             ;
+            $route = $this->recursivelyAddRequirements($route, $resource, $config, $parents);
             foreach ($this->builders as $builder) {
                 $builder->build(
                     $route,
@@ -87,6 +88,19 @@ class RadLoader implements LoaderInterface
             if (!isset($this->cache[$type])) {
                 $this->cache[$type] = array();
             }
+
+            if (!isset($this->cache[$type]['property']) and isset($config['property'])) {
+                $this->cache[$type]['property'] = $config['property'];
+            }
+
+            if (!isset($this->cache[$type]['requirement']) and isset($config['requirement'])) {
+                $this->cache[$type]['requirement'] = $config['requirement'];
+            }
+
+            if (!isset($this->cache[$type]['parent']) and isset($config['parent'])) {
+                $this->cache[$type]['parent'] = $config['parent'];
+            }
+
             $this->cache[$type][$actionName] = $route;
         }
 
@@ -172,5 +186,33 @@ class RadLoader implements LoaderInterface
         }
 
         return $this->cache[$name];
+    }
+
+    private function recursivelyAddRequirements(Route $route, $resource, array $config, array $parents = null)
+    {
+        if (!isset($config['property'])) {
+            $config['property'] = 'id';
+        }
+
+        if (isset($config['requirement'])) {
+            $resources = explode(':', $resource);
+            $propertyName = sprintf(
+                '%s_%s',
+                str_replace('\\', '/', array_pop($resources)),
+                $config['property']
+            );
+            $route->addRequirements(array($propertyName => $config['requirement']));
+        }
+
+        if (null === $parents) {
+            return $route;
+        }
+
+        $elder = isset($parents['parent']) ?
+            $this->getParents($parents['parent']) :
+            null
+        ;
+
+        return $this->recursivelyAddRequirements($route, $config['parent'], $parents, $elder);
     }
 }
