@@ -42,6 +42,14 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
     }
 
     /**
+     * @BeforeScenario
+     */
+    public function clearCache()
+    {
+        $this->fs->remove($this->tmpDir.'/../cache/test');
+    }
+
+    /**
      * @Given I write in :path:
      */
     public function iWriteIn($path, PyStringNode $class)
