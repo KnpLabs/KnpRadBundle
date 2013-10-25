@@ -39,5 +39,3 @@ Feature: Auto detection of forms
         }
         """
       Then "invalid" should not be a registered form type
-
-    Scenario: If FormType implements ContainerAwareInterface, it should have the container
