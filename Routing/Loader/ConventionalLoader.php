@@ -24,7 +24,7 @@ class ConventionalLoader implements LoaderInterface
 
     public function supports($resource, $type = null)
     {
-        return '@rad_convention' === $type;
+        return 'knp_rad' === $type;
     }
 
     public function load($file, $type = null)

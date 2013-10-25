@@ -84,11 +84,10 @@ class RadLoader implements LoaderInterface
 
             $collection->add($routeName, $route);
 
-            $cacheName = str_replace('@', '', $type);
-            if (!isset($this->cache[$cacheName])) {
-                $this->cache[$cacheName] = array();
+            if (!isset($this->cache[$type])) {
+                $this->cache[$type] = array();
             }
-            $this->cache[$cacheName][$actionName] = $route;
+            $this->cache[$type][$actionName] = $route;
         }
 
         return $collection;
@@ -96,7 +95,7 @@ class RadLoader implements LoaderInterface
 
     public function supports($config, $type = null)
     {
-        return 0 === strpos($type, '@');
+        return true;
     }
 
     public function getResolver()
@@ -110,7 +109,7 @@ class RadLoader implements LoaderInterface
     private function guessBaseName($type)
     {
         if (false === strpos($type, ':')) {
-            return strtolower(Inflector::tableize(substr($type, 1)));
+            return strtolower(Inflector::tableize($type));
         } else {
             return implode('_', array_map(
                 function ($v) {
@@ -120,7 +119,7 @@ class RadLoader implements LoaderInterface
                         $v
                     )));
                 },
-                explode(':', substr($type, 1))
+                explode(':', $type)
             ));
         }
     }
@@ -135,7 +134,7 @@ class RadLoader implements LoaderInterface
             ));
         }
 
-        return substr($type, 1);
+        return $type;
     }
 
     private function definedDefaultActions()
@@ -168,7 +167,6 @@ class RadLoader implements LoaderInterface
 
     private function getParents($name)
     {
-        $name = str_replace('@', '', $name);
         if (!isset($this->cache[$name])) {
             return null;
         }

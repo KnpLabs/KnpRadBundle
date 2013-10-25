@@ -17,12 +17,6 @@ class RadLoaderSpec extends ObjectBehavior
         $this->shouldHaveType('Symfony\Component\Config\Loader\LoaderInterface');
     }
 
-    function its_supports_should_only_support_rad_definition()
-    {
-        $this->supports(array(), 'InvalidDefinition')->shouldReturn(false);
-        $this->supports(array(), '@valid_definition')->shouldReturn(true);
-    }
-
     function its_load_should_guess_the_routes_name()
     {
         $this
@@ -34,7 +28,7 @@ class RadLoaderSpec extends ObjectBehavior
                     )
                 ),
                 'resource' => 'Bundle:Resource'
-            ), '@SomeName')
+            ), 'SomeName')
             ->get('some_name_some_action')
             ->shouldHaveType('Symfony\Component\Routing\Route')
         ;
@@ -47,7 +41,7 @@ class RadLoaderSpec extends ObjectBehavior
                         'pattern' => '/action'
                     )
                 )
-            ), '@Bundle:Namespace\\SubNamespace/Resource')
+            ), 'Bundle:Namespace\\SubNamespace/Resource')
             ->get('bundle_namespace_sub_namespace_resource_some_action')
             ->shouldHaveType('Symfony\Component\Routing\Route')
         ;
@@ -64,7 +58,7 @@ class RadLoaderSpec extends ObjectBehavior
                         'pattern' => '/foo'
                     )
                 )
-            ), '@InvalidResource')
+            ), 'InvalidResource')
         ;
 
         $this
@@ -76,50 +70,50 @@ class RadLoaderSpec extends ObjectBehavior
                         'pattern' => '/foo'
                     )
                 )
-            ), '@Bundle:Resource')
+            ), 'Bundle:Resource')
         ;
     }
 
     function its_load_should_defined_seven_rest_actions_when_no_actions_is_precised()
     {
         $this
-            ->load(array(), '@Foo:Bar')
+            ->load(array(), 'Foo:Bar')
             ->count()
             ->shouldReturn(7)
         ;
 
         $this
-            ->load(array(), '@Foo:Bar')
+            ->load(array(), 'Foo:Bar')
             ->get('foo_bar_index')
             ->shouldHaveType('Symfony\Component\Routing\Route')
         ;
         $this
-            ->load(array(), '@Foo:Bar')
+            ->load(array(), 'Foo:Bar')
             ->get('foo_bar_new')
             ->shouldHaveType('Symfony\Component\Routing\Route')
         ;
         $this
-            ->load(array(), '@Foo:Bar')
+            ->load(array(), 'Foo:Bar')
             ->get('foo_bar_create')
             ->shouldHaveType('Symfony\Component\Routing\Route')
         ;
         $this
-            ->load(array(), '@Foo:Bar')
+            ->load(array(), 'Foo:Bar')
             ->get('foo_bar_show')
             ->shouldHaveType('Symfony\Component\Routing\Route')
         ;
         $this
-            ->load(array(), '@Foo:Bar')
+            ->load(array(), 'Foo:Bar')
             ->get('foo_bar_edit')
             ->shouldHaveType('Symfony\Component\Routing\Route')
         ;
         $this
-            ->load(array(), '@Foo:Bar')
+            ->load(array(), 'Foo:Bar')
             ->get('foo_bar_update')
             ->shouldHaveType('Symfony\Component\Routing\Route')
         ;
         $this
-            ->load(array(), '@Foo:Bar')
+            ->load(array(), 'Foo:Bar')
             ->get('foo_bar_delete')
             ->shouldHaveType('Symfony\Component\Routing\Route')
         ;
@@ -132,7 +126,7 @@ class RadLoaderSpec extends ObjectBehavior
                 'actions' => array(
                     'new' => null
                 )
-            ), '@My:Resource')
+            ), 'My:Resource')
             ->get('my_resource_new')
             ->shouldHaveType('Symfony\Component\Routing\Route')
         ;
@@ -146,7 +140,7 @@ class RadLoaderSpec extends ObjectBehavior
                 'actions' => array(
                     'no_default' => null
                 )
-            ), '@Test:Resource')
+            ), 'Test:Resource')
         ;
     }
 
@@ -162,6 +156,6 @@ class RadLoaderSpec extends ObjectBehavior
         $builder1->build(Argument::cetera())->shouldBeCalled(1);
         $builder2->build(Argument::cetera())->shouldBeCalled(1);
 
-        $this->load(array(), '@Foo:Bar');
+        $this->load(array(), 'Foo:Bar');
     }
 }

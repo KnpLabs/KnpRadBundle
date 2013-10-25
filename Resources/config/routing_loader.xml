@@ -19,15 +19,9 @@
     <services>
         <service id="knp_rad.routing.rad_loader" class="%knp_rad.routing.rad_loader.class%" public="true">
         </service>
-        <service id="knp_rad.routing.default_yaml_loader" class="%knp_rad.routing.default_yaml_loader.class%" public="true">
-            <argument type="service" id="file_locator" />
-        </service>
         <service id="knp_rad.routing.resolver" class="%knp_rad.routing.resolver.class%" public="true">
             <call method="add">
                 <argument type="service" id="knp_rad.routing.rad_loader" />
-            </call>
-            <call method="add">
-                <argument type="service" id="knp_rad.routing.default_yaml_loader" />
             </call>
         </service>
 
