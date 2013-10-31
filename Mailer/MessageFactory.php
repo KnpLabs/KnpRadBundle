@@ -12,6 +12,11 @@ class MessageFactory
     private $twig;
     private $bundleGuesser;
 
+    /**
+     * @param \Swift_Mailer $mailer
+     * @param \Twig_Environment $twig
+     * @param \BundleGuesser
+     */
     public function __construct(Swift_Mailer $mailer, Twig_Environment $twig, BundleGuesser $bundleGuesser)
     {
         $this->mailer     = $mailer;
@@ -19,6 +24,13 @@ class MessageFactory
         $this->bundleGuesser = $bundleGuesser;
     }
 
+    /**
+     * @param string $class
+     * @param string $name
+     * @param array  $parameters
+     * 
+     * @return object
+     */
     public function createMessage($class, $name, array $parameters)
     {
         $subject = $txtBody = $htmlBody = null;
