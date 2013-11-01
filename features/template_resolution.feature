@@ -4,17 +4,25 @@ Feature: Template resolution
     I need rad bundle to auto resolve template location
 
     Scenario: Auto resolution
-        Given I write in Foo controller:
+        Given I write in "Controller/FooController.php":
         """
-        public function barAction() {
-            return array();
+        <?php
+
+        namespace App\Controller;
+
+        class FooController
+        {
+            public function barAction()
+            {
+                return new \Symfony\Component\HttpFoundation\Response;
+            }
         }
         """
+        And I add route for "App:Foo:bar"
         And I write in "Resources/views/Foo/bar.html.twig":
         """
         Hello from bar action.
         """
-        And I add route for "App:Foo:bar"
         When I visit "App:Foo:bar" page
         Then I should see "Hello from bar action."
 
