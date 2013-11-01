@@ -1,0 +1,23 @@
+filter:
+    excluded_paths:
+        - Resources/public
+
+tools:
+    php_mess_detector: ~
+    php_cs_fixer:
+        config:
+            level: all
+    php_analyzer: ~
+    php_code_sniffer:
+        config:
+            standard: PSR2
+    sensiolabs_security_checker: true
+    php_cpd: ~
+    php_loc:
+        excluded_dirs:
+            - vendor/
+            - web/
+    php_pdepend:
+        excluded_dirs:
+            - vendor/
+            - web/
