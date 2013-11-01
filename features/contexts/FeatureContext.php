@@ -1,7 +1,8 @@
 <?php
 
 use Behat\Behat\Context\ContextInterface;
-use Behat\Behat\Snippet\Context\SnippetsFriendlyInterface;
+use Behat\Behat\Snippet\Context\TurnipSnippetsFriendlyInterface;
+use Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface;
 use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
@@ -9,13 +10,18 @@ use Behat\Behat\Exception\BehaviorException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
+use Behat\MinkExtension\Context\MinkDictionary;
+use Behat\MinkExtension\Context\MinkAwareInterface;
+use Symfony\Component\Yaml\Yaml;
 
-class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
+class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnippetsFriendlyInterface, RegexSnippetsFriendlyInterface
 {
     private $tmpDir;
     private $fs;
     private $app;
     private $lastResponse;
+
+    use MinkDictionary;
 
     /**
      * Initializes context. Every scenario gets its own context object.
@@ -28,6 +34,14 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
         $this->tmpDir = __DIR__.'/fixtures/tmp/App';
         $this->app = new \App\AppKernel('test', true);
         $this->app->boot();
+    }
+
+    /**
+     * @BeforeScenario
+     **/
+    public function removeCache()
+    {
+        $this->fs->remove($this->tmpDir.'/../cache');
     }
 
     /**
@@ -103,48 +117,32 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
     }
 
     /**
-     * @Given I add route for :controller
+     * @Given /I add route for "([^"]*)":?$/
      */
-    public function iAddRouteForController($controller)
+    public function iAddRouteForController($controller, TableNode $defaultParams = null)
     {
-        $this
-            ->app
-            ->getContainer()
-            ->get('router')
-            ->getRouteCollection()
-            ->add($controller, new Route(
-                str_replace(':', '/', strtolower($controller)),
-                array('_controller' => $controller)
-            ))
-        ;
-    }
+        $defaults = array('_controller' => $controller);
+        if ($defaultParams) {
+            $defaults = array_merge($defaults, $defaultParams->getRowsHash());
+            array_walk($defaults, function($value) {
+                if (in_array($value, array('false', 'true'))) {
+                    $value = $value === 'true';
+                }
+            });
+        }
 
-    /**
-     * @Given I write in :controller controller:
-     */
-    public function iWriteInController($controller, PyStringNode $code)
-    {
-        $path = $this->tmpDir.'/Controller/'.$controller.'Controller.php';
-        $code = <<<CONTROLLER
-<?php
-
-namespace App\Controller;
-
-use Knp\RadBundle\Controller\Controller;
-
-class {$controller}Controller extends Controller
-{
-{$code}
-}
-CONTROLLER;
-
-        $this->writeContent($path, $code);
+        fwrite(fopen($this->tmpDir.'/Resources/config/routing.yml', 'a+'), Yaml::dump(array(
+            $controller => array(
+                'pattern' => str_replace(':', '/', strtolower($controller)),
+                'defaults' => $defaults,
+            )
+        )));
     }
 
     /**
      * @When I visit :route page
      */
-    public function iVisitRoute($route)
+    public function visitRoute($route)
     {
         $url = $this
             ->app
@@ -152,22 +150,8 @@ CONTROLLER;
             ->get('router')
             ->generate($route)
         ;
-        $request = Request::create($url);
-        $this->lastResponse = $this->app->handle($request);
-    }
 
-    /**
-     * @Then I should see :text
-     */
-    public function iShouldSee($text)
-    {
-        if (false === strpos($this->lastResponse->getContent(), $text)) {
-            throw new BehaviorException(sprintf(
-                '"%s" not found in "%s".',
-                $text,
-                $this->lastResponse->getContent()
-            ));
-        }
+        $this->visit($url);
     }
 
     private function writeContent($path, $content)

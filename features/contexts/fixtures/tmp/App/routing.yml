@@ -1,3 +1,6 @@
 _knp_rad_assistant:
     resource: "@KnpRadBundle/Resources/config/routing/assistant.xml"
     prefix:   /_assistant
+
+_rad:
+    resource: "@App/Resources/config/routing.yml"

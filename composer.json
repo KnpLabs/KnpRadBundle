@@ -18,6 +18,8 @@
     },
     "require-dev": {
         "behat/behat":                        "~3@dev",
+        "behat/mink-extension":               "*@dev",
+        "behat/mink-selenium2-driver":        "*@dev",
         "phpspec/phpspec":                    "~2@dev",
         "symfony/swiftmailer-bundle":         "~2.3",
         "doctrine/orm":                       "~2.4",

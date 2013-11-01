@@ -26,12 +26,16 @@ class AppKernel extends Kernel
                     'storage_id' => 'session.storage.mock_file',
                 ),
                 'secret' => '%kernel.secret%',
+                'csrf_protection' => null,
                 'form' => null,
                 'router' => array('resource' => __DIR__.'/routing.yml'),
                 'validation' => array('enable_annotations' => true),
                 'templating' => array(
                     'engines' => array('twig'),
                 ),
+            ));
+            $container->loadFromExtension('knp_rad', array(
+                'csrf_links' => array('enabled' => true,),
             ));
         });
     }
