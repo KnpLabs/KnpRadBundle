@@ -60,9 +60,7 @@ class DataTypeGuesser implements FormTypeGuesserInterface
             }
         }
 
-        $type = gettype($value);
-
-        switch ($type) {
+        switch (gettype($value)) {
             case 'boolean':
                 return 'checkbox';
             case 'array':
@@ -73,4 +71,3 @@ class DataTypeGuesser implements FormTypeGuesserInterface
         }
     }
 }
-

@@ -14,7 +14,7 @@ interface ObjectStoreInterface
     /**
      * Stores the given object
      *
-     * @param  mixed $object
+     * @param mixed $object
      */
     public function store($object);
 

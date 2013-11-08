@@ -24,7 +24,6 @@ class ResourceResolverListener
         $request = $event->getRequest();
         $controller = $event->getController();
 
-
         foreach ($this->getParameters($controller) as $param) {
             $name = $param->getName();
             if (!$this->requestResolver->hasResourceOptions($request, $name)) {

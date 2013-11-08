@@ -26,7 +26,7 @@ class PathDeducer
     /**
      * Returns the path corresponding to the specified view name
      *
-     * @param  string $logicalName A logical view name (i.e FooBundle:Bar:baz.html.twig)
+     * @param string $logicalName A logical view name (i.e FooBundle:Bar:baz.html.twig)
      *
      * @return string The path of the view
      */

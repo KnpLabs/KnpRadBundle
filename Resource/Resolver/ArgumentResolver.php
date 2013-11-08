@@ -2,7 +2,6 @@
 
 namespace Knp\RadBundle\Resource\Resolver;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Knp\RadBundle\HttpFoundation\RequestManipulator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;

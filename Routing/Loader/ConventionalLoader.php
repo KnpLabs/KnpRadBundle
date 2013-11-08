@@ -169,7 +169,7 @@ class ConventionalLoader extends YamlFileLoader
                 $this->parseImport($collection, $mapping, $path, $file);
             // Symfony 2.1
             } else {
-                $getOr = function($key, $def) use($mapping) {
+                $getOr = function ($key, $def) use ($mapping) {
                     return isset($mapping[$key]) ? $mapping[$key] : $def;
                 };
 
@@ -231,7 +231,7 @@ class ConventionalLoader extends YamlFileLoader
 
         return $requirements;
     }
-    
+
     private function getOptionsFromMapping($mapping, $routeType = 'collections')
     {
         $options = array();

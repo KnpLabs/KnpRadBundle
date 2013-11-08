@@ -2,8 +2,6 @@
 
 namespace Knp\RadBundle\DependencyInjection\Compiler;
 
-namespace Knp\RadBundle\DependencyInjection\Compiler;
-
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Knp\RadBundle\Finder\ClassFinder;

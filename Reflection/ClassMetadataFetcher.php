@@ -47,7 +47,7 @@ class ClassMetadataFetcher
 
     public function getProperties($object)
     {
-        return array_map(function($property) {
+        return array_map(function ($property) {
             return $property->getName();
         }, $this->reflect($object)->getProperties(\ReflectionProperty::IS_PUBLIC));
     }

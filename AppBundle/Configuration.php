@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = $this->treeBuilderFactory->createTreeBuilder();
         $alias       = $this->bundle->getContainerExtension()->getAlias();
         $rootNode    = $treeBuilder->root($alias);
-        
+
         $this->bundle->buildConfiguration($rootNode);
 
         return $treeBuilder;

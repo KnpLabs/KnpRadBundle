@@ -3,7 +3,6 @@
 namespace Knp\RadBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class RemoveUnavailableServicesPass implements CompilerPassInterface
