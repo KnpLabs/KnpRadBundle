@@ -28,6 +28,7 @@ class AppKernel extends Kernel
                 'secret' => '%kernel.secret%',
                 'form' => null,
                 'router' => array('resource' => __DIR__.'/routing.yml'),
+                'validation' => array('enable_annotations' => true),
                 'templating' => array(
                     'engines' => array('twig'),
                 ),

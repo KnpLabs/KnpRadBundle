@@ -110,6 +110,24 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
     }
 
     /**
+     * @Then :alias should be a registered validator
+     */
+    public function shouldBeARegisteredValidator($alias)
+    {
+        $this->app->getContainer()->get(sprintf('app.constraints.validator.%s_validator', $alias));
+    }
+
+    /**
+     * @Then :alias should not be a registered validator
+     */
+    public function shouldNotBeARegisteredValidator($alias)
+    {
+        if ($this->app->getContainer()->has(sprintf('app.constraints.validator.%s_validator', $alias))) {
+            throw new \LogicException(sprintf('Valdiator with alias %s was found.', $alias));
+        }
+    }
+
+    /**
      * @Given I add route for :controller
      */
     public function iAddRouteForController($controller)
