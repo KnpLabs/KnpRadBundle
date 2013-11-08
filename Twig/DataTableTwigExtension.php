@@ -91,7 +91,7 @@ class DataTableTwigExtension extends \Twig_Extension
                     }
                 }
 
-            } else if(is_array($el)) {
+            } elseif (is_array($el)) {
 
                 foreach ($el as $key => $value) {
                     if (!in_array($key, $headers) && (0 === count($fields) || array_key_exists($key, $fields))) {
@@ -134,7 +134,7 @@ class DataTableTwigExtension extends \Twig_Extension
                 }
             }
 
-        } else if(is_array($el)) {
+        } elseif (is_array($el)) {
 
             foreach ($el as $key => $value) {
                 if (!is_object($value) && !is_array($value)) {
@@ -153,7 +153,7 @@ class DataTableTwigExtension extends \Twig_Extension
 
         return array_filter(
             $rfl->getMethods(\ReflectionMethod::IS_PUBLIC),
-            function($method){
+            function ($method) {
                 return preg_match('#get.*#', $method->name) && 0 === count($method->getParameters());
             }
 

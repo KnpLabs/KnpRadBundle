@@ -15,7 +15,6 @@ class DefaultFormCreator implements FormCreatorInterface, EventSubscriberInterfa
     private $factory;
     private $dataTypeGuesser;
 
-
     public function __construct(ClassMetadataFetcher $fetcher = null, FormFactoryInterface $factory, DataTypeGuesser $dataTypeGuesser)
     {
         $this->fetcher = $fetcher ?: new ClassMetadataFetcher;

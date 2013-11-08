@@ -16,7 +16,7 @@ class PathExpander
     /**
      * Expands the given path if needed (i.e bundle resource path)
      *
-     * @param  string $path The path to expand
+     * @param string $path The path to expand
      *
      * @return string The expanded path
      */

@@ -46,8 +46,7 @@ class BundleGuesser
     {
         try {
             $this->getBundleForClass($class);
-        }
-        catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
             return false;
         }
 

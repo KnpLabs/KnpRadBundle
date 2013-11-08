@@ -2,9 +2,6 @@
 
 namespace Knp\RadBundle\Twig;
 
-use Knp\RadBundle\Flash\Message;
-use Knp\RadBundle\Flash\MessageRenderer;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 
 class LinkAttributesExtension extends \Twig_Extension

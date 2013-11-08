@@ -4,7 +4,6 @@ namespace Knp\RadBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityRepository;
 use Knp\RadBundle\Flash;
 
@@ -86,7 +85,7 @@ class Controller extends BaseController
             $result = $repository->$findMethod($criterias);
         }
 
-        if (null !== $result){
+        if (null !== $result) {
             return $result;
         }
 

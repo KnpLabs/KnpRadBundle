@@ -3,7 +3,6 @@
 namespace Knp\RadBundle\Doctrine;
 
 use Doctrine\ORM\EntityRepository as BaseEntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\Common\Util\Inflector;
 
 class EntityRepository extends BaseEntityRepository

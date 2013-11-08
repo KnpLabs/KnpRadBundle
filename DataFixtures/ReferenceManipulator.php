@@ -43,7 +43,7 @@ class ReferenceManipulator
 
         return preg_replace_callback(
             '#^(.*)(\d+)$#',
-            function($matches){ return $matches[1].intval($matches[2]+1); },
+            function ($matches) { return $matches[1].intval($matches[2]+1); },
             $referenceName
         );
     }

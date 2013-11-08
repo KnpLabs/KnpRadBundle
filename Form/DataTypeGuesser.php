@@ -73,4 +73,3 @@ class DataTypeGuesser implements FormTypeGuesserInterface
         }
     }
 }
-

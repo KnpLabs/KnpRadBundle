@@ -26,4 +26,3 @@ class RegisterAppBundlePass implements CompilerPassInterface
         }
     }
 }
-

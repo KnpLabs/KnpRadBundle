@@ -53,7 +53,7 @@ class ClassFinder
     {
         $reflectionFactory = $this->reflectionFactory;
 
-        return array_filter($classes, function($class) use($interface, $reflectionFactory) {
+        return array_filter($classes, function ($class) use ($interface, $reflectionFactory) {
             return $reflectionFactory->createReflectionClass($class)->isSubclassOf($interface);
         });
     }
