@@ -34,6 +34,20 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
     /**
      * @BeforeScenario
      */
+    public function clearCache()
+    {
+        $this
+            ->app
+            ->getContainer()
+            ->get('cache_clearer')
+            ->clear($this->tmpDir.'/../cache/test')
+        ;
+        // $this->fs->remove($this->tmpDir.'/../cache/test');
+    }
+
+    /**
+     * @AfterScenario
+     */
     public function clearFixtures()
     {
         foreach ($this->wroteContents as $path) {
@@ -71,6 +85,46 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
         }
 
         throw new \LogicException(sprintf('Form type with alias %s was found', $alias));
+    }
+
+    /**
+     * @Then :alias should be a registered twig extension
+     */
+    public function shouldBeARegisteredTwigExtension($alias)
+    {
+        $this->app->getContainer()->get(sprintf('app.twig.%s_extension', $alias));
+
+        $twig = $this->app->getContainer()->get('twig');
+        $twig->setLoader(new \Twig_Loader_String());
+        $twig->render(sprintf('{{ %s() }}', $alias));
+    }
+
+    /**
+     * @Then :alias should not be a registered twig extension
+     */
+    public function shouldNotBeARegisteredTwigExtension($alias)
+    {
+        if ($this->app->getContainer()->has(sprintf('app.twig.%s_extension', $alias))) {
+            throw new \LogicException(sprintf('Twig extension with alias %s was found.', $alias));
+        }
+    }
+
+    /**
+     * @Then :alias should be a registered validator
+     */
+    public function shouldBeARegisteredValidator($alias)
+    {
+        $this->app->getContainer()->get(sprintf('app.constraints.validator.%s_validator', $alias));
+    }
+
+    /**
+     * @Then :alias should not be a registered validator
+     */
+    public function shouldNotBeARegisteredValidator($alias)
+    {
+        if ($this->app->getContainer()->has(sprintf('app.constraints.validator.%s_validator', $alias))) {
+            throw new \LogicException(sprintf('Valdiator with alias %s was found.', $alias));
+        }
     }
 
     /**
