@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace fixtures;
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -13,7 +13,7 @@ class AppKernel extends Kernel
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle,
             new \Symfony\Bundle\TwigBundle\TwigBundle,
             new \Knp\RadBundle\KnpRadBundle,
-            new \App\App,
+            new \fixtures\App,
         );
     }
 
@@ -50,11 +50,18 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        return $this->rootDir.'/../cache/'.$this->environment;
+        return $this->rootDir.'/tmp/cache/'.$this->environment;
     }
 
     public function getLogDir()
     {
-        return $this->rootDir.'/../logs';
+        return $this->rootDir.'/tmp/logs';
+    }
+
+    public function getContainer()
+    {
+        $this->boot();
+
+        return parent::getContainer();
     }
 }

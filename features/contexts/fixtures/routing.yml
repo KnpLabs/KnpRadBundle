@@ -4,3 +4,4 @@ _knp_rad_assistant:
 
 _rad:
     resource: "@App/Resources/config/routing.yml"
+    type: rad_convention

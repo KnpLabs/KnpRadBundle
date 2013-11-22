@@ -3,36 +3,31 @@ Feature: Template resolution
     As a developer
     I need rad bundle to auto resolve template location
 
-    Scenario: Auto resolution
-        Given I write in "Controller/FooController.php":
+    Background:
+        Given I write in "App/Controller/FooController.php":
         """
-        <?php
-
-        namespace App\Controller;
-
-        class FooController
-        {
-            public function barAction()
+        <?php namespace App\Controller {
+            class FooController
             {
-                return new \Symfony\Component\HttpFoundation\Response;
+                public function barAction() {}
+                public function bazAction() {}
             }
         }
         """
-        And I add route for "App:Foo:bar"
-        And I write in "Resources/views/Foo/bar.html.twig":
+        And I write in "App/Resources/config/routing.yml":
+        """
+        App:Foo:bar: ~
+        App:Foo:baz: ~
+        """
+
+    Scenario: Auto resolution
+        Given I write in "App/Resources/views/Foo/bar.html.twig":
         """
         Hello from bar action.
         """
-        When I visit "App:Foo:bar" page
+        When I visit "app_foo_bar" page
         Then I should see "Hello from bar action."
 
     Scenario: Missing template
-        Given I write in Foo controller:
-        """
-        public function bazAction() {
-            return array();
-        }
-        """
-        And I add route for "App:Foo:baz"
-        When I visit "App:Foo:baz" page
-        Then I should see 'The view "<strong>App:Foo:baz.html.twig</strong>" is missing.'
+        Given I visit "app_foo_baz" page
+        Then I should see text matching "The view .*App:Foo:baz.html.twig.* is missing"

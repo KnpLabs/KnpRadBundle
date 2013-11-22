@@ -4,7 +4,7 @@ Feature: Auto detection of Twig extensions
     I need rad bundle to register DI services automatically
 
     Scenario: Add a Twig extension that exists
-        Given I write in "Twig/FooExtension.php":
+        Given I write in "App/Twig/FooExtension.php":
         """
         <?php
 
@@ -28,14 +28,14 @@ Feature: Auto detection of Twig extensions
         Then "foo" should be a registered twig extension
 
     Scenario: Twig extension that does not implement correct Interface is not registered
-        Given I write in "Twig/FooExtension.php":
+        Given I write in "App/Twig/NotFooExtension.php":
         """
         <?php
 
         namespace App\Twig;
 
-        class FooExtension
+        class NotFooExtension
         {
         }
         """
-        Then "foo" should not be a registered twig extension
+        Then "not_foo" should not be a registered twig extension

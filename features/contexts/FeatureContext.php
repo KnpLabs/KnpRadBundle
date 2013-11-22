@@ -14,12 +14,14 @@ use Behat\MinkExtension\Context\MinkDictionary;
 use Behat\MinkExtension\Context\MinkAwareInterface;
 use Symfony\Component\Yaml\Yaml;
 
-class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnippetsFriendlyInterface, RegexSnippetsFriendlyInterface
+class FeatureContext implements ContextInterface,
+                                MinkAwareInterface,
+                                TurnipSnippetsFriendlyInterface,
+                                RegexSnippetsFriendlyInterface
 {
     private $tmpDir;
     private $fs;
     private $app;
-    private $lastResponse;
 
     use MinkDictionary;
 
@@ -31,17 +33,10 @@ class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnip
     public function __construct(array $parameters)
     {
         $this->fs = new Filesystem;
-        $this->tmpDir = __DIR__.'/fixtures/tmp/App';
-        $this->app = new \App\AppKernel('test', true);
-        $this->app->boot();
-    }
-
-    /**
-     * @BeforeScenario
-     **/
-    public function removeCache()
-    {
-        $this->fs->remove($this->tmpDir.'/../cache');
+        $this->tmpDir = __DIR__.'/fixtures/tmp';
+        $this->fs->remove($this->tmpDir);
+        $this->writeContent($this->tmpDir.'/App/Resources/config/routing.yml');
+        $this->app = new \fixtures\AppKernel('test', true);
     }
 
     /**
@@ -58,6 +53,7 @@ class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnip
      */
     public function shouldBeARegisteredFormType($alias)
     {
+        $this->app->boot();
         $this->app->getContainer()->get('form.factory')->create($alias);
     }
 
@@ -66,14 +62,10 @@ class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnip
      */
     public function shouldNotBeARegisteredFormType($alias)
     {
-        try {
-            $this->app->getContainer()->get('form.factory')->create($alias);
-        } catch (\Exception $e) {
-            // all good
-            return;
+        $this->app->boot();
+        if ($this->app->getContainer()->get('form.registry')->hasType($alias)) {
+            throw new \LogicException(sprintf('Form type with alias %s was found', $alias));
         }
-
-        throw new \LogicException(sprintf('Form type with alias %s was found', $alias));
     }
 
     /**
@@ -81,11 +73,11 @@ class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnip
      */
     public function shouldBeARegisteredTwigExtension($alias)
     {
-        $this->app->getContainer()->get(sprintf('app.twig.%s_extension', $alias));
-
+        $this->app->boot();
         $twig = $this->app->getContainer()->get('twig');
-        $twig->setLoader(new \Twig_Loader_String());
-        $twig->render(sprintf('{{ %s() }}', $alias));
+        if (!$twig->hasExtension($alias)) {
+            throw new \LogicException(sprintf('Twig extension with alias %s was not found.', $alias));
+        }
     }
 
     /**
@@ -93,7 +85,9 @@ class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnip
      */
     public function shouldNotBeARegisteredTwigExtension($alias)
     {
-        if ($this->app->getContainer()->has(sprintf('app.twig.%s_extension', $alias))) {
+        $this->app->boot();
+        $twig = $this->app->getContainer()->get('twig');
+        if ($twig->hasExtension($alias)) {
             throw new \LogicException(sprintf('Twig extension with alias %s was found.', $alias));
         }
     }
@@ -103,7 +97,8 @@ class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnip
      */
     public function shouldBeARegisteredValidator($alias)
     {
-        $this->app->getContainer()->get(sprintf('app.constraints.validator.%s_validator', $alias));
+        $this->app->boot();
+        $this->app->getContainer()->get(sprintf('app.validator.constraints.%s_validator', $alias));
     }
 
     /**
@@ -111,32 +106,10 @@ class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnip
      */
     public function shouldNotBeARegisteredValidator($alias)
     {
-        if ($this->app->getContainer()->has(sprintf('app.constraints.validator.%s_validator', $alias))) {
+        $this->app->boot();
+        if ($this->app->getContainer()->has(sprintf('app.validator.constraints.%s_validator', $alias))) {
             throw new \LogicException(sprintf('Valdiator with alias %s was found.', $alias));
         }
-    }
-
-    /**
-     * @Given /I add route for "([^"]*)":?$/
-     */
-    public function iAddRouteForController($controller, TableNode $defaultParams = null)
-    {
-        $defaults = array('_controller' => $controller);
-        if ($defaultParams) {
-            $defaults = array_merge($defaults, $defaultParams->getRowsHash());
-            array_walk($defaults, function($value) {
-                if (in_array($value, array('false', 'true'))) {
-                    $value = $value === 'true';
-                }
-            });
-        }
-
-        fwrite(fopen($this->tmpDir.'/Resources/config/routing.yml', 'a+'), Yaml::dump(array(
-            $controller => array(
-                'pattern' => str_replace(':', '/', strtolower($controller)),
-                'defaults' => $defaults,
-            )
-        )));
     }
 
     /**
@@ -144,6 +117,7 @@ class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnip
      */
     public function visitRoute($route)
     {
+        $this->app->boot();
         $url = $this
             ->app
             ->getContainer()
@@ -154,7 +128,7 @@ class FeatureContext implements ContextInterface, MinkAwareInterface, TurnipSnip
         $this->visit($url);
     }
 
-    private function writeContent($path, $content)
+    private function writeContent($path, $content = '')
     {
         $this->fs->mkdir(dirname($path));
         file_put_contents($path, $content);
