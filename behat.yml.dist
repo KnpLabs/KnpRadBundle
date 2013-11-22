@@ -1,6 +1,7 @@
 default:
     autoload:
         '': %paths.base%/features/contexts
+        'fixtures': %paths.base%/features/contexts
         'App': %paths.base%/features/contexts/fixtures/tmp
     suites:
         default:
@@ -8,7 +9,7 @@ default:
             context: FeatureContext
     extensions:
         Behat\MinkExtension\Extension:
-            base_url:    'http://locahost:8080/app.php'
+            base_url:    'http://localhost:8080/app.php'
             selenium2:   ~
             default_session: selenium2
             javascript_session: selenium2
