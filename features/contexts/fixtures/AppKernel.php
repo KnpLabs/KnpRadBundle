@@ -5,8 +5,16 @@ namespace fixtures;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
+require __DIR__.'/App.php';
+
 class AppKernel extends Kernel
 {
+    public function __construct()
+    {
+        $this->name = 'app'.uniqid();
+        parent::__construct('test', true);
+    }
+
     public function registerBundles()
     {
         return array(
@@ -50,18 +58,11 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        return $this->rootDir.'/tmp/cache/'.$this->environment;
+        return $this->rootDir.'/tmp/cache/'.$this->name.$this->environment;
     }
 
     public function getLogDir()
     {
         return $this->rootDir.'/tmp/logs';
-    }
-
-    public function getContainer()
-    {
-        $this->boot();
-
-        return parent::getContainer();
     }
 }

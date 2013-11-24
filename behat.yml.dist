@@ -9,7 +9,7 @@ default:
             context: FeatureContext
     extensions:
         Behat\MinkExtension\Extension:
-            base_url:    'http://localhost:8080/app.php'
+            base_url:    'http://localhost:8080/app_test.php'
             selenium2:   ~
             default_session: selenium2
             javascript_session: selenium2
