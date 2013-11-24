@@ -13,4 +13,4 @@ before_script:
 
 script:
     - ./bin/phpspec run -fpretty
-    - ./bin/behat
+    - ./bin/behat --verbose
