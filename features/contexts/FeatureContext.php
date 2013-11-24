@@ -34,9 +34,17 @@ class FeatureContext implements ContextInterface,
     {
         $this->fs = new Filesystem;
         $this->tmpDir = __DIR__.'/fixtures/tmp';
-        $this->fs->remove($this->tmpDir);
         $this->writeContent($this->tmpDir.'/App/Resources/config/routing.yml');
-        $this->app = new \fixtures\AppKernel('test', true);
+        $this->app = new \fixtures\AppKernel;
+    }
+
+    /**
+     * @BeforeSuite
+     **/
+    public static function removeTmp()
+    {
+        $fs = new Filesystem;
+        $fs->remove(__DIR__.'/fixtures/tmp');
     }
 
     /**

@@ -59,7 +59,7 @@ class ContainerExtension extends Extension
                 $container->addResource(new DirectoryResource($dirPath));
             }
         }
-    
+
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->configProcessor->processConfiguration($configuration, $configs);
 

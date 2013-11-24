@@ -3,10 +3,9 @@
 
 require __DIR__.'/../../../vendor/autoload.php';
 require __DIR__.'/AppKernel.php';
-require __DIR__.'/App.php';
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
-$kernel = new \fixtures\AppKernel('test', true);
+$kernel = new \fixtures\AppKernel;
 $application = new Application($kernel);
 $application->run();
