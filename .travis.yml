@@ -12,6 +12,7 @@ cache:
 
 before_script:
   - composer install --prefer-source --dev
+  - phantomjs --webdriver=4444 &
   - 'curl -H "Accept: text/plain" https://security.sensiolabs.org/check_lock -F lock=@composer.lock -s | grep "No known"'
 
 script:
