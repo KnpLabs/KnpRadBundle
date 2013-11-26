@@ -4,7 +4,7 @@ Feature: Auto detection of validators
     I need rad bundle to register DI services automatically
 
     Scenario: Add a validator that exists
-        Given I write in "Validator/Constraints/Foo.php":
+        Given I write in "App/Validator/Constraints/Foo.php":
         """
         <?php
 
@@ -20,17 +20,17 @@ Feature: Auto detection of validators
             public $message = 'Foo.';
         }
         """
-        Given I write in "Validator/Constraints/FooValidator.php":
+        Given I write in "App/Validator/Constraints/FooValidator.php":
         """
         <?php
 
         namespace App\Validator\Constraints;
 
-        use Symfony\Component\Validator\Constraint;
+        use Symfony\Component\Validator;
 
-        class FooValidator extends ConstraintValidator
+        class FooValidator extends Validator\ConstraintValidator
         {
-            public function validate($value, Constraint $constraint)
+            public function validate($value, Validator\Constraint $constraint)
             {
             }
         }
@@ -38,7 +38,7 @@ Feature: Auto detection of validators
         Then "foo" should be a registered validator
 
     Scenario: Validator that does not extends Constraint is not registered
-        Given I write in "Validator/Constraints/Foo.php":
+        Given I write in "App/Validator/Constraints/NotFoo.php":
         """
         <?php
 
@@ -49,8 +49,8 @@ Feature: Auto detection of validators
         /**
          * @Annotation
          */
-        class Foo
+        class NotFoo
         {
         }
         """
-        Then "foo" should not be a registered validator
+        Then "not_foo" should not be a registered validator

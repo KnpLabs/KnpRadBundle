@@ -1,7 +1,8 @@
 <?php
 
 use Behat\Behat\Context\ContextInterface;
-use Behat\Behat\Snippet\Context\SnippetsFriendlyInterface;
+use Behat\Behat\Snippet\Context\TurnipSnippetsFriendlyInterface;
+use Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface;
 use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
@@ -9,13 +10,20 @@ use Behat\Behat\Exception\BehaviorException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
+use Behat\MinkExtension\Context\MinkDictionary;
+use Behat\MinkExtension\Context\MinkAwareInterface;
+use Symfony\Component\Yaml\Yaml;
 
-class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
+class FeatureContext implements ContextInterface,
+                                MinkAwareInterface,
+                                TurnipSnippetsFriendlyInterface,
+                                RegexSnippetsFriendlyInterface
 {
     private $tmpDir;
     private $fs;
     private $app;
-    private $lastResponse;
+
+    use MinkDictionary;
 
     /**
      * Initializes context. Every scenario gets its own context object.
@@ -25,9 +33,18 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
     public function __construct(array $parameters)
     {
         $this->fs = new Filesystem;
-        $this->tmpDir = __DIR__.'/fixtures/tmp/App';
-        $this->app = new \App\AppKernel('test', true);
-        $this->app->boot();
+        $this->tmpDir = __DIR__.'/fixtures/tmp';
+        $this->writeContent($this->tmpDir.'/App/Resources/config/routing.yml');
+        $this->app = new \fixtures\AppKernel;
+    }
+
+    /**
+     * @BeforeSuite
+     **/
+    public static function removeTmp()
+    {
+        $fs = new Filesystem;
+        $fs->remove(__DIR__.'/fixtures/tmp');
     }
 
     /**
@@ -44,6 +61,7 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function shouldBeARegisteredFormType($alias)
     {
+        $this->app->boot();
         $this->app->getContainer()->get('form.factory')->create($alias);
     }
 
@@ -52,14 +70,10 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function shouldNotBeARegisteredFormType($alias)
     {
-        try {
-            $this->app->getContainer()->get('form.factory')->create($alias);
-        } catch (\Exception $e) {
-            // all good
-            return;
+        $this->app->boot();
+        if ($this->app->getContainer()->get('form.registry')->hasType($alias)) {
+            throw new \LogicException(sprintf('Form type with alias %s was found', $alias));
         }
-
-        throw new \LogicException(sprintf('Form type with alias %s was found', $alias));
     }
 
     /**
@@ -67,11 +81,11 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function shouldBeARegisteredTwigExtension($alias)
     {
-        $this->app->getContainer()->get(sprintf('app.twig.%s_extension', $alias));
-
+        $this->app->boot();
         $twig = $this->app->getContainer()->get('twig');
-        $twig->setLoader(new \Twig_Loader_String());
-        $twig->render(sprintf('{{ %s() }}', $alias));
+        if (!$twig->hasExtension($alias)) {
+            throw new \LogicException(sprintf('Twig extension with alias %s was not found.', $alias));
+        }
     }
 
     /**
@@ -79,7 +93,9 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function shouldNotBeARegisteredTwigExtension($alias)
     {
-        if ($this->app->getContainer()->has(sprintf('app.twig.%s_extension', $alias))) {
+        $this->app->boot();
+        $twig = $this->app->getContainer()->get('twig');
+        if ($twig->hasExtension($alias)) {
             throw new \LogicException(sprintf('Twig extension with alias %s was found.', $alias));
         }
     }
@@ -89,7 +105,8 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function shouldBeARegisteredValidator($alias)
     {
-        $this->app->getContainer()->get(sprintf('app.constraints.validator.%s_validator', $alias));
+        $this->app->boot();
+        $this->app->getContainer()->get(sprintf('app.validator.constraints.%s_validator', $alias));
     }
 
     /**
@@ -97,80 +114,29 @@ class FeatureContext implements ContextInterface, SnippetsFriendlyInterface
      */
     public function shouldNotBeARegisteredValidator($alias)
     {
-        if ($this->app->getContainer()->has(sprintf('app.constraints.validator.%s_validator', $alias))) {
+        $this->app->boot();
+        if ($this->app->getContainer()->has(sprintf('app.validator.constraints.%s_validator', $alias))) {
             throw new \LogicException(sprintf('Valdiator with alias %s was found.', $alias));
         }
     }
 
     /**
-     * @Given I add route for :controller
-     */
-    public function iAddRouteForController($controller)
-    {
-        $this
-            ->app
-            ->getContainer()
-            ->get('router')
-            ->getRouteCollection()
-            ->add($controller, new Route(
-                str_replace(':', '/', strtolower($controller)),
-                array('_controller' => $controller)
-            ))
-        ;
-    }
-
-    /**
-     * @Given I write in :controller controller:
-     */
-    public function iWriteInController($controller, PyStringNode $code)
-    {
-        $path = $this->tmpDir.'/Controller/'.$controller.'Controller.php';
-        $code = <<<CONTROLLER
-<?php
-
-namespace App\Controller;
-
-use Knp\RadBundle\Controller\Controller;
-
-class {$controller}Controller extends Controller
-{
-{$code}
-}
-CONTROLLER;
-
-        $this->writeContent($path, $code);
-    }
-
-    /**
      * @When I visit :route page
      */
-    public function iVisitRoute($route)
+    public function visitRoute($route)
     {
+        $this->app->boot();
         $url = $this
             ->app
             ->getContainer()
             ->get('router')
             ->generate($route)
         ;
-        $request = Request::create($url);
-        $this->lastResponse = $this->app->handle($request);
+
+        $this->visit($url);
     }
 
-    /**
-     * @Then I should see :text
-     */
-    public function iShouldSee($text)
-    {
-        if (false === strpos($this->lastResponse->getContent(), $text)) {
-            throw new BehaviorException(sprintf(
-                '"%s" not found in "%s".',
-                $text,
-                $this->lastResponse->getContent()
-            ));
-        }
-    }
-
-    private function writeContent($path, $content)
+    private function writeContent($path, $content = '')
     {
         $this->fs->mkdir(dirname($path));
         file_put_contents($path, $content);

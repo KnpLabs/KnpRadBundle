@@ -5,7 +5,7 @@ Feature: Auto detection of forms
 
     Scenario: Add a Form type that exists
 
-        Given I write in "Form/TestType.php":
+        Given I write in "App/Form/TestType.php":
         """
         <?php
 
@@ -24,7 +24,7 @@ Feature: Auto detection of forms
         Then "test" should be a registered form type
 
     Scenario: FormType class that does not implement correct Interface is not registered
-      Given I write in "Form/InvalidFormType.php":
+      Given I write in "App/Form/InvalidFormType.php":
       """
       <?php
 
