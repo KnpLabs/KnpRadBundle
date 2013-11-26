@@ -3,7 +3,7 @@ filter:
         - Resources/public
 
 tools:
-    php_mess_detector: ~
+    php_mess_detector: true
     php_cs_fixer:
         config:
             level: all
@@ -12,7 +12,8 @@ tools:
         config:
             standard: PSR2
     sensiolabs_security_checker: true
-    php_cpd: ~
+    php_code_coverage: true
+    php_cpd: true
     php_loc:
         excluded_dirs:
             - vendor/
