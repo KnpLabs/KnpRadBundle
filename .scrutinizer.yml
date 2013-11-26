@@ -1,6 +1,8 @@
 filter:
     excluded_paths:
         - Resources/public
+        - vendor
+        - web
 
 before_commands:
     - "composer install --prefer-dist --dev"
@@ -15,14 +17,6 @@ tools:
         config:
             standard: PSR2
     sensiolabs_security_checker: true
-    php_code_coverage:
-        test_command: ./bin/phpspec run -fpretty
     php_cpd: true
-    php_loc:
-        excluded_dirs:
-            - vendor/
-            - web/
-    php_pdepend:
-        excluded_dirs:
-            - vendor/
-            - web/
+    php_loc: ~
+    php_pdepend: ~
