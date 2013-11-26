@@ -1,14 +1,9 @@
 filter:
     excluded_paths:
         - Resources/public
-        - vendor
-        - web
-
-before_commands:
-    - "composer install --prefer-dist --dev"
 
 tools:
-    php_mess_detector: true
+    php_mess_detector: ~
     php_cs_fixer:
         config:
             level: all
@@ -17,6 +12,12 @@ tools:
         config:
             standard: PSR2
     sensiolabs_security_checker: true
-    php_cpd: true
-    php_loc: ~
-    php_pdepend: ~
+    php_cpd: ~
+    php_loc:
+        excluded_dirs:
+            - vendor/
+            - web/
+    php_pdepend:
+        excluded_dirs:
+            - vendor/
+            - web/
