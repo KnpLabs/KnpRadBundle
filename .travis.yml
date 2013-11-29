@@ -8,6 +8,10 @@ env:
 before_script:
   - composer require --no-update symfony/symfony=$SYMFONY_VERSION
   - composer install --prefer-source --dev
+  - phantomjs --webdriver=4444 &
+  - php -S localhost:8080 -t features/contexts/fixtures &
   - 'curl -H "Accept: text/plain" https://security.sensiolabs.org/check_lock -F lock=@composer.lock -s | grep "No known"'
 
-script: ./bin/phpspec run -fpretty
+script:
+    - ./bin/phpspec run -fpretty
+    - ./bin/behat --verbose
