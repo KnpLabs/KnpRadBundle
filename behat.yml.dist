@@ -1,8 +1,8 @@
 default:
     autoload:
-        '': %paths.base%/features/contexts
-        'fixtures': %paths.base%/features/contexts
-        'App': %paths.base%/features/contexts/fixtures/tmp
+        '': %paths.base%/features/Context
+        'fixtures': %paths.base%/features/Context
+        'App': %paths.base%/features/Context/fixtures/tmp
     suites:
         default:
             path: %paths.base%/features
