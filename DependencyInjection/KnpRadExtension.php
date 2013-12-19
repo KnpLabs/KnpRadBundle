@@ -6,7 +6,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * This is the class that loads and manages your bundle configuration
@@ -27,6 +26,7 @@ class KnpRadExtension extends Extension
 
         $loader->load('bundle.xml');
         $loader->load('controller_helper.xml');
+        $loader->load('form/extension/upload.xml');
 
         foreach ($config['detect'] as $type => $isActivated) {
             $container->setParameter('knp_rad.detect.'.$type, $isActivated);
@@ -65,9 +65,6 @@ class KnpRadExtension extends Extension
         if ($config['datatable']) {
             $loader->load('datatable.xml');
         }
-        if ($config['alice']) {
-            $loader->load('alice.xml');
-        }
         $container->setParameter('knp_rad.csrf_link.intention', $config['csrf_links']['intention']);
         if ($this->isConfigEnabled($container, $config['csrf_links'])) {
             $loader->load('link_attributes.xml');
@@ -77,8 +74,6 @@ class KnpRadExtension extends Extension
             $loader->load('flashes.xml');
         }
         $container->setParameter('knp_rad.decision_manager.id', $config['security']['decision_manager']);
-
-        $container->setAlias('knp_rad.resource.resolver.resource', 'knp_rad.resource.resolver.resource.aggregate');
     }
 
     public function getNamespace()
