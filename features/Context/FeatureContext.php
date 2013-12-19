@@ -10,20 +10,16 @@ use Behat\Behat\Exception\BehaviorException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
-use Behat\MinkExtension\Context\MinkDictionary;
 use Behat\MinkExtension\Context\MinkAwareInterface;
 use Symfony\Component\Yaml\Yaml;
+use Behat\MinkExtension\Context\RawMinkContext;
 
-class FeatureContext implements ContextInterface,
-                                MinkAwareInterface,
-                                TurnipSnippetsFriendlyInterface,
-                                RegexSnippetsFriendlyInterface
+class FeatureContext extends RawMinkContext implements TurnipSnippetsFriendlyInterface,
+                                                       RegexSnippetsFriendlyInterface
 {
     private $tmpDir;
     private $fs;
     private $app;
-
-    use MinkDictionary;
 
     /**
      * Initializes context. Every scenario gets its own context object.
@@ -133,7 +129,7 @@ class FeatureContext implements ContextInterface,
             ->generate($route)
         ;
 
-        $this->visit($url);
+        $this->getMink()->getSession()->visit($this->locatePath($url));
     }
 
     private function writeContent($path, $content = '')
