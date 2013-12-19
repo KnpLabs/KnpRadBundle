@@ -2,7 +2,7 @@ filter:
     excluded_paths:
         - Resources/public
         - vendor
-        - features/contexts/fixtures
+        - features/Context/fixtures
 
 tools:
     php_code_sniffer:
@@ -12,7 +12,7 @@ tools:
         excluded_dirs:
             - Resources/public
             - vendor
-            - features/contexts/fixtures
+            - features/Context/fixtures
     php_cs_fixer:
         config:
             level: all
@@ -21,12 +21,12 @@ tools:
         excluded_dirs:
             - Resources/public
             - vendor
-            - features/contexts/fixtures
+            - features/Context/fixtures
     php_mess_detector: true
     php_pdepend:
         excluded_dirs:
             - Resources/public
             - vendor
-            - features/contexts/fixtures
+            - features/Context/fixtures
     php_analyzer: true
     sensiolabs_security_checker: true
