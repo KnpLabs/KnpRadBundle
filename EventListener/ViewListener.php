@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser;
 use Knp\RadBundle\HttpFoundation\RequestManipulator;
 use Knp\RadBundle\AppBundle\BundleGuesser;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Adds Response event listener to render no-Response
@@ -51,6 +52,33 @@ class ViewListener
     {
         $request = $event->getRequest();
 
+        if (!$viewName = $this->getViewName($request)) {
+            $viewName   = $this->deduceViewName($request, $request->getRequestFormat());
+        }
+        $viewParams = $event->getControllerResult() ?: array();
+
+        if ($this->templateExists($viewName)) {
+            $response = $this->templating->renderResponse($viewName, (array)$viewParams);
+            $event->setResponse($response);
+        } else {
+            $this->missingViewHandler->handleMissingView($event, $viewName, (array)$viewParams);
+        }
+    }
+
+    private function getViewName(Request $request)
+    {
+        if (false === $this->requestManipulator->hasAttribute($request, '_view')) {
+            return;
+        }
+
+        $view = $this->requestManipulator->getAttribute($request, '_view');
+
+        return sprintf('%s.%s.%s', $view, $request->getRequestFormat(), $this->engine);
+    }
+
+
+    private function deduceViewName(Request $request, $format)
+    {
         if (false === $this->requestManipulator->hasAttribute($request, '_controller')) {
             return;
         }
@@ -64,20 +92,6 @@ class ViewListener
         if (!$this->bundleGuesser->hasBundleForClass($class)) {
             return;
         }
-
-        $viewName   = $this->deduceViewName($class, $method, $request->getRequestFormat());
-        $viewParams = $event->getControllerResult() ?: array();
-
-        if ($this->templateExists($viewName)) {
-            $response = $this->templating->renderResponse($viewName, $viewParams);
-            $event->setResponse($response);
-        } else {
-            $this->missingViewHandler->handleMissingView($event, $viewName, $viewParams);
-        }
-    }
-
-    private function deduceViewName($class, $method, $format)
-    {
         $group = preg_replace(array('#^.*\\Controller\\\\#', '#Controller$#'), '', $class);
         $group = str_replace('\\', '/', $group);
         $view  = preg_replace('/Action$/', '', $method);

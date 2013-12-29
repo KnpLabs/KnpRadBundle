@@ -11,7 +11,7 @@ use Symfony\Component\Config\FileLocatorInterface;
 class ConventionalLoader extends YamlFileLoader
 {
     private static $supportedControllerKeys = array(
-        'prefix', 'defaults', 'requirements', 'options', 'collections', 'resources'
+        'prefix', 'defaults', 'requirements', 'options', 'collections', 'resources', 'controller'
     );
     private static $supportedActionKeys = array(
         'pattern', 'defaults', 'requirements', 'options'
@@ -52,10 +52,10 @@ class ConventionalLoader extends YamlFileLoader
             $parts = explode(':', $shortname);
 
             if (3 == count($parts)) {
-                list($bundle, $class, $action) = $parts;
+                list($bundle, $name, $action) = $parts;
 
-                $routeName = $this->getRouteName($bundle, $class, $action);
-                $route     = $this->getCustomCollectionRoute($bundle, $class, $action);
+                $routeName = $this->getRouteName($bundle, $name, $action);
+                $route     = $this->getCustomCollectionRoute($bundle, $name, $action, $mapping['controller']);
 
                 $this->overrideRouteParams($shortname, $route, $mapping);
                 $collection->add($routeName, $route);
@@ -89,9 +89,9 @@ class ConventionalLoader extends YamlFileLoader
                 }
             }
 
-            list($bundle, $class) = $parts;
+            list($bundle, $name) = $parts;
 
-            $prefix                 = $this->getPatternPrefix($class, $mapping);
+            $prefix                 = $this->getPatternPrefix($name, $mapping);
             $collectionDefaults     = $this->getDefaultsFromMapping($mapping, 'collections');
             $collectionRequirements = $this->getRequirementsFromMapping($mapping, 'collections');
             $collectionOptions      = $this->getOptionsFromMapping($mapping, 'collections');
@@ -99,8 +99,8 @@ class ConventionalLoader extends YamlFileLoader
             $resourceRequirements   = $this->getRequirementsFromMapping($mapping, 'resources');
             $resourceOptions        = $this->getOptionsFromMapping($mapping, 'resources');
 
-            $collectionRoutes = $this->getCollectionRoutesFromMapping($shortname, $mapping, $bundle, $class);
-            $resourceRoutes   = $this->getResourceRoutesFromMapping($shortname, $mapping, $bundle, $class);
+            $collectionRoutes = $this->getCollectionRoutesFromMapping($shortname, $mapping, $bundle, $name);
+            $resourceRoutes   = $this->getResourceRoutesFromMapping($shortname, $mapping, $bundle, $name);
 
             $controllerCollection = new RouteCollection();
             foreach ($collectionRoutes as $name => $route) {
@@ -253,9 +253,9 @@ class ConventionalLoader extends YamlFileLoader
         return $options;
     }
 
-    private function getCollectionRoutesFromMapping($shortname, $mapping, $bundle, $class)
+    private function getCollectionRoutesFromMapping($shortname, $mapping, $bundle, $name)
     {
-        $defaults = $this->getDefaultCollectionRoutes($bundle, $class);
+        $defaults = $this->getDefaultCollectionRoutes($bundle, $name, @$mapping['controller']);
         if (!is_array($mapping) || !isset($mapping['collections'])) {
             return $defaults;
         }
@@ -276,11 +276,11 @@ class ConventionalLoader extends YamlFileLoader
                 $params = null;
             }
 
-            $routeName = $this->getRouteName($bundle, $class, $action);
+            $routeName = $this->getRouteName($bundle, $name, $action);
             if (isset($defaults[$routeName])) {
                 $route = $defaults[$routeName];
             } else {
-                $route = $this->getCustomCollectionRoute($bundle, $class, $action);
+                $route = $this->getCustomCollectionRoute($bundle, $name, $action, @$mapping['controller']);
             }
 
             $this->overrideRouteParams($shortname, $route, $params);
@@ -291,9 +291,9 @@ class ConventionalLoader extends YamlFileLoader
         return $routes;
     }
 
-    private function getResourceRoutesFromMapping($shortname, $mapping, $bundle, $class)
+    private function getResourceRoutesFromMapping($shortname, $mapping, $bundle, $name)
     {
-        $defaults = $this->getDefaultResourceRoutes($bundle, $class);
+        $defaults = $this->getDefaultResourceRoutes($bundle, $name, @$mapping['controller']);
         if (!is_array($mapping) || !isset($mapping['resources'])) {
             return $defaults;
         }
@@ -314,11 +314,11 @@ class ConventionalLoader extends YamlFileLoader
                 $params = null;
             }
 
-            $routeName = $this->getRouteName($bundle, $class, $action);
+            $routeName = $this->getRouteName($bundle, $name, $action);
             if (isset($defaults[$routeName])) {
                 $route = $defaults[$routeName];
             } else {
-                $route = $this->getCustomResourceRoute($bundle, $class, $action);
+                $route = $this->getCustomResourceRoute($bundle, $name, $action);
             }
 
             $this->overrideRouteParams($shortname, $route, $params);
@@ -365,72 +365,72 @@ class ConventionalLoader extends YamlFileLoader
         }
     }
 
-    private function getDefaultCollectionRoutes($bundle, $class)
+    private function getDefaultCollectionRoutes($bundle, $name, $controller)
     {
         return array(
-            $this->getRouteName($bundle, $class, 'index') => new Route(
+            $this->getRouteName($bundle, $name, 'index') => new Route(
                 '/',
-                array('_controller' => sprintf('%s:%s:index', $bundle, $class)),
+                array('_controller' => sprintf('%s:index', $this->getControllerName($bundle, $name, $controller))),
                 array('_method' => 'GET')
             ),
-            $this->getRouteName($bundle, $class, 'new') => new Route(
+            $this->getRouteName($bundle, $name, 'new') => new Route(
                 '/new',
-                array('_controller' => sprintf('%s:%s:new', $bundle, $class)),
+                array('_controller' => sprintf('%s:new', $this->getControllerName($bundle, $name, $controller))),
                 array('_method' => 'GET')
             ),
-            $this->getRouteName($bundle, $class, 'create') => new Route(
+            $this->getRouteName($bundle, $name, 'create') => new Route(
                 '/',
-                array('_controller' => sprintf('%s:%s:new', $bundle, $class)),
+                array('_controller' => sprintf('%s:new', $this->getControllerName($bundle, $name, $controller))),
                 array('_method' => 'POST')
             ),
         );
     }
 
-    private function getCustomCollectionRoute($bundle, $class, $action)
+    private function getCustomCollectionRoute($bundle, $name, $action, $controller)
     {
         return new Route(
             '/'.$action,
-            array('_controller' => sprintf('%s:%s:%s', $bundle, $class, $action)),
+            array('_controller' => sprintf('%s:%s', $this->getControllerName($bundle, $name, $controller), $action)),
             array('_method' => 'GET')
         );
     }
 
-    private function getDefaultResourceRoutes($bundle, $class)
+    private function getDefaultResourceRoutes($bundle, $name, $controller)
     {
         return array(
-            $this->getRouteName($bundle, $class, 'show') => new Route(
+            $this->getRouteName($bundle, $name, 'show') => new Route(
                 '/{id}',
-                array('_controller' => sprintf('%s:%s:show', $bundle, $class)),
+                array('_controller' => sprintf('%s:showAction', $this->getControllerName($bundle, $name, $controller))),
                 array('_method' => 'GET')
             ),
-            $this->getRouteName($bundle, $class, 'edit') => new Route(
+            $this->getRouteName($bundle, $name, 'edit') => new Route(
                 '/{id}/edit',
-                array('_controller' => sprintf('%s:%s:edit', $bundle, $class)),
+                array('_controller' => sprintf('%s:edit', $this->getControllerName($bundle, $name, $controller))),
                 array('_method' => 'GET')
             ),
-            $this->getRouteName($bundle, $class, 'update') => new Route(
+            $this->getRouteName($bundle, $name, 'update') => new Route(
                 '/{id}',
-                array('_controller' => sprintf('%s:%s:edit', $bundle, $class)),
+                array('_controller' => sprintf('%s:edit', $this->getControllerName($bundle, $name, $controller))),
                 array('_method' => 'PUT')
             ),
-            $this->getRouteName($bundle, $class, 'delete') => new Route(
+            $this->getRouteName($bundle, $name, 'delete') => new Route(
                 '/{id}',
-                array('_controller' => sprintf('%s:%s:delete', $bundle, $class)),
+                array('_controller' => sprintf('%s:delete', $this->getControllerName($bundle, $name, $controller))),
                 array('_method' => 'DELETE')
             ),
         );
     }
 
-    private function getCustomResourceRoute($bundle, $class, $action)
+    private function getCustomResourceRoute($bundle, $name, $action)
     {
         return new Route(
             '/{id}/'.$action,
-            array('_controller' => sprintf('%s:%s:%s', $bundle, $class, $action)),
+            array('_controller' => sprintf('%s:%s', $this->getControllerName($bundle, $name, $controller), $action)),
             array('_method' => 'PUT')
         );
     }
 
-    private function getPatternPrefix($class, $mapping)
+    private function getPatternPrefix($name, $mapping)
     {
         if (is_string($mapping)) {
             return $mapping;
@@ -438,13 +438,22 @@ class ConventionalLoader extends YamlFileLoader
             return $mapping['prefix'];
         }
 
-        return '/'.strtolower(str_replace('\\', '/', $class));
+        return '/'.strtolower(str_replace('\\', '/', $name));
     }
 
-    private function getRouteName($bundle, $class, $action)
+    private function getRouteName($bundle, $name, $action)
     {
-        $group = implode('_', array_map('lcfirst', explode('\\', $class)));
+        $group = implode('_', array_map('lcfirst', explode('\\', $name)));
 
         return sprintf('%s_%s_%s', lcfirst($bundle), $group, lcfirst($action));
+    }
+
+    private function getControllerName($bundle, $name, $controller)
+    {
+        if (empty($controller)) {
+            return sprintf('%s:%s', $bundle, $name);
+        }
+
+        return $controller;
     }
 }
