@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\RadBundle\Resource\Resolver;
+namespace Knp\RadBundle\Resource\Resolver\OptionsBased;
 
 use Knp\RadBundle\HttpFoundation\RequestManipulator;
 use Symfony\Component\HttpFoundation\Request;

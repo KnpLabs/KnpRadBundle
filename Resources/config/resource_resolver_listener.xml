@@ -6,8 +6,10 @@
 
     <parameters>
         <parameter key="knp_rad.resource.resolver.request.class">Knp\RadBundle\Resource\Resolver\RequestResolver</parameter>
-        <parameter key="knp_rad.resource.resolver.resource.class">Knp\RadBundle\Resource\Resolver\ResourceResolver</parameter>
-        <parameter key="knp_rad.resource.resolver.argument.class">Knp\RadBundle\Resource\Resolver\ArgumentResolver</parameter>
+        <parameter key="knp_rad.resource.resolver.resource.aggregate.class">Knp\RadBundle\Resource\Resolver\Aggregate</parameter>
+        <parameter key="knp_rad.resource.resolver.resource.options_based.class">Knp\RadBundle\Resource\Resolver\OptionsBased</parameter>
+        <parameter key="knp_rad.resource.resolver.resource.expression_language_based.class">Knp\RadBundle\Resource\Resolver\ExpressionLanguageBased</parameter>
+        <parameter key="knp_rad.resource.resolver.argument.class">Knp\RadBundle\Resource\Resolver\OptionsBased\ArgumentResolver</parameter>
         <parameter key="knp_rad.event_listener.resource_resolver.class">Knp\RadBundle\EventListener\ResourceResolverListener</parameter>
     </parameters>
 
@@ -16,9 +18,18 @@
             <argument type="service" id="knp_rad.resource.resolver.resource" />
         </service>
 
-        <service id="knp_rad.resource.resolver.resource" class="%knp_rad.resource.resolver.resource.class%" public="false">
+        <service id="knp_rad.resource.resolver.resource.aggregate" class="%knp_rad.resource.resolver.resource.aggregate.class%" public="false">
+            <argument type="service" id="knp_rad.resource.resolver.resource.options_based" />
+            <argument type="service" id="knp_rad.resource.resolver.resource.expression_language_based" />
+        </service>
+
+        <service id="knp_rad.resource.resolver.resource.options_based" class="%knp_rad.resource.resolver.resource.options_based.class%" public="false">
             <argument type="service" id="service_container" />
             <argument type="service" id="knp_rad.resource.resolver.argument" />
+        </service>
+
+        <service id="knp_rad.resource.resolver.resource.expression_language_based" class="%knp_rad.resource.resolver.resource.expression_language_based.class%" public="false">
+            <argument type="service" id="service_container" />
         </service>
 
         <service id="knp_rad.resource.resolver.argument" class="%knp_rad.resource.resolver.argument.class%" public="false">
