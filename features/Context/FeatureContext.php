@@ -3,11 +3,10 @@
 use Behat\Behat\Context\ContextInterface;
 use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
-use Behat\Behat\Exception\BehaviorException;
 use Symfony\Component\Filesystem\Filesystem;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Gherkin\Node\TableNode;
 
 class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
 {
@@ -25,7 +24,8 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
         $this->fs = new Filesystem;
         $this->tmpDir = __DIR__.'/fixtures/tmp';
         $this->fs->remove($this->tmpDir);
-        $this->writeContent($this->tmpDir.'/App/Resources/config/routing.yml');
+        $this->writeContent($this->tmpDir.'/App/Resources/config/rad.yml');
+        $this->writeContent($this->tmpDir.'/App/Resources/config/rad_convention.yml');
         $this->fs->mkdir($this->tmpDir.'/App/Entity');
         $this->app = new \fixtures\AppKernel;
     }
@@ -123,8 +123,9 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
 
     /**
      * @When I visit :route page
+     * @When I visit :route page:
      */
-    public function visitRoute($route)
+    public function visitRoute($route, TableNode $params = null)
     {
         $this->createSchema();
         $this->app->boot();
@@ -132,7 +133,7 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
             ->app
             ->getContainer()
             ->get('router')
-            ->generate($route)
+            ->generate($route, $params ? $params->getRowsHash() : array())
         ;
 
         $this->getMink()->getSession()->visit($this->locatePath($url));
@@ -151,6 +152,8 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
     private function writeContent($path, $content = '')
     {
         $this->fs->mkdir(dirname($path));
-        file_put_contents($path, $content);
+        $fd = fopen($path, 'w');
+        fwrite($fd, $content);
+        fclose($fd);
     }
 }

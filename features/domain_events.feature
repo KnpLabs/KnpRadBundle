@@ -67,7 +67,7 @@ Feature: Domain events
                 tags:
                     - { name: doctrine.event_listener, event: onUserActivated }
         """
-        And I write in "App/Resources/config/routing.yml":
+        And I write in "App/Resources/config/rad.yml":
         """
         App:User: ~
         """

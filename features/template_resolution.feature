@@ -14,7 +14,7 @@ Feature: Template resolution
             }
         }
         """
-        And I write in "App/Resources/config/routing.yml":
+        And I write in "App/Resources/config/rad_convention.yml":
         """
         App:Foo:bar: ~
         App:Foo:baz: ~
