@@ -6,10 +6,6 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Behat\Exception\BehaviorException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Route;
-use Behat\MinkExtension\Context\MinkAwareInterface;
-use Symfony\Component\Yaml\Yaml;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Behat\Context\SnippetAcceptingContext;
 
@@ -29,6 +25,7 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
         $this->fs = new Filesystem;
         $this->tmpDir = __DIR__.'/fixtures/tmp';
         $this->writeContent($this->tmpDir.'/App/Resources/config/routing.yml');
+        $this->fs->mkdir($this->tmpDir.'/App/Entity');
         $this->app = new \fixtures\AppKernel;
     }
 
@@ -39,6 +36,15 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
     {
         $fs = new Filesystem;
         $fs->remove(__DIR__.'/fixtures/tmp');
+    }
+
+    public function createSchema()
+    {
+        $this->app->boot();
+        $em = $this->app->getContainer()->get('doctrine.orm.default_entity_manager');
+        $schemaTool = new \Doctrine\ORM\Tools\SchemaTool($em);
+        $schemaTool->dropSchema($em->getMetadataFactory()->getAllMetadata());
+        $schemaTool->createSchema($em->getMetadataFactory()->getAllMetadata());
     }
 
     /**
@@ -119,6 +125,7 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
      */
     public function visitRoute($route)
     {
+        $this->createSchema();
         $this->app->boot();
         $url = $this
             ->app
@@ -128,6 +135,16 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
         ;
 
         $this->getMink()->getSession()->visit($this->locatePath($url));
+    }
+
+    /**
+     * @Then the file :file should contain :content
+     */
+    public function theFileShouldContain($file, $content)
+    {
+        if ($content !== file_get_contents($this->tmpDir.'/'.$file)) {
+            throw new \LogicException(sprintf('file %s does not contain %s.', $file, $content));
+        }
     }
 
     private function writeContent($path, $content = '')

@@ -11,6 +11,7 @@ class AppKernel extends Kernel
 {
     public function __construct()
     {
+        \Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
         $this->name = 'app'.uniqid();
         parent::__construct('test', true);
     }
@@ -20,6 +21,7 @@ class AppKernel extends Kernel
         return array(
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle,
             new \Symfony\Bundle\TwigBundle\TwigBundle,
+            new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle,
             new \Knp\RadBundle\KnpRadBundle,
             new \fixtures\App,
         );
@@ -44,6 +46,25 @@ class AppKernel extends Kernel
             ));
             $container->loadFromExtension('knp_rad', array(
                 'csrf_links' => array('enabled' => true,),
+                'listener' => array(
+                    'orm_user' => false,
+                ),
+            ));
+            $container->loadFromExtension('doctrine', array(
+                'dbal' => array(
+                    'driver' => 'pdo_sqlite',
+                    'dbname' => 'knprad_test',
+                    'path' => __DIR__.'/tmp/knp_rad.sqlite',
+                ),
+                'orm' => array(
+                    'mappings' => array(
+                        'app' => array(
+                            'type' => 'annotation',
+                            'dir' => __DIR__.'/tmp/App/Entity',
+                            'prefix' => 'App',
+                        )
+                    ),
+                )
             ));
         });
     }
