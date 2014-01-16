@@ -1,21 +1,14 @@
 <?php
 
 use Behat\Behat\Context\ContextInterface;
-use Behat\Behat\Snippet\Context\TurnipSnippetsFriendlyInterface;
-use Behat\Behat\Snippet\Context\RegexSnippetsFriendlyInterface;
-use Behat\Behat\Exception\PendingException;
+use Behat\Behat\Context\TurnipAcceptingContext;
+use Behat\Behat\Context\RegexAcceptingContext;
 use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
-use Behat\Behat\Exception\BehaviorException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Route;
-use Behat\MinkExtension\Context\MinkAwareInterface;
-use Symfony\Component\Yaml\Yaml;
 use Behat\MinkExtension\Context\RawMinkContext;
 
-class FeatureContext extends RawMinkContext implements TurnipSnippetsFriendlyInterface,
-                                                       RegexSnippetsFriendlyInterface
+class FeatureContext extends RawMinkContext implements TurnipAcceptingContext,
+                                                       RegexAcceptingContext
 {
     private $tmpDir;
     private $fs;

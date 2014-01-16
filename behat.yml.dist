@@ -17,3 +17,4 @@ default:
             javascript_session: selenium2
             show_auto: true
             show_cmd: chrome %s
+            files_path: %paths.base%/features/Context/fixtures
