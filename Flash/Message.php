@@ -8,6 +8,11 @@ class Message implements \Serializable
     private $parameters;
     private $pluralization;
 
+    /**
+     * @param string $template
+     * @param array  $parameters
+     * @param string $pluralization
+     */
     public function __construct($template, array $parameters = array(), $pluralization = null)
     {
         $this->template      = $template;
@@ -15,16 +20,25 @@ class Message implements \Serializable
         $this->pluralization = $pluralization;
     }
 
+    /**
+     * @return string
+     */
     public function getTemplate()
     {
         return $this->template;
     }
 
+    /**
+     * @return array
+     */
     public function getParameters()
     {
         return $this->parameters;
     }
 
+    /**
+     * @return string
+     */
     public function getPluralization()
     {
         return $this->pluralization;

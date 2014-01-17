@@ -7,6 +7,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AssistantController extends Controller
 {
+    /**
+     * @param string $viewName
+     * @param array  $viewParams
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function missingViewAction($viewName, $viewParams)
     {
         $viewPath = $this->get('knp_rad.view.path_deducer')->deducePath($viewName);
@@ -26,6 +32,11 @@ class AssistantController extends Controller
         );
     }
 
+    /**
+     * @param Request $request
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function createViewAction(Request $request)
     {
         $viewName   = $request->request->get('viewName');

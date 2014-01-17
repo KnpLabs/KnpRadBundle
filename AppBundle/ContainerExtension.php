@@ -13,6 +13,11 @@ class ContainerExtension extends Extension
 {
     private $bundle;
 
+    /**
+     * @param ConfigurableBundleInterface $bundle
+     * @param ConfigurationFactory        $configFactory
+     * @param Processor                   $configProcessor
+     */
     public function __construct(ConfigurableBundleInterface $bundle, ConfigurationFactory $configFactory = null, Processor $configProcessor = null)
     {
         $this->bundle = $bundle;
@@ -20,6 +25,9 @@ class ContainerExtension extends Extension
         $this->configProcessor = $configProcessor ?: new Processor;
     }
 
+    /**
+     * @return string
+     */
     public function getAlias()
     {
         return strtolower(str_replace('Bundle', '', $this->bundle->getName()));
@@ -66,6 +74,10 @@ class ContainerExtension extends Extension
         $this->bundle->buildContainer($config, $container);
     }
 
+    /**
+     * @param array $configs
+     * @param ContainerBuilder $container
+     */
     public function getConfiguration(array $configs, ContainerBuilder $container)
     {
         return $this->configFactory->createConfiguration(
