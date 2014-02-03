@@ -17,7 +17,7 @@
         "fzaninotto/faker":         "~1.2"
     },
     "require-dev": {
-        "behat/behat":                        "~3@dev",
+        "behat/behat":                        "~3.0@dev",
         "behat/mink-extension":               "*@dev",
         "behat/mink-selenium2-driver":        "*@dev",
         "phpspec/phpspec":                    "~2@dev",
@@ -33,12 +33,11 @@
         "symfony/swiftmailer-bundle":        "To take advantage of the Rad mailer logger in your tests",
         "doctrine/orm":                      "To take advantage of the Rad password hash updater listener"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "config": {
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Knp\\RadBundle": "" }
-    },
-    "target-dir": "Knp/RadBundle"
+        "psr-4": { "Knp\\RadBundle\\": "" }
+    }
 }
