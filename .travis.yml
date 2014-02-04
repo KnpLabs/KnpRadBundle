@@ -11,7 +11,8 @@ cache:
     - vendor
 
 before_script:
-  - composer install --prefer-source --dev
+  - composer self-update
+  - composer install --prefer-source
   - phantomjs --version
   - phantomjs --webdriver=4444 &
   - php -S localhost:8080 -t features/contexts/fixtures &
