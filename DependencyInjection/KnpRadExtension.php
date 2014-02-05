@@ -26,6 +26,7 @@ class KnpRadExtension extends Extension
 
         $loader->load('bundle.xml');
         $loader->load('domain_event.xml');
+        $loader->load('controller_helper.xml');
 
         if ($config['mailer']['logger']) {
             $loader->load('mailer_logger.xml');
