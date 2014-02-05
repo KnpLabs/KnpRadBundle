@@ -9,104 +9,74 @@ use Knp\RadBundle\Flash;
 
 class Controller extends BaseController
 {
-    protected function redirectToRoute($route, $parameters = array(), $status = 302)
+    protected function redirectToRoute($route, array $parameters = array(), $status = 302)
     {
-        return $this->redirect($this->generateUrl($route, $parameters), $status);
+        return $this->get('knp_rad.controller.helper.response')->redirectToRoute($route, $parameters, $status);
     }
 
-    protected function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
+    public function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
     {
-        return new AccessDeniedException($message, $previous);
+        return $this->get('knp_rad.controller.helper.security')->createAccessDeniedException($message, $exception);
     }
 
-    protected function getRepository($entity)
+    protected function getRepository($object)
     {
-        return $this->getEntityManager()->getRepository(is_object($entity) ? get_class($entity) : $entity);
+        return $this->get('knp_rad.controller.helper.doctrine')->getRepository($object);
     }
 
     protected function isGranted($attributes, $object = null)
     {
-        return $this->getSecurity()->isGranted($attributes, $object);
+        return $this->get('knp_rad.controller.helper.security')->isGranted($attributes, $object);
+    }
+
+    protected function isGrantedOr403($object, $criteria = array())
+    {
+        return $this->get('knp_rad.controller.helper.security')->isGrantedOr403($object, $criteria);
     }
 
     protected function createMessage($name, array $parameters = array(), $from = null, $to = null)
     {
-        $message = $this->get('knp_rad.mailer.message_factory')->createMessage(get_class($this), $name, $parameters);
-
-        if ($from) {
-            $message->setFrom($from);
-        }
-        if ($to) {
-            $message->setTo($to);
-        }
-
-        return $message;
+        return $this->get('knp_rad.controller.helper.mail')->createMessage($name, $parameters, $from, $to);
     }
 
     protected function send(\Swift_Mime_Message $message)
     {
-        $this->getMailer()->send($message);
+        $this->get('knp_rad.controller.helper.mail')->send($message);
     }
 
-    protected function persist($entity, $flush = false)
+    protected function persist($object, $flush = false)
     {
-        $this->getEntityManager()->persist($entity);
-
-        if ($flush) {
-            $this->flush($entity);
-        }
+        return $this->get('knp_rad.controller.helper.doctrine')->persist($object, $flush);
     }
 
-    protected function remove($entity, $flush = false)
+    protected function remove($object, $flush = false)
     {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->flush();
-        }
+        return $this->get('knp_rad.controller.helper.doctrine')->remove($object, $flush);
     }
 
-    protected function flush($entity = null)
+    protected function flush($object = null)
     {
-        $this->getEntityManager()->flush($entity);
+        return $this->get('knp_rad.controller.helper.doctrine')->flush($object);
     }
 
-    protected function findOr404($entity, $criterias = array())
+    protected function findOr404($object, $criteria = array())
     {
-        $result = null;
-        $findMethod = is_scalar($criterias) ? 'find' : 'findOneBy';
-
-        if (is_object($entity) && $entity instanceof EntityRepository) {
-            $result = $entity->$findMethod($criterias);
-        } elseif (is_object($entity) && $this->getEntityManager()->contains($entity)) {
-            $result = $this->getEntityManager()->refresh($entity);
-        } elseif (is_string($entity)) {
-            $repository = $this->getRepository($entity);
-            $result = $repository->$findMethod($criterias);
-        }
-
-        if (null !== $result) {
-            return $result;
-        }
-
-        throw $this->createNotFoundException('Resource not found');
+        return $this->get('knp_rad.controller.helper.doctrine')->findOr404($object, $criteria);
     }
 
     protected function addFlash($type, $message = null, array $parameters = array(), $pluralization = null)
     {
-        $message = $message ?: sprintf('%s.%s', $this->getRequest()->attributes->get('_route'), $type);
-
-        $this->getFlashBag()->add($type, new Flash\Message($message, $parameters, $pluralization));
+        return $this->get('knp_rad.controller.helper.session')->addFlash($type, $message, $parameters, $pluralization);
     }
 
     protected function createObjectForm($object, $purpose = null, array $options = array())
     {
-        return $this->get('knp_rad.form.manager')->createObjectForm($object, $purpose, $options);
+        return $this->get('knp_rad.controller.helper.form')->createObjectForm($object, $purpose, $options);
     }
 
     protected function createBoundObjectForm($object, $purpose = null, array $options = array())
     {
-        return $this->get('knp_rad.form.manager')->createBoundObjectForm($object, $purpose, $options);
+        return $this->get('knp_rad.controller.helper.form')->createBoundObjectForm($object, $purpose, $options);
     }
 
     protected function getSession()
@@ -124,7 +94,7 @@ class Controller extends BaseController
         return $this->get('security.context');
     }
 
-    protected function getEntityManager()
+    protected function getManager()
     {
         return $this->getDoctrine()->getManager();
     }

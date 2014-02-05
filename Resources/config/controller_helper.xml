@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_rad.controller.helper.doctrine.class">Knp\RadBundle\Controller\Helper\Doctrine</parameter>
+        <parameter key="knp_rad.controller.helper.form.class">Knp\RadBundle\Controller\Helper\Form</parameter>
+        <parameter key="knp_rad.controller.helper.mail.class">Knp\RadBundle\Controller\Helper\Mail</parameter>
+        <parameter key="knp_rad.controller.helper.response.class">Knp\RadBundle\Controller\Helper\Response</parameter>
+        <parameter key="knp_rad.controller.helper.security.class">Knp\RadBundle\Controller\Helper\Security</parameter>
+        <parameter key="knp_rad.controller.helper.session.class">Knp\RadBundle\Controller\Helper\Session</parameter>
+    </parameters>
+
+    <services>
+        <service id="knp_rad.controller.helper.doctrine" class="%knp_rad.controller.helper.doctrine.class%">
+            <argument type="service" id="doctrine" />
+            <tag name="remove-when-missing" service="doctrine" />
+        </service>
+        <service id="knp_rad.controller.helper.form" class="%knp_rad.controller.helper.form.class%" scope="request">
+            <argument type="service" id="knp_rad.form.manager" />
+            <tag name="remove-when-missing" service="form.factory" />
+        </service>
+        <service id="knp_rad.controller.helper.mail" class="%knp_rad.controller.helper.mail.class%">
+            <argument type="service" id="knp_rad.mailer.message_factory" />
+            <argument type="service" id="mailer" />
+            <tag name="remove-when-missing" service="mailer" />
+        </service>
+        <service id="knp_rad.controller.helper.response" class="%knp_rad.controller.helper.response.class%">
+            <argument type="service" id="router" />
+        </service>
+        <service id="knp_rad.controller.helper.security" class="%knp_rad.controller.helper.security.class%">
+            <argument type="service" id="security.context" />
+            <tag name="remove-when-missing" service="security.context" />
+        </service>
+        <service id="knp_rad.controller.helper.session" class="%knp_rad.controller.helper.session.class%">
+            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
+        </service>
+    </services>
+</container>
