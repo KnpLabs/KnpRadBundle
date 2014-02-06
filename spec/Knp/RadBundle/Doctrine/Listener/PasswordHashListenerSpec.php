@@ -96,9 +96,11 @@ class PasswordHashListenerSpec extends ObjectBehavior
 
     /**
      * @param Doctrine\ORM\Event\PreUpdateEventArgs $args
+     * @param Doctrine\ORM\EntityManagerInterface   $em
+     * @param Doctrine\ORM\UnitOfWork               $uow
      * @param Knp\RadBundle\Security\UserInterface  $entity
      */
-    function its_preUpdate_should_rehash_user_password_if_new_password_providen($args, $entity)
+    function its_preUpdate_should_rehash_user_password_if_new_password_providen($args, $em, $uow, $entity)
     {
         $args->getEntity()->willReturn($entity);
 
@@ -109,19 +111,26 @@ class PasswordHashListenerSpec extends ObjectBehavior
         $entity->eraseCredentials()->shouldBeCalled();
 
         $entity->getPassword()->willReturn('custom_pass#some_salt');
-        $args->setNewValue('password', 'custom_pass#some_salt')->shouldBeCalled();
+        $args->getEntityManager()->willReturn($em);
+        $em->getUnitOfWork()->willReturn($uow);
+        $uow->computeChangeSets()->shouldBeCalled();
 
         $this->preUpdate($args);
     }
 
     /**
      * @param Doctrine\ORM\Event\PreUpdateEventArgs           $args
+     * @param Doctrine\ORM\EntityManagerInterface             $em
+     * @param Doctrine\ORM\UnitOfWork                         $uow
      * @param Knp\RadBundle\Security\RecoverableUserInterface $entity
      */
-    function its_preUpdate_should_erase_password_recovery_key_for_recoverable_user($args, $entity)
+    function its_preUpdate_should_erase_password_recovery_key_for_recoverable_user($args, $em, $uow, $entity)
     {
         $args->getEntity()->willReturn($entity);
-        $args->setNewValue('password', 'custom_pass#some_salt')->shouldBeCalled();
+
+        $args->getEntityManager()->willReturn($em);
+        $em->getUnitOfWork()->willReturn($uow);
+        $uow->computeChangeSets()->shouldBeCalled();
 
         $entity->getPlainPassword()->willReturn('custom_pass');
         $entity->getSalt()->willReturn('some_salt');
