@@ -3,6 +3,7 @@
 namespace Knp\RadBundle\Controller\Helper;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 
 class Security
 {
