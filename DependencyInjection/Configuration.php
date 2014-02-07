@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('message_factory')->defaultTrue()->end()
                     ->end()
                 ->end()
+                ->booleanNode('domain_event')->defaultTrue()->end()
                 ->arrayNode('listener')
                     ->addDefaultsIfNotSet()
                     ->children()
