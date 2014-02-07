@@ -24,18 +24,10 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
     {
         $this->fs = new Filesystem;
         $this->tmpDir = __DIR__.'/fixtures/tmp';
+        $this->fs->remove($this->tmpDir);
         $this->writeContent($this->tmpDir.'/App/Resources/config/routing.yml');
         $this->fs->mkdir($this->tmpDir.'/App/Entity');
         $this->app = new \fixtures\AppKernel;
-    }
-
-    /**
-     * @BeforeSuite
-     **/
-    public static function removeTmp()
-    {
-        $fs = new Filesystem;
-        $fs->remove(__DIR__.'/fixtures/tmp');
     }
 
     public function createSchema()
