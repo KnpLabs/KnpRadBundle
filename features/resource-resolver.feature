@@ -8,14 +8,14 @@ Feature: Resolve request parameters to their corresponding resources
         """
         <?php namespace App\Controller {
             class FooController {
-                public function indexAction($object) { return ['object' => $object]; }
+                public function indexAction($object) { return ['object' => get_class($object)]; }
                 public function showAction($object) { return ['object' => $object]; }
             }
         }
         """
         And I write in "App/Resources/views/Foo/index.html.twig":
         """
-        {{ object }}
+        {{ dump(object) }}
         """
         And I write in "App/Resources/views/Foo/show.html.twig":
         """
@@ -38,6 +38,16 @@ Feature: Resolve request parameters to their corresponding resources
         App:Foo:
             defaults:
                 _resources: {'object': {service: service_container, method: has, arguments: [{ name: id}] }}
+        """
+        And I go to "/foo/templating"
+        Then I should see "true"
+
+    Scenario: expression language resolution
+        Given I write in "App/Resources/config/routing.yml":
+        """
+        App:Foo:
+            defaults:
+                _resources: {object: {expr: "service('service_container').has(request.attributes.get('id'))"}}
         """
         And I go to "/foo/templating"
         Then I should see "true"

@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Knp\RadBundle\Resource\Resolver;
+namespace spec\Knp\RadBundle\Resource\Resolver\OptionsBased;
 
 use PhpSpec\ObjectBehavior;
 
