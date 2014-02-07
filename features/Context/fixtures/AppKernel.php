@@ -62,9 +62,9 @@ class AppKernel extends Kernel
                             'type' => 'annotation',
                             'dir' => __DIR__.'/tmp/App/Entity',
                             'prefix' => 'App',
-                        )
+                        ),
                     ),
-                )
+                ),
             ));
         });
     }

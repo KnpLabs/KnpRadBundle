@@ -9,7 +9,7 @@ class Queued implements EventSubscriber
     private $queuedEventNames;
     private $events = array();
 
-    public function __construct(array $queuedEventNamess = array())
+    public function __construct(array $queuedEventNames = array())
     {
         $this->queuedEventNames = $queuedEventNames;
     }
