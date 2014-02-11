@@ -24,6 +24,10 @@ class RegisterValidatorConstraintsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        if (!$container->getparameter('knp_rad.detect.validator_constraint')) {
+            return;
+        }
+
         if (false === $container->hasDefinition('validator.validator_factory')) {
             return;
         }

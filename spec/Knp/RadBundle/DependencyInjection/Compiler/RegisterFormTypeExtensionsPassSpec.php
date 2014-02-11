@@ -17,6 +17,7 @@ class RegisterFormTypeExtensionsPassSpec extends ObjectBehavior
     function let($bundle, $classFinder, $definitionFactory, $container, $formExtension, $servIdGen)
     {
         $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $servIdGen);
+        $container->getParameter('knp_rad.detect.form_extension')->willReturn(true);
 
         $bundle->getPath()->willReturn('/my/project/src/App');
         $bundle->getNamespace()->willReturn('App');

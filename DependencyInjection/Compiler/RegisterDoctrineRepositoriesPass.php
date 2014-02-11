@@ -30,12 +30,16 @@ class RegisterDoctrineRepositoriesPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $directory = $this->bundle->getPath().'/Entity';
-        $namespace = $this->bundle->getNamespace().'\Entity';
+        if (!$container->getParameter('knp_rad.detect.entity')) {
+            return;
+        }
 
         if (false === $container->hasDefinition('doctrine')) {
             return;
         }
+
+        $directory = $this->bundle->getPath().'/Entity';
+        $namespace = $this->bundle->getNamespace().'\Entity';
 
         $classes = $this->classFinder->findClassesMatching($directory, $namespace, '(?<!Repository)$');
         foreach ($classes as $class) {

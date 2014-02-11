@@ -8,10 +8,12 @@ class RegisterFormCreatorsPassSpec extends ObjectBehavior
 {
     /**
      * @param Knp\RadBundle\DependencyInjection\ReferenceFactory $referenceFactory
+     * @param Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    function let($referenceFactory)
+    function let($referenceFactory, $container)
     {
         $this->beConstructedWith($referenceFactory);
+        $container->getParameter('knp_rad.detect.form_creator')->willReturn(true);
     }
 
     function it_should_be_a_compiler_pass()
@@ -20,7 +22,6 @@ class RegisterFormCreatorsPassSpec extends ObjectBehavior
     }
 
     /**
-     * @param Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param Symfony\Component\DependencyInjection\Definition       $managerDef
      * @param Symfony\Component\DependencyInjection\Reference        $memoryRef
      * @param Symfony\Component\DependencyInjection\Reference        $typeRef

@@ -122,6 +122,17 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
     }
 
     /**
+     * @Then :id should not be a registered service
+     */
+    public function shouldNotBeARegisteredService($id)
+    {
+        $this->app->boot();
+        if ($this->app->getContainer()->has($id)) {
+            throw new \LogicException(sprintf('service %s was found.', $id));
+        }
+    }
+
+    /**
      * @When I visit :route page
      * @When I visit :route page:
      */

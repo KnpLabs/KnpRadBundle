@@ -31,6 +31,10 @@ class RegisterFormTypeExtensionsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        if (!$container->getParameter('knp_rad.detect.form_extension')) {
+            return;
+        }
+
         if (false === $container->hasDefinition('form.extension')) {
             return;
         }

@@ -17,6 +17,7 @@ class RegisterSecurityVotersPassSpec extends ObjectBehavior
      */
     function let($bundle, $container, $classFinder, $definitionFactory, $referenceFactory, $serviceIdGenerator, $definitionManipulator)
     {
+        $container->getParameter('knp_rad.detect.security_voter')->willReturn(true);
         $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $referenceFactory, $serviceIdGenerator, $definitionManipulator);
 
         $bundle->getPath()->willReturn('/my/project/src/App');

@@ -28,6 +28,10 @@ class KnpRadExtension extends Extension
         $loader->load('bundle.xml');
         $loader->load('controller_helper.xml');
 
+        foreach ($config['detect'] as $type => $isActivated) {
+            $container->setParameter('knp_rad.detect.'.$type, $isActivated);
+        }
+
         if ($config['domain_event']) {
             $loader->load('domain_event.xml');
         }
