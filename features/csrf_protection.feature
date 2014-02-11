@@ -18,7 +18,7 @@ Feature: CSRF protection for unsafe requests
             }
         }
         """
-        And I write in "App/Resources/config/routing.yml":
+        And I write in "App/Resources/config/rad_convention.yml":
         """
         App:Foo:show: ~
         App:Foo:delete:

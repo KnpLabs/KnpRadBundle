@@ -23,7 +23,7 @@ Feature: Resolve request parameters to their corresponding resources
         """
 
     Scenario: static service resolution
-        Given I write in "App/Resources/config/routing.yml":
+        Given I write in "App/Resources/config/rad_convention.yml":
         """
         App:Foo:
             defaults:
@@ -33,7 +33,7 @@ Feature: Resolve request parameters to their corresponding resources
         Then I should see "Symfony\Bundle\FrameworkBundle\Routing\Router"
 
     Scenario: dynamic resolution
-        Given I write in "App/Resources/config/routing.yml":
+        Given I write in "App/Resources/config/rad_convention.yml":
         """
         App:Foo:
             defaults:
@@ -43,7 +43,7 @@ Feature: Resolve request parameters to their corresponding resources
         Then I should see "true"
 
     Scenario: expression language resolution
-        Given I write in "App/Resources/config/routing.yml":
+        Given I write in "App/Resources/config/rad_convention.yml":
         """
         App:Foo:
             defaults:
