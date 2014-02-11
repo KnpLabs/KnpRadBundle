@@ -59,6 +59,11 @@ class Controller extends BaseController
         return $this->get('knp_rad.controller.helper.doctrine')->flush($object);
     }
 
+    protected function findBy($object, $criteria = array())
+    {
+        return $this->get('knp_rad.controller.helper.doctrine')->findBy($object, $criteria);
+    }
+
     protected function findOr404($object, $criteria = array())
     {
         return $this->get('knp_rad.controller.helper.doctrine')->findOr404($object, $criteria);

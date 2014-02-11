@@ -38,7 +38,7 @@ class Doctrine
         $this->getManager()->flush($object);
     }
 
-    public function findOr404($object, $criterias = array())
+    public function findBy($object, $criterias = array())
     {
         $result = null;
         $findMethod = is_scalar($criterias) ? 'find' : 'findOneBy';
@@ -53,6 +53,13 @@ class Doctrine
         }
 
         if (null !== $result) {
+            return $result;
+        }
+    }
+
+    public function findOr404($object, $criterias = array())
+    {
+        if ($result = $this->findBy($object, $criterias)) {
             return $result;
         }
 
