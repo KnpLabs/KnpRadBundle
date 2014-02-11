@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="knp_rad.view.listener.class">Knp\RadBundle\EventListener\ViewListener</parameter>
+        <parameter key="knp_rad.view.name_deducer.class">Knp\RadBundle\View\NameDeducer</parameter>
         <parameter key="knp_rad.filesystem.path_expander.class">Knp\RadBundle\Filesystem\PathExpander</parameter>
         <parameter key="knp_rad.view.path_deducer.class">Knp\RadBundle\View\PathDeducer</parameter>
         <parameter key="knp_rad.view.path_deducer.logicalNames" type="collection">
@@ -20,13 +21,19 @@
     <services>
         <service id="knp_rad.view.listener" class="%knp_rad.view.listener.class%">
             <argument type="service" id="templating" />
-            <argument type="service" id="twig" />
-            <argument type="service" id="controller_name_converter" />
-            <argument>twig</argument>
-            <argument type="service" id="knp_rad.bundle.guesser" />
+            <argument type="service" id="knp_rad.view.name_deducer" />
             <tag name="kernel.event_listener" event="kernel.view" method="onKernelView" />
             <tag name="remove-when-missing" service="templating" />
             <tag name="remove-when-missing" service="twig" />
+        </service>
+
+        <service id="knp_rad.view.name_deducer" class="%knp_rad.view.name_deducer.class%">
+            <argument type="service" id="templating" />
+            <argument type="service" id="controller_name_converter" />
+            <argument type="service" id="knp_rad.bundle.guesser" />
+            <argument>twig</argument>
+            <tag name="remove-when-missing" service="twig" />
+            <tag name="remove-when-missing" service="templating" />
         </service>
 
         <service id="knp_rad.view.path_deducer" class="%knp_rad.view.path_deducer.class%">

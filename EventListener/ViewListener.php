@@ -3,10 +3,12 @@
 namespace Knp\RadBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser;
-use Knp\RadBundle\HttpFoundation\RequestManipulator;
-use Knp\RadBundle\AppBundle\BundleGuesser;
+use Symfony\Component\HttpFoundation\Request;
+use Knp\RadBundle\View\NameDeducer;
+use Knp\RadBundle\View\NameDeducer\NotInBundleException;
+use Knp\RadBundle\View\NameDeducer\NoControllerNameException;
+use Knp\RadBundle\EventListener\MissingViewHandler;
+use Symfony\Component\Templating\EngineInterface;
 
 /**
  * Adds Response event listener to render no-Response
@@ -15,31 +17,21 @@ use Knp\RadBundle\AppBundle\BundleGuesser;
 class ViewListener
 {
     private $templating;
-    private $twigEnvironment;
-    private $parser;
-    private $engine;
-    private $requestManipulator;
-    private $bundleGuesser;
+    private $missingViewHandler;
+    private $viewNameDeducer;
 
     /**
      * Initializes listener.
      *
      * @param EngineInterface      $templating         Templating engine
-     * @param ControllerNameParser $parser             Controller name parser
-     * @param string               $engine             Default engine name
-     * @param BundleGuesser        $bundleGuesser      To guess the current rad bundle
-     * @param MissingViewHandler   $missingViewHandler The handle to be used in case the view does not exist
-     * @param RequestManipulator   $requestManipulator The request manipulator
+     * @param ViewNameDeducer      $viewNameDeducer    Deduces the view name from controller name
+     * @param MissingViewHandler   $missingViewHandler handles missing views
      */
-    public function __construct(EngineInterface $templating, \Twig_Environment $twigEnvironment, ControllerNameParser $parser, $engine, BundleGuesser $bundleGuesser, MissingViewHandler $missingViewHandler = null, RequestManipulator $requestManipulator = null)
+    public function __construct(EngineInterface $templating, NameDeducer $viewNameDeducer, MissingViewHandler $missingViewHandler)
     {
-        $this->templating         = $templating;
-        $this->twigEnvironment    = $twigEnvironment;
-        $this->parser             = $parser;
-        $this->engine             = $engine;
-        $this->bundleGuesser      = $bundleGuesser;
-        $this->missingViewHandler = $missingViewHandler ?: new MissingViewHandler();
-        $this->requestManipulator = $requestManipulator ?: new RequestManipulator();
+        $this->templating = $templating;
+        $this->viewNameDeducer = $viewNameDeducer;
+        $this->missingViewHandler = $missingViewHandler ?: new MissingViewHandler;
     }
 
     /**
@@ -51,56 +43,23 @@ class ViewListener
     {
         $request = $event->getRequest();
 
-        if (false === $this->requestManipulator->hasAttribute($request, '_controller')) {
+        try {
+            $viewName = $this->viewNameDeducer->deduce($request);
+        }
+        catch (NotInBundleException $e) {
             return;
         }
-
-        $controller = $this->requestManipulator->getAttribute($request, '_controller');
-        if (false === strpos($controller, '::')) {
-            $controller = $this->parser->parse($controller);
-        }
-
-        list($class, $method) = explode('::', $controller, 2);
-        if (!$this->bundleGuesser->hasBundleForClass($class)) {
+        catch (NoControllerNameException $e) {
             return;
         }
-
-        $viewName   = $this->deduceViewName($class, $method, $request->getRequestFormat());
         $viewParams = $event->getControllerResult() ?: array();
 
-        if ($this->templateExists($viewName)) {
-            $response = $this->templating->renderResponse($viewName, $viewParams);
+        if ($this->templating->exists($viewName)) {
+            $response = $this->templating->renderResponse($viewName, (array)$viewParams);
             $event->setResponse($response);
-        } else {
-            $this->missingViewHandler->handleMissingView($event, $viewName, $viewParams);
-        }
-    }
-
-    private function deduceViewName($class, $method, $format)
-    {
-        $group = preg_replace(array('#^.*\\Controller\\\\#', '#Controller$#'), '', $class);
-        $group = str_replace('\\', '/', $group);
-        $view  = preg_replace('/Action$/', '', $method);
-        $bundle = $this->bundleGuesser->getBundleForClass($class);
-
-        return sprintf('%s:%s:%s.%s.%s', $bundle->getName(), $group, $view, $format, $this->engine);
-    }
-
-    private function templateExists($template)
-    {
-        $loader = $this->twigEnvironment->getLoader();
-        if ($loader instanceof \Twig_ExistsLoaderInterface) {
-            return $loader->exists($template);
+            return;
         }
 
-        try {
-            $loader->getSource($template);
-
-            return true;
-        } catch (\Twig_Error_Loader $e) {
-            throw $e;
-        }
-
-        return false;
+        $this->missingViewHandler->handleMissingView($event, $viewName, (array)$viewParams);
     }
 }
