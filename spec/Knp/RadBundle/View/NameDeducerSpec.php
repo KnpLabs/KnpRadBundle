@@ -21,7 +21,7 @@ class NameDeducerSpec extends ObjectBehavior
         $bundleGuesser->getBundleForClass(\Prophecy\Argument::any())->willReturn($bundle);
         $bundle->getName()->willReturn('App');
 
-        $this->beConstructedWith($container, $reqManip, $engine, $cnp, $bundleGuesser, 'twig');
+        $this->beConstructedWith($container, $engine, $cnp, $bundleGuesser, $reqManip,  'twig');
     }
 
     function it_should_deduce_standard_controller_names($request, $reqManip, $engine)

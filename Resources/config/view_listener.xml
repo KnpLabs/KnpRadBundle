@@ -28,10 +28,10 @@
         </service>
 
         <service id="knp_rad.view.name_deducer" class="%knp_rad.view.name_deducer.class%">
+            <argument type="service" id="service_container" />
             <argument type="service" id="templating" />
             <argument type="service" id="controller_name_converter" />
             <argument type="service" id="knp_rad.bundle.guesser" />
-            <argument>twig</argument>
             <tag name="remove-when-missing" service="twig" />
             <tag name="remove-when-missing" service="templating" />
         </service>

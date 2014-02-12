@@ -12,19 +12,19 @@ use Knp\RadBundle\AppBundle\BundleGuesser;
 class NameDeducer
 {
     private $container;
-    private $requestManipulator;
     private $templating;
-    private $bundleGuesser;
     private $parser;
+    private $bundleGuesser;
+    private $requestManipulator;
     private $engine;
 
-    public function __construct(ContainerInterface $container, RequestManipulator $requestManipulator, EngineInterface $templating, ControllerNameParser $parser, BundleGuesser $bundleGuesser, $engine)
+    public function __construct(ContainerInterface $container, EngineInterface $templating, ControllerNameParser $parser, BundleGuesser $bundleGuesser, RequestManipulator $requestManipulator = null, $engine = 'twig')
     {
         $this->container = $container;
-        $this->requestManipulator = $requestManipulator;
         $this->templating = $templating;
-        $this->bundleGuesser = $bundleGuesser;
         $this->parser = $parser;
+        $this->bundleGuesser = $bundleGuesser;
+        $this->requestManipulator = $requestManipulator ?: new RequestManipulator;
         $this->engine = $engine;
     }
 

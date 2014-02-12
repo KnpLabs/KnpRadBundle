@@ -27,7 +27,7 @@ class ViewListener
      * @param ViewNameDeducer      $viewNameDeducer    Deduces the view name from controller name
      * @param MissingViewHandler   $missingViewHandler handles missing views
      */
-    public function __construct(EngineInterface $templating, NameDeducer $viewNameDeducer, MissingViewHandler $missingViewHandler)
+    public function __construct(EngineInterface $templating, NameDeducer $viewNameDeducer, MissingViewHandler $missingViewHandler = null)
     {
         $this->templating = $templating;
         $this->viewNameDeducer = $viewNameDeducer;
