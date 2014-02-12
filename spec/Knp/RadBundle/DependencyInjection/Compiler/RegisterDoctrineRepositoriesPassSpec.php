@@ -17,6 +17,7 @@ class RegisterDoctrineRepositoriesPassSpec extends ObjectBehavior
     {
         $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $serviceIdGenerator);
 
+        $container->getParameter('knp_rad.detect.entity')->willReturn(true);
         $container->hasDefinition('doctrine')->willReturn(true);
         $bundle->getNamespace()->willReturn('App');
         $bundle->getPath()->willReturn('src/App');

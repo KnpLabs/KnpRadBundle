@@ -15,6 +15,10 @@ class RegisterFormCreatorsPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container)
     {
+        if (!$container->getParameter('knp_rad.detect.form_creator')) {
+            return;
+        }
+
         if (!$container->hasDefinition('knp_rad.form.manager')) {
             return;
         }

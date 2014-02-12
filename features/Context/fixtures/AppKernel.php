@@ -29,6 +29,9 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
+        if (file_exists($file = __DIR__.'/tmp/config.yml')) {
+            $loader->load($file);
+        }
         $loader->load(function($container) {
             $container->loadFromExtension('framework', array(
                 'test' => null,

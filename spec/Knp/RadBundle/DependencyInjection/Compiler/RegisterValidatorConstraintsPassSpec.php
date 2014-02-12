@@ -16,6 +16,7 @@ class RegisterValidatorConstraintsPassSpec extends ObjectBehavior
      */
     function let($bundle, $classFinder, $definitionFactory, $container, $servIdGen, $validatorFactoryDef)
     {
+        $container->getParameter('knp_rad.detect.validator_constraint')->willReturn(true);
         $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $servIdGen);
 
         $bundle->getPath()->shouldBeCalled()->willReturn('/my/project/src/App');

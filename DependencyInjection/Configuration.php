@@ -22,6 +22,18 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->arrayNode('detect')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('entity')->defaultTrue()->end()
+                        ->booleanNode('form_creator')->defaultTrue()->end()
+                        ->booleanNode('form_extension')->defaultTrue()->end()
+                        ->booleanNode('form_type')->defaultTrue()->end()
+                        ->booleanNode('twig')->defaultTrue()->end()
+                        ->booleanNode('security_voter')->defaultTrue()->end()
+                        ->booleanNode('validator_constraint')->defaultTrue()->end()
+                    ->end()
+                ->end()
                 ->arrayNode('mailer')
                     ->addDefaultsIfNotSet()
                     ->children()

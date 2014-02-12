@@ -32,6 +32,10 @@ class RegisterTwigExtensionsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
+        if (!$container->getparameter('knp_rad.detect.twig')) {
+            return;
+        }
+
         if (false === $container->hasDefinition('twig')) {
             return;
         }

@@ -17,6 +17,7 @@ class RegisterTwigExtensionsPassSpec extends ObjectBehavior
      */
     function let($bundle, $container, $classFinder, $definitionFactory, $referenceFactory, $serviceIdGenerator, $twigDef)
     {
+        $container->getParameter('knp_rad.detect.twig')->willReturn(true);
         $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $referenceFactory, $serviceIdGenerator);
 
         $bundle->getPath()->willReturn('/my/project/src/App');
