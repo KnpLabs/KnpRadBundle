@@ -20,14 +20,14 @@
             var form      = document.createElement('form');
             var input     = document.createElement('input');
             var csrfInput = document.createElement('input');
-            var csrfToken = $(event.target).data('csrf-token');
+            var csrfToken = $(event.currentTarget).data('csrf-token');
 
             form.method   = 'POST';
             form.action   = event.currentTarget.href;
 
             input.type    = 'hidden';
             input.name    = '_method';
-            input.value   = $(event.target).data('method');
+            input.value   = $(event.currentTarget).data('method');
 
             form.appendChild(input);
 
