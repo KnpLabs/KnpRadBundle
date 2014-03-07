@@ -58,31 +58,31 @@ class LoaderSpec extends ObjectBehavior
 
         $collection->get('app_cheese_index')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:index',
-            '_view' => 'App:Cheese:index',
+            'view' => 'App:Cheese:index',
         ));
         $collection->get('app_cheese_new')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:new',
-            '_view' => 'App:Cheese:new',
+            'view' => 'App:Cheese:new',
         ));
         $collection->get('app_cheese_create')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:new',
-            '_view' => 'App:Cheese:create',
+            'view' => 'App:Cheese:create',
         ));
         $collection->get('app_cheese_edit')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:edit',
-            '_view' => 'App:Cheese:edit',
+            'view' => 'App:Cheese:edit',
         ));
         $collection->get('app_cheese_update')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:edit',
-            '_view' => 'App:Cheese:update',
+            'view' => 'App:Cheese:update',
         ));
         $collection->get('app_cheese_show')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:show',
-            '_view' => 'App:Cheese:show',
+            'view' => 'App:Cheese:show',
         ));
         $collection->get('app_cheese_delete')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:delete',
-            '_view' => 'App:Cheese:delete',
+            'view' => 'App:Cheese:delete',
         ));
     }
 
@@ -103,7 +103,7 @@ class LoaderSpec extends ObjectBehavior
 
         $collection->get('app_cheese_index')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:index',
-            '_view' => 'App:Cheese:index',
+            'view' => 'App:Cheese:index',
             '_resources' => array(
                 'object' => array('expr' => "request.get('id')"),
             ),
@@ -130,7 +130,7 @@ class LoaderSpec extends ObjectBehavior
 
         $collection->get('app_cheese_index')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:index',
-            '_view' => 'App:Cheese:index',
+            'view' => 'App:Cheese:index',
             '_resources' => array(),
         ));
     }
@@ -147,7 +147,7 @@ class LoaderSpec extends ObjectBehavior
 
         $collection->get('app_cheese_index')->getDefaults()->shouldReturn(array(
             '_controller' => 'knp_rad.controller.crud_controller:indexAction',
-            '_view' => 'App:Cheese:index',
+            'view' => 'App:Cheese:index',
         ));
     }
 
@@ -163,7 +163,7 @@ class LoaderSpec extends ObjectBehavior
 
         $collection->get('app_cheese_custom')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:custom',
-            '_view' => 'App:Cheese:custom',
+            'view' => 'App:Cheese:custom',
         ));
         $collection->get('app_cheese_custom')->getPattern()->shouldReturn('/cheese/custom');
     }
@@ -207,7 +207,7 @@ class LoaderSpec extends ObjectBehavior
 
         $collection->get('app_cheese_custom')->getDefaults()->shouldReturn(array(
             '_controller' => 'a different one:customAction',
-            '_view' => 'App:Cheese:custom',
+            'view' => 'App:Cheese:custom',
         ));
         $collection->get('app_cheese_custom')->getPattern()->shouldReturn('/cheese/custom');
     }
@@ -224,7 +224,7 @@ class LoaderSpec extends ObjectBehavior
 
         $collection->get('app_cheese_custom')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:custom',
-            '_view' => 'App:Cheese:custom',
+            'view' => 'App:Cheese:custom',
         ));
         $collection->get('app_cheese_custom')->getPattern()->shouldReturn('/cheese/patt{ern}/de/ouf');
     }
@@ -245,7 +245,7 @@ class LoaderSpec extends ObjectBehavior
         $collection->get('app_cheese_custom')->getPattern()->shouldReturn('/sub/patt{ern}/de/ouf');
         $collection->get('app_cheese_custom')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:custom',
-            '_view' => 'App:Cheese:custom',
+            'view' => 'App:Cheese:custom',
         ));
     }
 

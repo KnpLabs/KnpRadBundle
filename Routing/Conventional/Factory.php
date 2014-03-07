@@ -28,7 +28,7 @@ class Factory
             $this->patterns->generate($config),
             array_merge(array(
                 '_controller' => $this->controllerNames->generate($config),
-                '_view'       => $this->viewNames->generate($config),
+                'view'       => $this->viewNames->generate($config),
             ), $config->getDefaults()),
             $config->getRequirements(),
             array(), // options

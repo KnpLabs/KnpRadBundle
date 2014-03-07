@@ -26,7 +26,7 @@ class NameDeducerSpec extends ObjectBehavior
 
     function it_should_deduce_standard_controller_names($request, $reqManip, $engine)
     {
-        $reqManip->hasAttribute($request, '_view')->willReturn(false);
+        $reqManip->hasAttribute($request, 'view')->willReturn(false);
         $reqManip->hasAttribute($request, '_controller')->willReturn(true);
         $reqManip->getAttribute($request, '_controller')->willReturn('App\Controller\CheeseController::eatAction');
         $request->getRequestFormat()->willReturn('html');
@@ -36,7 +36,7 @@ class NameDeducerSpec extends ObjectBehavior
 
     function it_should_deduce_service_controller_names($container, $request, $reqManip, $engine)
     {
-        $reqManip->hasAttribute($request, '_view')->willReturn(false);
+        $reqManip->hasAttribute($request, 'view')->willReturn(false);
         $reqManip->hasAttribute($request, '_controller')->willReturn(true);
         $reqManip->getAttribute($request, '_controller')->willReturn('app.controller.assistant:eatAction');
         $container->get('app.controller.assistant')->willReturn(new \Knp\RadBundle\Controller\AssistantController);
@@ -45,10 +45,10 @@ class NameDeducerSpec extends ObjectBehavior
         $this->deduce($request)->shouldReturn('App:Assistant:eat.html.twig');
     }
 
-    function it_should_use__view_attribute_if_given($request, $reqManip, $engine)
+    function it_should_use_view_attribute_if_given($request, $reqManip, $engine)
     {
-        $reqManip->hasAttribute($request, '_view')->willReturn(true);
-        $reqManip->getAttribute($request, '_view')->willReturn('App:Cheese:eat');
+        $reqManip->hasAttribute($request, 'view')->willReturn(true);
+        $reqManip->getAttribute($request, 'view')->willReturn('App:Cheese:eat');
         $request->getRequestFormat()->willReturn('html');
 
         $this->deduce($request)->shouldReturn('App:Cheese:eat.html.twig');

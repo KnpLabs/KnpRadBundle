@@ -52,14 +52,17 @@ class ViewListener
         catch (NoControllerNameException $e) {
             return;
         }
-        $viewParams = $event->getControllerResult() ?: array();
+        $viewParams = $event->getControllerResult();
+        if (!is_array($viewParams) && !is_null($viewParams)) {
+            return;
+        }
 
         if ($this->templating->exists($viewName)) {
-            $response = $this->templating->renderResponse($viewName, (array)$viewParams);
+            $response = $this->templating->renderResponse($viewName, $viewParams ?: array());
             $event->setResponse($response);
             return;
         }
 
-        $this->missingViewHandler->handleMissingView($event, $viewName, (array)$viewParams);
+        $this->missingViewHandler->handleMissingView($event, $viewName, $viewParams ?: array());
     }
 }

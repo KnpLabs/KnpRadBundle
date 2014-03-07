@@ -30,8 +30,8 @@ class Config
 
     public function getView()
     {
-        if ($this->get('_view')) {
-            return $this->get('_view');
+        if ($this->get('view')) {
+            return $this->get('view');
         }
         if ($this->parent) {
             return $this->parent->getView();

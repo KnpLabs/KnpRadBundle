@@ -30,8 +30,8 @@ class NameDeducer
 
     public function deduce(Request $request)
     {
-        if ($this->requestManipulator->hasAttribute($request, '_view')) {
-            $view = $this->requestManipulator->getAttribute($request, '_view');
+        if ($this->requestManipulator->hasAttribute($request, 'view')) {
+            $view = $this->requestManipulator->getAttribute($request, 'view');
 
             return sprintf('%s.%s.%s', $view, $request->getRequestFormat(), $this->engine);
         }
