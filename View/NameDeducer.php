@@ -2,12 +2,14 @@
 
 namespace Knp\RadBundle\View;
 
+use Knp\RadBundle\AppBundle\BundleGuesser;
+use Knp\RadBundle\HttpFoundation\RequestManipulator;
+use Knp\RadBundle\View\NameDeducer\NoControllerNameException;
+use Knp\RadBundle\View\NameDeducer\NotInBundleException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerNameParser;
 use Symfony\Component\Templating\EngineInterface;
-use Knp\RadBundle\HttpFoundation\RequestManipulator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Knp\RadBundle\AppBundle\BundleGuesser;
 
 class NameDeducer
 {
@@ -43,7 +45,7 @@ class NameDeducer
     private function deduceViewName(Request $request)
     {
         if (false === $this->requestManipulator->hasAttribute($request, '_controller')) {
-            throw new NoControllerNameException;
+            throw new NoControllerNameException();
         }
 
         $controller = $this->requestManipulator->getAttribute($request, '_controller');
@@ -81,5 +83,4 @@ class NameDeducer
 
         return sprintf('%s::%s', $class, $method);
     }
-
 }
