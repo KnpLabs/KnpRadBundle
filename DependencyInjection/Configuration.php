@@ -55,6 +55,7 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('form_manager')->defaultTrue()->end()
                 ->booleanNode('security_voter')->defaultTrue()->end()
                 ->booleanNode('datatable')->defaultTrue()->end()
+                ->booleanNode('alice')->defaultTrue()->end()
                 ->arrayNode('flashes')
                     ->addDefaultsIfNotSet()
                     ->canBeDisabled()

@@ -65,6 +65,9 @@ class KnpRadExtension extends Extension
         if ($config['datatable']) {
             $loader->load('datatable.xml');
         }
+        if ($config['alice']) {
+            $loader->load('alice.xml');
+        }
         $container->setParameter('knp_rad.csrf_link.intention', $config['csrf_links']['intention']);
         if ($this->isConfigEnabled($container, $config['csrf_links'])) {
             $loader->load('link_attributes.xml');
