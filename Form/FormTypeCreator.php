@@ -38,13 +38,27 @@ class FormTypeCreator implements FormCreatorInterface
 
         $id = sprintf('app.form.%s%s_type', $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
         $class = sprintf('%s\\Form\\%s%sType', $bundle->getNamespace(), ucfirst($purpose), $this->fetcher->getShortClassName($object));
+
+        if (null === $type = $this->loadFormType($id, $class)) {
+            $id = sprintf('app.form.type.%s%s_type', $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
+            $class = sprintf('%s\\Form\\Type\\%s%sType', $bundle->getNamespace(), ucfirst($purpose), $this->fetcher->getShortClassName($object));
+
+            $type = $this->loadFormType($id, $class);
+        }
+
+        if (null === $type && null !== $purpose) {
+            // Let's try without purpose
+            $type = $this->getFormType($object);
+        }
+
+        return $type;
+    }
+
+    private function loadFormType($id, $class)
+    {
         $type = $this->getAlias($class, $id);
 
         if (!$this->formRegistry->hasType($type)) {
-            if ($purpose) {
-                // let's try without the purpose
-                return $this->getFormType($object);
-            }
 
             return null;
         }
