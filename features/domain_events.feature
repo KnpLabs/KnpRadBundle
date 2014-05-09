@@ -15,14 +15,24 @@ Feature: Domain events
                 /**
                  * @Doctrine\ORM\Mapping\Id
                  * @Doctrine\ORM\Mapping\GeneratedValue
-                 * @Doctrine\ORM\Mapping\Column(type="bigint")
+                 * @Doctrine\ORM\Mapping\Column(type="integer")
                  **/
-                public $id;
+                private $id;
 
                 /**
                  * @Doctrine\ORM\Mapping\Column(type="boolean")
                  **/
                 private $isActivated = false;
+
+                public function getId()
+                {
+                    return $this->id;
+                }
+
+                public function setId($id)
+                {
+                    $this->id = $id;
+                }
 
                 public function activate()
                 {

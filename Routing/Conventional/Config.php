@@ -52,7 +52,9 @@ class Config
 
     public function getDefaults()
     {
-        $defaults = $this->get('defaults', array());
+        $defaults = $this->get('defaults', array(
+            '_format' => 'html'
+        ));
         if ($this->parent) {
             $defaults = array_merge($this->parent->getDefaults(), $defaults);
         }
