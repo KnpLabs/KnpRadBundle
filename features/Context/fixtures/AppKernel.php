@@ -36,7 +36,7 @@ class AppKernel extends Kernel
             $container->loadFromExtension('framework', array(
                 'test' => null,
                 'session' => array(
-                    'storage_id' => 'session.storage.mock_file',
+                    'handler_id' => null,
                 ),
                 'secret' => '%kernel.secret%',
                 'csrf_protection' => null,
