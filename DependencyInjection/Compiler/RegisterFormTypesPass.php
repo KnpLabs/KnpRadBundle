@@ -47,6 +47,10 @@ class RegisterFormTypesPass implements CompilerPassInterface
         $classes = $this->classFinder->filterClassesImplementing($potentialClasses, 'Symfony\Component\Form\FormTypeInterface');
 
         foreach ($classes as $class) {
+            if ((new \ReflectionClass($class))->isAbstract()) {
+                continue;
+            }
+
             $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
             $alias = $this->getAlias($class, $id);
 
