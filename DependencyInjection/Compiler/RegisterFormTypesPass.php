@@ -2,6 +2,7 @@
 
 namespace Knp\RadBundle\DependencyInjection\Compiler;
 
+use Knp\RadBundle\Reflection\ReflectionFactory;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Knp\RadBundle\Finder\ClassFinder;
@@ -17,13 +18,20 @@ class RegisterFormTypesPass implements CompilerPassInterface
     private $classFinder;
     private $definitionFactory;
     private $serviceIdGenerator;
+    private $reflexionClassFactory;
 
-    public function __construct(BundleInterface $bundle, ClassFinder $classFinder = null, FormTypeDefinitionFactory $definitionFactory = null, ServiceIdGenerator $serviceIdGenerator = null)
-    {
+    public function __construct(
+        BundleInterface $bundle,
+        ClassFinder $classFinder = null,
+        FormTypeDefinitionFactory $definitionFactory = null,
+        ServiceIdGenerator $serviceIdGenerator = null,
+        ReflectionFactory $reflexionClassFactory = null
+    ) {
         $this->bundle = $bundle;
         $this->classFinder = $classFinder ?: new ClassFinder();
         $this->definitionFactory = $definitionFactory ?: new FormTypeDefinitionFactory;
         $this->serviceIdGenerator = $serviceIdGenerator ?: new ServiceIdGenerator;
+        $this->reflexionClassFactory = $reflexionClassFactory ?: new ReflectionFactory;
     }
 
     /**
@@ -47,7 +55,7 @@ class RegisterFormTypesPass implements CompilerPassInterface
         $classes = $this->classFinder->filterClassesImplementing($potentialClasses, 'Symfony\Component\Form\FormTypeInterface');
 
         foreach ($classes as $class) {
-            if ((new \ReflectionClass($class))->isAbstract()) {
+            if ($this->reflexionClassFactory->createReflectionClass($class)->isAbstract()) {
                 continue;
             }
 
