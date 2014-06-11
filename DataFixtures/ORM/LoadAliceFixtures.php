@@ -59,6 +59,11 @@ class LoadAliceFixtures extends AbstractFixture
 
     protected function getAliceOptions()
     {
-        return array('providers' => array($this));
+        return array('providers' => $this->getAliceProviders());
+    }
+
+    protected function getAliceProviders()
+    {
+        return $this->container->get('knp_rad.alice.provider_collection')->getProviders();
     }
 }
