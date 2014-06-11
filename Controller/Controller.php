@@ -14,11 +14,6 @@ class Controller extends BaseController
         return $this->getHelper('response')->redirectToRoute($route, $parameters, $status);
     }
 
-    public function createAccessDeniedException($message = 'Access Denied', \Exception $previous = null)
-    {
-        return $this->getHelper('security')->createAccessDeniedException($message, $exception);
-    }
-
     protected function getRepository($object)
     {
         return $this->getHelper('doctrine')->getRepository($object);
