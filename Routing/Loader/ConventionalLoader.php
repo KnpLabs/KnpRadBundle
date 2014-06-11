@@ -269,6 +269,10 @@ class ConventionalLoader extends YamlFileLoader
             return $defaults;
         }
 
+        if (false === $collections) {
+            return array();
+        }
+
         $routes = array();
         foreach ($collections as $action => $params) {
             if (is_integer($action)) {
@@ -305,6 +309,10 @@ class ConventionalLoader extends YamlFileLoader
 
         if (0 == count($resources)) {
             return $defaults;
+        }
+
+        if (false === $resources) {
+            return array();
         }
 
         $routes = array();
