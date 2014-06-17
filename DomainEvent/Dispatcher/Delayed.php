@@ -3,17 +3,17 @@
 namespace Knp\RadBundle\DomainEvent\Dispatcher;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\EventManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Delayed implements EventSubscriber
 {
-    private $eventManager;
+    private $container;
     private $delayedEventNames;
     private $events = array();
 
-    public function __construct(EventManager $eventManager, array $delayedEventNames = array())
+    public function __construct(ContainerInterface $container, array $delayedEventNames = array())
     {
-        $this->eventManager = $eventManager;
+        $this->container = $container;
         $this->delayedEventNames = $delayedEventNames;
     }
 
@@ -33,8 +33,9 @@ class Delayed implements EventSubscriber
 
     public function dispatchDelayedDomainEvents()
     {
+        $eventManager = $this->container->get('doctrine.dbal.default_connection.event_manager');
         foreach ($this->events as $event) {
-            $this->eventManager->dispatchEvent('onDelayed'.$event->getName(), $event);
+            $eventManager->dispatchEvent('onDelayed'.$event->getName(), $event);
         }
     }
 }
