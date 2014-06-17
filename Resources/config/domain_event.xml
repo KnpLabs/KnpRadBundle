@@ -18,7 +18,7 @@
         </service>
 
         <service id="knp_rad.domain_event.dispatcher.delayed" class="%knp_rad.domain_event.dispatcher.delayed.class%">
-            <argument type="service" id="doctrine.orm.default_entity_manager.event_manager" />
+            <argument type="service" id="service_container" />
             <argument type="collection">%knp_rad.domain_event.delayed_event_names%</argument>
             <tag name="doctrine.event_subscriber" />
             <tag name="kernel.event_listener" event="kernel.terminate" method="dispatchDelayedDomainEvents" />
