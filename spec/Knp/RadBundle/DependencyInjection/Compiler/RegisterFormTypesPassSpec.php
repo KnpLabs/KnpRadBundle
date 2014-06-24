@@ -3,6 +3,7 @@
 namespace spec\Knp\RadBundle\DependencyInjection\Compiler;
 
 use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 class RegisterFormTypesPassSpec extends ObjectBehavior
 {
@@ -13,10 +14,12 @@ class RegisterFormTypesPassSpec extends ObjectBehavior
      * @param Knp\RadBundle\DependencyInjection\Definition\FormTypeDefinitionFactory $definitionFactory
      * @param Symfony\Component\DependencyInjection\Definition $formExtension
      * @param Knp\RadBundle\DependencyInjection\ServiceIdGenerator $servIdGen
+     * @param Knp\RadBundle\Reflection\ReflectionFactory $reflectionFactory
+     * @param ReflectionClass $reflClass
      */
-    function let($bundle, $classFinder, $definitionFactory, $container, $formExtension, $servIdGen)
+    function let($bundle, $classFinder, $definitionFactory, $container, $formExtension, $servIdGen, $reflectionFactory, $reflClass)
     {
-        $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $servIdGen);
+        $this->beConstructedWith($bundle, $classFinder, $definitionFactory, $servIdGen, $reflectionFactory);
         $container->getParameter('knp_rad.detect.form_type')->willReturn(true);
 
         $bundle->getPath()->willReturn('/my/project/src/App');
@@ -33,6 +36,9 @@ class RegisterFormTypesPassSpec extends ObjectBehavior
         $servIdGen->generateForBundleClass($bundle, 'App\Form\CheeseType')->willReturn('app.form.cheese_type');
         $servIdGen->generateForBundleClass($bundle, 'App\Form\EditCheeseType')->willReturn('app.form.edit_cheese_type');
         $servIdGen->generateForBundleClass($bundle, 'App\Form\MouseType')->willReturn('app.form.mouse_type');
+
+        $reflClass->isAbstract()->willReturn(false);
+        $reflectionFactory->createReflectionClass(Argument::any())->willReturn($reflClass);
 
         $formExtension->getArgument(1)->willReturn(array());
         $container->getDefinition('form.extension')->willReturn($formExtension);
