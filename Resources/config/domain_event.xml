@@ -28,6 +28,7 @@
         <service id="knp_rad.domain_event.dispatcher.queued" class="%knp_rad.domain_event.dispatcher.queued.class%">
             <argument type="service" id="doctrine.orm.default_entity_manager.event_manager" />
             <argument type="collection">%knp_rad.domain_event.queued_event_names%</argument>
+            <tag name="remove-when-missing" service="doctrine" />            
         </service>
 
     </services>
