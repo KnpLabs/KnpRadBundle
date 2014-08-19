@@ -59,30 +59,37 @@ class LoaderSpec extends ObjectBehavior
         $collection->get('app_cheese_index')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:index',
             'view' => 'App:Cheese:index',
+            '_format' => 'html',
         ));
         $collection->get('app_cheese_new')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:new',
             'view' => 'App:Cheese:new',
+            '_format' => 'html',
         ));
         $collection->get('app_cheese_create')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:new',
             'view' => 'App:Cheese:create',
+            '_format' => 'html',
         ));
         $collection->get('app_cheese_edit')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:edit',
             'view' => 'App:Cheese:edit',
+            '_format' => 'html',
         ));
         $collection->get('app_cheese_update')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:edit',
             'view' => 'App:Cheese:update',
+            '_format' => 'html',
         ));
         $collection->get('app_cheese_show')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:show',
             'view' => 'App:Cheese:show',
+            '_format' => 'html',
         ));
         $collection->get('app_cheese_delete')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:delete',
             'view' => 'App:Cheese:delete',
+            '_format' => 'html',
         ));
     }
 
@@ -107,6 +114,7 @@ class LoaderSpec extends ObjectBehavior
             '_resources' => array(
                 'object' => array('expr' => "request.get('id')"),
             ),
+            '_format' => 'html',
         ));
     }
 
@@ -148,6 +156,7 @@ class LoaderSpec extends ObjectBehavior
         $collection->get('app_cheese_index')->getDefaults()->shouldReturn(array(
             '_controller' => 'knp_rad.controller.crud_controller:indexAction',
             'view' => 'App:Cheese:index',
+            '_format' => 'html',
         ));
     }
 
@@ -164,6 +173,7 @@ class LoaderSpec extends ObjectBehavior
         $collection->get('app_cheese_custom')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:custom',
             'view' => 'App:Cheese:custom',
+            '_format' => 'html',
         ));
         $collection->get('app_cheese_custom')->getPattern()->shouldReturn('/cheese/custom');
     }
@@ -208,6 +218,7 @@ class LoaderSpec extends ObjectBehavior
         $collection->get('app_cheese_custom')->getDefaults()->shouldReturn(array(
             '_controller' => 'a different one:customAction',
             'view' => 'App:Cheese:custom',
+            '_format' => 'html',
         ));
         $collection->get('app_cheese_custom')->getPattern()->shouldReturn('/cheese/custom');
     }
@@ -225,6 +236,7 @@ class LoaderSpec extends ObjectBehavior
         $collection->get('app_cheese_custom')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:custom',
             'view' => 'App:Cheese:custom',
+            '_format' => 'html',
         ));
         $collection->get('app_cheese_custom')->getPattern()->shouldReturn('/cheese/patt{ern}/de/ouf');
     }
@@ -246,6 +258,7 @@ class LoaderSpec extends ObjectBehavior
         $collection->get('app_cheese_custom')->getDefaults()->shouldReturn(array(
             '_controller' => 'App:Cheese:custom',
             'view' => 'App:Cheese:custom',
+            '_format' => 'html',
         ));
     }
 
