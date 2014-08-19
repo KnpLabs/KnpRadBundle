@@ -38,7 +38,7 @@ Feature: Domain events
                 {
                     $this->isActivated = true;
                     $this->events[] = new \Knp\RadBundle\DomainEvent\Event('UserActivated', array(
-                        'id' => $this->id
+                        'user' => $this
                     ));
                 }
             }
@@ -93,7 +93,7 @@ Feature: Domain events
             class Listener
             {
                 public function onDelayedUserActivated(\Knp\RadBundle\DomainEvent\Event $event) {
-                    file_put_contents(__DIR__.'/'.$event->getName(), $event->id);
+                    file_put_contents(__DIR__.'/'.$event->getName(), $event->user->getId());
                 }
             }
         }

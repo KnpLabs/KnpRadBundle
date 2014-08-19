@@ -1,7 +1,5 @@
 <?php
 
-use Behat\Behat\Context\ContextInterface;
-use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Symfony\Component\Filesystem\Filesystem;
 use Behat\MinkExtension\Context\RawMinkContext;

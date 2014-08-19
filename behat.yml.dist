@@ -15,3 +15,5 @@ default:
             selenium2:   ~
             default_session: selenium2
             javascript_session: selenium2
+            show_auto: true
+            show_cmd: firefox %s
