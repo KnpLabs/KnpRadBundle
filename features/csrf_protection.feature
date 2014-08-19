@@ -44,15 +44,18 @@ Feature: CSRF protection for unsafe requests
         When I follow "Delete"
         Then I should see "ok"
 
+    @javascript
     Scenario: Invalid token sent
         Given I visit "app_foo_show" page
         When I follow "Invalid Delete"
         Then I should see "The CSRF token is invalid. Please submit a request with a valid csrf token."
 
+    @javascript
     Scenario: no token sent
         When I visit "app_foo_delete" page
         Then I should see "The CSRF token verification is activated but you did not send a token. Please submit a request with a valid csrf token."
 
+    @javascript
     Scenario: deactivated csrf protection
         When I visit "app_foo_show" page
         When I follow "Unsafe Delete"

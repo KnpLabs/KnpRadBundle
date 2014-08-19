@@ -19,6 +19,7 @@
         "behat/behat":                        "~3@dev",
         "behat/mink-extension":               "~2@dev",
         "behat/mink-selenium2-driver":        "*@dev",
+        "behat/mink-goutte-driver":           "*@dev",
         "phpspec/phpspec":                    "~2@dev",
         "symfony/swiftmailer-bundle":         "~2.3",
         "doctrine/orm":                       "~2.4",

@@ -13,7 +13,6 @@ default:
         Behat\MinkExtension:
             base_url:    'http://localhost:8080/app_test.php'
             selenium2:   ~
-            default_session: selenium2
+            goutte: ~
+            default_session: goutte
             javascript_session: selenium2
-            show_auto: true
-            show_cmd: firefox %s
