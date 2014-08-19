@@ -36,8 +36,6 @@ class Config
         if ($this->parent) {
             return $this->parent->getView();
         }
-
-        return $this->name;
     }
 
     public function getPattern()
