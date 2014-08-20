@@ -10,15 +10,7 @@ Feature: Domain events
             /** @Doctrine\ORM\Mapping\Entity **/
             class User implements \Knp\RadBundle\DomainEvent\Provider
             {
-                private $events = array();
-
-                public function popEvents()
-                {
-                    $events = $this->events;
-                    $this->events = array();
-
-                    return $events;
-                }
+                use \Knp\RadBundle\DomainEvent\ProviderTrait;
 
                 /**
                  * @Doctrine\ORM\Mapping\Id

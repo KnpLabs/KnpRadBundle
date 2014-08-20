@@ -13,7 +13,7 @@ class Delayed implements EventSubscriber
     private $delayedEventNames;
     private $events = array();
 
-    public function __construct(ContainerInterface $container, array $delayedEventNames = array())
+    public function __construct(ContainerInterface $container, array $delayedEventNames = [])
     {
         $this->container = $container;
         $this->delayedEventNames = $delayedEventNames;
