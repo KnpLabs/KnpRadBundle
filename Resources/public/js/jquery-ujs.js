@@ -1,4 +1,4 @@
-(function($, undefined) {
+(function($) {
     function confirmDeletion (event) {
         var needConfirmation = !event.currentTarget.hasAttribute('data-no-confirm');
 
@@ -7,10 +7,10 @@
         }
 
         return true;
-    }
+    };
 
     $(document).ready(function() {
-        $('body').delegate('a[data-method]', 'click', function (event) {
+        $('body').on('click', 'a[data-method]', function (event) {
             event.preventDefault();
 
             if (!confirmDeletion(event)) {

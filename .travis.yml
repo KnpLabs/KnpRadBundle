@@ -1,6 +1,6 @@
 language: php
 
-php: [5.3.3, 5.3, 5.4, 5.5, hhvm]
+php: [5.4, 5.5, 5.6, hhvm]
 
 matrix:
   allow_failures:
@@ -14,7 +14,7 @@ before_script:
   - composer install --prefer-source --dev
   - phantomjs --version
   - phantomjs --webdriver=4444 &
-  - php -S localhost:8080 -t features/contexts/fixtures &
+  - php -S localhost:8080 -t features/Context/fixtures &
   - 'curl -H "Accept: text/plain" https://security.sensiolabs.org/check_lock -F lock=@composer.lock -s | grep "No known"'
 
 script:

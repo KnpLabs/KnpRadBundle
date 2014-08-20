@@ -6,6 +6,9 @@
 
     <parameters>
         <parameter key="knp_rad.domain_event.dispatcher.doctrine.class">Knp\RadBundle\DomainEvent\Dispatcher\Doctrine</parameter>
+        <parameter key="knp_rad.domain_event.delayed_event_names" type="collection"></parameter>
+        <parameter key="knp_rad.domain_event.queued_event_names" type="collection"></parameter>
+        <parameter key="knp_rad.domain_event.dispatcher.doctrine.class">Knp\RadBundle\DomainEvent\Dispatcher\Doctrine</parameter>
         <parameter key="knp_rad.domain_event.dispatcher.delayed.class">Knp\RadBundle\DomainEvent\Dispatcher\Delayed</parameter>
         <parameter key="knp_rad.domain_event.dispatcher.queued.class">Knp\RadBundle\DomainEvent\Dispatcher\Queued</parameter>
     </parameters>
@@ -19,7 +22,7 @@
 
         <service id="knp_rad.domain_event.dispatcher.delayed" class="%knp_rad.domain_event.dispatcher.delayed.class%">
             <argument type="service" id="service_container" />
-            <argument type="collection">%knp_rad.domain_event.delayed_event_names%</argument>
+            <argument>%knp_rad.domain_event.delayed_event_names%</argument>
             <tag name="doctrine.event_subscriber" />
             <tag name="kernel.event_listener" event="kernel.terminate" method="dispatchDelayedDomainEvents" />
             <tag name="remove-when-missing" service="doctrine" />
@@ -27,8 +30,8 @@
 
         <service id="knp_rad.domain_event.dispatcher.queued" class="%knp_rad.domain_event.dispatcher.queued.class%">
             <argument type="service" id="doctrine.orm.default_entity_manager.event_manager" />
-            <argument type="collection">%knp_rad.domain_event.queued_event_names%</argument>
-            <tag name="remove-when-missing" service="doctrine" />            
+            <argument>%knp_rad.domain_event.queued_event_names%</argument>
+            <tag name="remove-when-missing" service="doctrine" />
         </service>
 
     </services>

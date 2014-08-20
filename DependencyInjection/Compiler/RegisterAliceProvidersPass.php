@@ -12,7 +12,7 @@ class RegisterAliceProvidersPass implements CompilerPassInterface
     {
         $collectionDefinition = $container->getDefinition('knp_rad.alice.provider_collection');
         foreach (array_keys($container->findTaggedServiceIds('alice.provider')) as $id) {
-            $collectionDefinition->addMethodCall('addProvider', [ new Reference($id) ]);
+            $collectionDefinition->addMethodCall('addProvider', array(new Reference($id)));
         }
     }
 }

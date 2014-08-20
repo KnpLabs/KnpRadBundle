@@ -15,20 +15,30 @@ Feature: Domain events
                 /**
                  * @Doctrine\ORM\Mapping\Id
                  * @Doctrine\ORM\Mapping\GeneratedValue
-                 * @Doctrine\ORM\Mapping\Column(type="bigint")
+                 * @Doctrine\ORM\Mapping\Column(type="integer")
                  **/
-                public $id;
+                private $id;
 
                 /**
                  * @Doctrine\ORM\Mapping\Column(type="boolean")
                  **/
                 private $isActivated = false;
 
+                public function getId()
+                {
+                    return $this->id;
+                }
+
+                public function setId($id)
+                {
+                    $this->id = $id;
+                }
+
                 public function activate()
                 {
                     $this->isActivated = true;
                     $this->events[] = new \Knp\RadBundle\DomainEvent\Event('UserActivated', array(
-                        'id' => $this->id
+                        'user' => $this
                     ));
                 }
             }
@@ -48,10 +58,10 @@ Feature: Domain events
             }
         }
         """
-        And I write in "App/Listener.php":
+        And I write in "App/SyncListener.php":
         """
         <?php namespace App {
-            class Listener
+            class SyncListener
             {
                 public function onUserActivated(\Knp\RadBundle\DomainEvent\Event $event) {
                     var_dump($event->getName());
@@ -62,8 +72,8 @@ Feature: Domain events
         And I write in "App/Resources/config/services.yml":
         """
         services:
-            app.listener:
-                class: App\Listener
+            app.sync_listener:
+                class: App\SyncListener
                 tags:
                     - { name: doctrine.event_listener, event: onUserActivated }
         """
@@ -77,13 +87,13 @@ Feature: Domain events
         Then I should see "UserActivated"
 
     Scenario: using delayed event listeners
-        Given I write in "App/Listener.php":
+        Given I write in "App/AsyncListener.php":
         """
         <?php namespace App {
-            class Listener
+            class AsyncListener
             {
                 public function onDelayedUserActivated(\Knp\RadBundle\DomainEvent\Event $event) {
-                    file_put_contents(__DIR__.'/'.$event->getName(), $event->id);
+                    file_put_contents(__DIR__.'/'.$event->getName(), $event->user->getId());
                 }
             }
         }
@@ -93,8 +103,8 @@ Feature: Domain events
         parameters:
             knp_rad.domain_event.delayed_event_names: [UserActivated]
         services:
-            app.listener:
-                class: App\Listener
+            app.async_listener:
+                class: App\AsyncListener
                 tags:
                     - { name: doctrine.event_listener, event: onDelayedUserActivated }
         """
