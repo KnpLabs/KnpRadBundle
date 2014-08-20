@@ -13,14 +13,10 @@ class Delayed implements EventSubscriber
     private $delayedEventNames;
     private $events = array();
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $container, array $delayedEventNames = [])
     {
         $this->container = $container;
-        try {
-            $this->delayedEventNames = $this->container->getParameter('knp_rad.domain_event.delayed_event_names');
-        } catch (InvalidArgumentException $e) {
-            $this->delayedEventNames = [];
-        }
+        $this->delayedEventNames = $delayedEventNames;
     }
 
     public function __call($method, array $arguments)
