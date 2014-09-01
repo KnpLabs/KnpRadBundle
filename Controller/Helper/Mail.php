@@ -17,9 +17,9 @@ class Mail
         $this->mailer = $mailer;
     }
 
-    public function createMessage($name, array $parameters = array(), $from = null, $to = null)
+    public function createMessage($controllerClass, $name, array $parameters = array(), $from = null, $to = null)
     {
-        $message = $this->factory->createMessage(get_class($this), $name, $parameters);
+        $message = $this->factory->createMessage($controllerClass, $name, $parameters);
 
         if ($from) {
             $message->setFrom($from);

@@ -31,7 +31,7 @@ class Controller extends BaseController
 
     protected function createMessage($name, array $parameters = array(), $from = null, $to = null)
     {
-        return $this->getHelper('mail')->createMessage($name, $parameters, $from, $to);
+        return $this->getHelper('mail')->createMessage(get_class($this), $name, $parameters, $from, $to);
     }
 
     protected function send(\Swift_Mime_Message $message)

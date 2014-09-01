@@ -14,8 +14,8 @@ class MessageFactory
 
     public function __construct(Swift_Mailer $mailer, Twig_Environment $twig, BundleGuesser $bundleGuesser)
     {
-        $this->mailer     = $mailer;
-        $this->twig       = $twig;
+        $this->mailer = $mailer;
+        $this->twig = $twig;
         $this->bundleGuesser = $bundleGuesser;
     }
 
