@@ -14,7 +14,7 @@
 
         <service id="knp_rad.mailer.recorder" class="%knp_rad.mailer.recorder.class%" public="false">
             <argument type="service" id="knp_rad.mailer.logger" />
-            <tag name="swiftmailer.plugin" />
+            <tag name="swiftmailer.default.plugin" />
             <tag name="remove-when-missing" service="mailer" />
         </service>
 
