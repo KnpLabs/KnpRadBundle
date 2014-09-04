@@ -14,8 +14,8 @@
     </parameters>
 
     <services>
-        <service id="knp_rad.form.manager" class="%knp_rad.form.manager.class%" scope="request">
-            <argument type="service" id="request" />
+        <service id="knp_rad.form.manager" class="%knp_rad.form.manager.class%">
+            <argument type="service" id="request_stack" />
             <tag name="remove-when-missing" service="form.factory" />
         </service>
 
