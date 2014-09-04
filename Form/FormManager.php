@@ -2,17 +2,17 @@
 
 namespace Knp\RadBundle\Form;
 
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class FormManager
 {
-    private $request;
+    private $requestStack;
     private $creators;
 
-    public function __construct(Request $request)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->creators = new \SplPriorityQueue;
-        $this->request  = $request;
+        $this->creators     = new \SplPriorityQueue;
+        $this->requestStack = $requestStack;
     }
 
     public function createObjectForm($object, $purpose = null, array $options = array())
@@ -28,11 +28,11 @@ class FormManager
 
     public function createBoundObjectForm($object, $purpose = null, array $options = array())
     {
-        if (!$this->request->isMethodSafe()) {
-            $options = array_merge(array('method' => $this->request->getMethod()), $options);
+        if (!$this->getRequest()->isMethodSafe()) {
+            $options = array_merge(array('method' => $this->getRequest()->getMethod()), $options);
         }
         $form = $this->createObjectForm($object, $purpose, $options);
-        $form->handleRequest($this->request);
+        $form->handleRequest($this->getRequest());
 
         return $form;
     }
@@ -45,5 +45,10 @@ class FormManager
     public function getCreators()
     {
         return array_values(iterator_to_array(clone $this->creators));
+    }
+
+    private function getRequest()
+    {
+        return $this->requestStack->getCurrentRequest();
     }
 }

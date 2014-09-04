@@ -2,21 +2,23 @@
 
 namespace spec\Knp\RadBundle\Form;
 
-use PhpSpec\ObjectBehavior;
 use PhpSpec\Exception\Example\PendingException;
+use PhpSpec\ObjectBehavior;
 
 class FormManagerSpec extends ObjectBehavior
 {
     /**
+     * @param Symfony\Component\HttpFoundation\RequestStack $requestStack
      * @param Symfony\Component\HttpFoundation\Request $request
      * @param Knp\RadBundle\Form\FormCreatorInterface $creator1
      * @param Knp\RadBundle\Form\FormCreatorInterface $creator2
      * @param Knp\RadBundle\Form\FormCreatorInterface $creator3
      */
-    function let($request, $creator1, $creator2, $creator3)
+    function let($requestStack, $request, $creator1, $creator2, $creator3)
     {
-        $this->beConstructedWith($request);
+        $this->beConstructedWith($requestStack);
 
+        $requestStack->getCurrentRequest()->willReturn($request);
         $this->registerCreator($creator1, 2);
         $this->registerCreator($creator2, 3);
         $this->registerCreator($creator3, 1);

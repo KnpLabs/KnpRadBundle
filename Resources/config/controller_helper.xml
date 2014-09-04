@@ -18,7 +18,7 @@
             <argument type="service" id="doctrine" />
             <tag name="remove-when-missing" service="doctrine" />
         </service>
-        <service id="knp_rad.controller.helper.form" class="%knp_rad.controller.helper.form.class%" scope="request">
+        <service id="knp_rad.controller.helper.form" class="%knp_rad.controller.helper.form.class%">
             <argument type="service" id="knp_rad.form.manager" />
             <tag name="remove-when-missing" service="form.factory" />
         </service>
