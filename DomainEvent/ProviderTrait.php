@@ -13,4 +13,9 @@ trait ProviderTrait
 
         return $events;
     }
+
+    public function raise($eventName, array $properties = array())
+    {
+        $this->events[] = new Event($eventName, $properties);
+    }
 }

@@ -2,9 +2,9 @@
 
 namespace Knp\RadBundle\DomainEvent;
 
-use Doctrine\Common\EventArgs;
+use Symfony\Component\EventDispatcher\Event as BaseEvent;
 
-class Event extends EventArgs
+class Event extends BaseEvent
 {
     private $eventName;
     private $properties;

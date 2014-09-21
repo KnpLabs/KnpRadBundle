@@ -75,7 +75,7 @@ Feature: Domain events
             app.sync_listener:
                 class: App\SyncListener
                 tags:
-                    - { name: doctrine.event_listener, event: onUserActivated }
+                    - { name: kernel.event_listener, event: UserActivated }
         """
         And I write in "App/Resources/config/rad.yml":
         """
@@ -106,7 +106,7 @@ Feature: Domain events
             app.async_listener:
                 class: App\AsyncListener
                 tags:
-                    - { name: doctrine.event_listener, event: onDelayedUserActivated }
+                    - { name: kernel.event_listener, event: UserActivated, method: onDelayedUserActivated }
         """
         When I visit "app_user_new" page
         Then the file "App/UserActivated" should contain "1"
