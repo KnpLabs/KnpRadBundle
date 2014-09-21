@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\UnitOfWork;
 use Knp\RadBundle\DomainEvent\Provider;
 use Knp\RadBundle\DomainEvent\Event;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 
 class DoctrineSpec extends ObjectBehavior
 {
@@ -18,39 +19,34 @@ class DoctrineSpec extends ObjectBehavior
         $this->beConstructedWith($dispatcher);
     }
 
-    function it_is_a_doctrine_event_subscriber()
-    {
-        $this->shouldBeAnInstanceOf('Doctrine\Common\EventSubscriber');
-    }
-
-    function it_subscribes_to_the_postFlush_event()
-    {
-        $this->getSubscribedEvents()->shouldReturn(array('postFlush'));
-    }
-
     function it_dispatches_domain_events_after_doctrine_unit_of_work_has_been_flushed(
-        PostFlushEventArgs $event,
-        EntityManager $em,
-        UnitOfWork $uow,
-        Provider $entity,
-        Event $event1,
-        Event $event2,
+        PostFlushEventArgs $postFlushEvent,
+        LifecycleEventArgs $postPersistEvent,
+        LifecycleEventArgs $postRemoveEvent,
+        Provider $provider,
+        Event $entityCreated,
+        Event $propertyUpdated,
+        NonProvider $nonProvider,
         $dispatcher
     ) {
-        $event->getEntityManager()->willReturn($em);
-        $em->getUnitOfWork()->willReturn($uow);
-        $uow->getIdentityMap()->willReturn([[
-            $entity
-        ]]);
-        $entity->popEvents()->willReturn([$event1, $event2]);
-        $event1->getName()->willReturn('EntityCreated');
-        $event2->getName()->willReturn('PropertyUpdated');
+        $postPersistEvent->getEntity()->willReturn($provider);
+        $postRemoveEvent->getEntity()->willReturn($nonProvider);
 
-        $event1->setSubject($entity)->shouldBeCalled();
-        $event2->setSubject($entity)->shouldBeCalled();
-        $dispatcher->dispatch('EntityCreated', $event1)->shouldBeCalled();
-        $dispatcher->dispatch('PropertyUpdated', $event2)->shouldBeCalled();
+        $provider->popEvents()->willReturn([$entityCreated, $propertyUpdated]);
+        $entityCreated->getName()->willReturn('EntityCreated');
+        $propertyUpdated->getName()->willReturn('PropertyUpdated');
 
-        $this->postFlush($event);
+        $entityCreated->setSubject($provider)->shouldBeCalled();
+        $propertyUpdated->setSubject($provider)->shouldBeCalled();
+        $dispatcher->dispatch('EntityCreated', $entityCreated)->shouldBeCalled();
+        $dispatcher->dispatch('PropertyUpdated', $propertyUpdated)->shouldBeCalled();
+
+        $this->postPersist($postPersistEvent);
+        $this->postRemove($postRemoveEvent);
+        $this->postFlush($postFlushEvent);
     }
+}
+
+class NonProvider
+{
 }
