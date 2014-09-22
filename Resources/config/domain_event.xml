@@ -17,7 +17,10 @@
 
         <service id="knp_rad.domain_event.dispatcher.doctrine" class="%knp_rad.domain_event.dispatcher.doctrine.class%">
             <argument type="service" id="event_dispatcher" />
-            <tag name="doctrine.event_subscriber" />
+            <tag name="doctrine.event_listener" event="postPersist" />
+            <tag name="doctrine.event_listener" event="postUpdate" />
+            <tag name="doctrine.event_listener" event="postRemove" />
+            <tag name="doctrine.event_listener" event="postFlush" />
             <tag name="remove-when-missing" service="doctrine" />
         </service>
 
