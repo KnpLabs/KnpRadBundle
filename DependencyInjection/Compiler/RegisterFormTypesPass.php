@@ -60,11 +60,12 @@ class RegisterFormTypesPass implements CompilerPassInterface
             }
 
             $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
-            $alias = $this->getAlias($class, $id);
-
             if ($container->hasDefinition($id)) {
                 continue;
             }
+
+            $defaultAlias = $this->getDefaultAlias($id);
+            $alias = $this->getAlias($class, $defaultAlias);
 
             $definition = $this->definitionFactory->createDefinition($class);
             $container->setDefinition($id, $definition);
@@ -73,6 +74,16 @@ class RegisterFormTypesPass implements CompilerPassInterface
         }
 
         $container->getDefinition('form.extension')->replaceArgument(1, $types);
+    }
+
+    private function getDefaultAlias($id)
+    {
+        $parts = explode('.', $id);
+
+        $bundleName = $parts[0];
+        $formName = preg_replace('/_type$/', '', end($parts));
+
+        return sprintf('%s_%s', $bundleName, $formName);
     }
 
     private function getAlias($class, $default)

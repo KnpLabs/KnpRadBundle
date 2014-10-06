@@ -36,15 +36,16 @@ class FormTypeCreator implements FormCreatorInterface
     {
         $currentPurpose = $purpose ? $purpose.'_' : '';
         $bundle = $this->bundleGuesser->getBundleForClass($object);
+        $bundleName = preg_replace('/Bundle$/', '', $bundle->getName());
+        $bundleNamespace = $bundle->getNamespace();
 
-        $id = sprintf('app.form.%s%s_type', $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
-        $class = sprintf('%s\\Form\\%s%sType', $bundle->getNamespace(), Inflector::classify($purpose), $this->fetcher->getShortClassName($object));
+        $alias = sprintf('%s_%s%s', strtolower($bundleName), $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
+        $class = sprintf('%s\\Form\\%s%sType', $bundleNamespace, Inflector::classify($purpose), $this->fetcher->getShortClassName($object));
 
-        if (null === $type = $this->loadFormType($id, $class)) {
-            $id = sprintf('app.form.type.%s%s_type', $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
-            $class = sprintf('%s\\Form\\Type\\%s%sType', $bundle->getNamespace(), Inflector::classify($purpose), $this->fetcher->getShortClassName($object));
+        if (null === $type = $this->loadFormType($alias, $class)) {
+            $class = sprintf('%s\\Form\\Type\\%s%sType', $bundleNamespace, Inflector::classify($purpose), $this->fetcher->getShortClassName($object));
 
-            $type = $this->loadFormType($id, $class);
+            $type = $this->loadFormType($alias, $class);
         }
 
         if (null === $type && null !== $purpose) {
@@ -55,9 +56,9 @@ class FormTypeCreator implements FormCreatorInterface
         return $type;
     }
 
-    private function loadFormType($id, $class)
+    private function loadFormType($alias, $class)
     {
-        $type = $this->getAlias($class, $id);
+        $type = $this->getAlias($class, $alias);
 
         if (!$this->formRegistry->hasType($type)) {
 
