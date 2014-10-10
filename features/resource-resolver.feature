@@ -15,11 +15,11 @@ Feature: Resolve request parameters to their corresponding resources
         """
         And I write in "App/Resources/views/Foo/index.html.twig":
         """
-        {{ dump(object) }}
+        {{ object }}
         """
         And I write in "App/Resources/views/Foo/show.html.twig":
         """
-        {{ dump(object) }}
+        {{ object == true ? 'true' }}
         """
 
     Scenario: static service resolution
