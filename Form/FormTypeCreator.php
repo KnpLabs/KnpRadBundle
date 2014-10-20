@@ -6,6 +6,7 @@ use Knp\RadBundle\Reflection\ClassMetadataFetcher;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormRegistryInterface;
 use Knp\RadBundle\AppBundle\BundleGuesser;
+use Doctrine\Common\Inflector\Inflector;
 
 class FormTypeCreator implements FormCreatorInterface
 {
@@ -37,11 +38,11 @@ class FormTypeCreator implements FormCreatorInterface
         $bundle = $this->bundleGuesser->getBundleForClass($object);
 
         $id = sprintf('app.form.%s%s_type', $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
-        $class = sprintf('%s\\Form\\%s%sType', $bundle->getNamespace(), ucfirst($purpose), $this->fetcher->getShortClassName($object));
+        $class = sprintf('%s\\Form\\%s%sType', $bundle->getNamespace(), Inflector::classify($purpose), $this->fetcher->getShortClassName($object));
 
         if (null === $type = $this->loadFormType($id, $class)) {
             $id = sprintf('app.form.type.%s%s_type', $currentPurpose, strtolower($this->fetcher->getShortClassName($object)));
-            $class = sprintf('%s\\Form\\Type\\%s%sType', $bundle->getNamespace(), ucfirst($purpose), $this->fetcher->getShortClassName($object));
+            $class = sprintf('%s\\Form\\Type\\%s%sType', $bundle->getNamespace(), Inflector::classify($purpose), $this->fetcher->getShortClassName($object));
 
             $type = $this->loadFormType($id, $class);
         }

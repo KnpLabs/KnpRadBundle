@@ -4,6 +4,7 @@ namespace Knp\RadBundle\DataFixtures;
 
 use Doctrine\Common\DataFixtures\ReferenceRepository;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ObjectFactory
 {
@@ -29,9 +30,10 @@ class ObjectFactory
         // We do not override $attributes because the reference manipulator will use the first element to generate the reference name
         $mergedAttributes = array_merge($this->defaultAttributes, $attributes);
         $object = new $this->className();
+        $accessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($mergedAttributes as $attribute => $value) {
-            $object->{'set'.ucfirst($attribute)}($value);
+            $accessor->setValue($object, $attribute, $value);
         }
 
         $this->referenceRepository->addReference(

@@ -6,8 +6,8 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormEvent;;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormEvents;
-
 use Knp\RadBundle\Reflection\ClassMetadataFetcher;
+use Doctrine\Common\Inflector\Inflector;
 
 class DefaultFormCreator implements FormCreatorInterface, EventSubscriberInterface
 {
@@ -73,6 +73,6 @@ class DefaultFormCreator implements FormCreatorInterface, EventSubscriberInterfa
 
     private function hasRelatedSetter($object, $propertyName)
     {
-        return $this->fetcher->hasMethod($object, 'set'.ucfirst($propertyName));
+        return $this->fetcher->hasMethod($object, 'set'.Inflector::classify($propertyName));
     }
 }
