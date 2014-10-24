@@ -34,7 +34,7 @@ class ArgumentResolver
         }
 
         if ($hasName) {
-            return $this->requestManipulator->getAttribute($request, $options['name']);
+            return $this->resolveName($request, $options['name']);
         }
 
         if ($hasValue) {
@@ -44,5 +44,10 @@ class ArgumentResolver
         throw new \InvalidArgumentException(
             'You must path either a `name` or a `value` option.'
         );
+    }
+
+    public function resolveName(Request $request, $name)
+    {
+        return $this->requestManipulator->getAttribute($request, $name);
     }
 }
