@@ -138,6 +138,7 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
     {
         $this->createSchema();
         $this->app->boot();
+
         $url = $this
             ->app
             ->getContainer()
