@@ -64,8 +64,7 @@ class RegisterFormTypesPass implements CompilerPassInterface
                 continue;
             }
 
-            $defaultAlias = $this->getDefaultAlias($id);
-            $alias = $this->getAlias($class, $defaultAlias);
+            $alias = $this->getAlias($class);
 
             $definition = $this->definitionFactory->createDefinition($class);
             $container->setDefinition($id, $definition);
@@ -76,27 +75,8 @@ class RegisterFormTypesPass implements CompilerPassInterface
         $container->getDefinition('form.extension')->replaceArgument(1, $types);
     }
 
-    private function getDefaultAlias($id)
+    private function getAlias($class)
     {
-        $parts = explode('.', $id);
-
-        $bundleName = $parts[0];
-        $formName = preg_replace('/_type$/', '', end($parts));
-
-        return sprintf('%s_%s', $bundleName, $formName);
-    }
-
-    private function getAlias($class, $default)
-    {
-        if (!class_exists($class)) {
-            return $default;
-        }
-
-        try {
-            return unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class))->getName();
-        } catch (\Exception $e) {
-        }
-
-        return $default;
+        return unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class))->getName();
     }
 }

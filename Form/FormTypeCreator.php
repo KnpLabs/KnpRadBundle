@@ -61,7 +61,6 @@ class FormTypeCreator implements FormCreatorInterface
         $type = $this->getAlias($class, $alias);
 
         if (!$this->formRegistry->hasType($type)) {
-
             return null;
         }
 
