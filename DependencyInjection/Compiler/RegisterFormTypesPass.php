@@ -60,11 +60,11 @@ class RegisterFormTypesPass implements CompilerPassInterface
             }
 
             $id = $this->serviceIdGenerator->generateForBundleClass($this->bundle, $class);
-            $alias = $this->getAlias($class, $id);
-
             if ($container->hasDefinition($id)) {
                 continue;
             }
+
+            $alias = $this->getAlias($class);
 
             $definition = $this->definitionFactory->createDefinition($class);
             $container->setDefinition($id, $definition);
@@ -75,17 +75,8 @@ class RegisterFormTypesPass implements CompilerPassInterface
         $container->getDefinition('form.extension')->replaceArgument(1, $types);
     }
 
-    private function getAlias($class, $default)
+    private function getAlias($class)
     {
-        if (!class_exists($class)) {
-            return $default;
-        }
-
-        try {
-            return unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class))->getName();
-        } catch (\Exception $e) {
-        }
-
-        return $default;
+        return unserialize(sprintf('O:%d:"%s":0:{}', strlen($class), $class))->getName();
     }
 }

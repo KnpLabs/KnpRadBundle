@@ -25,17 +25,54 @@ class RegisterFormTypesPassSpec extends ObjectBehavior
         $bundle->getPath()->willReturn('/my/project/src/App');
         $bundle->getNamespace()->willReturn('App');
 
-        $classes = array(
-            'App\Form\CheeseType',
-            'App\Form\EditCheeseType',
-            'App\Form\MouseType',
+        $classAliasMap = array(
+            'App\\Form\\CheeseType' => array('id' => 'app.form.cheese_type', 'alias' => 'app_cheese'),
+            'App\\Form\\EditCheeseType' => array('id' => 'app.form.edit_cheese_type', 'alias' => 'app_edit_cheese'),
+            'App\\Form\\MouseType' => array('id' => 'app.form.mouse_type', 'alias' => 'app_mouse'),
         );
-        $classFinder->findClassesMatching('/my/project/src/App/Form', 'App\Form', 'Type$')->willReturn($classes);
-        $classFinder->filterClassesImplementing($classes, 'Symfony\Component\Form\FormTypeInterface')->willReturn($classes);
 
-        $servIdGen->generateForBundleClass($bundle, 'App\Form\CheeseType')->willReturn('app.form.cheese_type');
-        $servIdGen->generateForBundleClass($bundle, 'App\Form\EditCheeseType')->willReturn('app.form.edit_cheese_type');
-        $servIdGen->generateForBundleClass($bundle, 'App\Form\MouseType')->willReturn('app.form.mouse_type');
+        $classes = array_keys($classAliasMap);
+
+        $classTmpl = <<<CLASS
+<?php
+
+namespace %s;
+
+class %s
+{
+    public function getName()
+    {
+        return '%s';
+    }
+}
+CLASS;
+
+        foreach ($classAliasMap as $class => $data) {
+            $id = $data['id'];
+            $alias = $data['alias'];
+
+            if (!class_exists($class)) {
+                $classFile = tmpfile();
+
+                preg_match('/[^\\\\]+$/', $class, $matches);
+                $classShortName = $matches[0];
+
+                $classNamespace = str_replace('\\'.$classShortName, '', $class);
+
+                $classFileContent = sprintf($classTmpl, $classNamespace, $classShortName, $alias);
+                fwrite($classFile, $classFileContent);
+
+                $metaData = stream_get_meta_data($classFile);
+
+                require $metaData['uri'];
+            }
+
+            $servIdGen->generateForBundleClass($bundle, $class)->willReturn($id);
+            $definitionFactory->createDefinition($class)->willReturn();
+        }
+
+        $classFinder->findClassesMatching('/my/project/src/App/Form', 'App\\Form', 'Type$')->willReturn($classes);
+        $classFinder->filterClassesImplementing($classes, 'Symfony\\Component\\Form\\FormTypeInterface')->willReturn($classes);
 
         $reflClass->isAbstract()->willReturn(false);
         $reflectionFactory->createReflectionClass(Argument::any())->willReturn($reflClass);
@@ -55,15 +92,15 @@ class RegisterFormTypesPassSpec extends ObjectBehavior
         $formExtension->replaceArgument(1, \Prophecy\Argument::any())->shouldBeCalled();
 
         $container->hasDefinition('app.form.cheese_type')->willReturn(false);
-        $definitionFactory->createDefinition('App\Form\CheeseType')->shouldBeCalled()->willReturn($cheeseTypeDef);
+        $definitionFactory->createDefinition('App\\Form\\CheeseType')->shouldBeCalled()->willReturn($cheeseTypeDef);
         $container->setDefinition('app.form.cheese_type', $cheeseTypeDef)->shouldBeCalled();
 
         $container->hasDefinition('app.form.edit_cheese_type')->willReturn(false);
-        $definitionFactory->createDefinition('App\Form\EditCheeseType')->willReturn($editCheeseTypeDef);
+        $definitionFactory->createDefinition('App\\Form\\EditCheeseType')->willReturn($editCheeseTypeDef);
         $container->setDefinition('app.form.edit_cheese_type', $editCheeseTypeDef)->shouldBeCalled();
 
         $container->hasDefinition('app.form.mouse_type')->willReturn(false);
-        $definitionFactory->createDefinition('App\Form\MouseType')->willReturn($mouseTypeDef);
+        $definitionFactory->createDefinition('App\\Form\\MouseType')->willReturn($mouseTypeDef);
         $container->setDefinition('app.form.mouse_type', $mouseTypeDef)->shouldBeCalled();
 
         $this->process($container);
@@ -80,7 +117,7 @@ class RegisterFormTypesPassSpec extends ObjectBehavior
         $formExtension->replaceArgument(\Prophecy\Argument::cetera())->shouldBeCalled();
 
         $container->hasDefinition('app.form.cheese_type')->willReturn(false);
-        $definitionFactory->createDefinition('App\Form\CheeseType')->shouldBeCalled()->willReturn($cheeseTypeDef);
+        $definitionFactory->createDefinition('App\\Form\\CheeseType')->shouldBeCalled()->willReturn($cheeseTypeDef);
         $container->setDefinition('app.form.cheese_type', $cheeseTypeDef)->shouldBeCalled();
 
         $container->hasDefinition('app.form.edit_cheese_type')->willReturn(true);
