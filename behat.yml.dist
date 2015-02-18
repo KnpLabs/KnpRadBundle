@@ -10,7 +10,7 @@ default:
                 - FeatureContext
                 - Behat\MinkExtension\Context\MinkContext
     extensions:
-        Behat\MinkExtension\Extension:
+        Behat\MinkExtension\ServiceContainer\MinkExtension:
             base_url:    'http://localhost:8080/app_test.php'
             selenium2:   ~
             goutte: ~
