@@ -8,6 +8,6 @@ class Parser
 {
     public function parse($path)
     {
-        return Yaml::parse($path);
+        return Yaml::parse(file_get_contents($path));
     }
 }
