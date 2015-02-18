@@ -144,7 +144,6 @@ class FeatureContext extends RawMinkContext
     public function visitRoute($route, TableNode $params = null)
     {
         $this->createSchema();
-        $this->app->boot();
         $url = $this
             ->app
             ->getContainer()
