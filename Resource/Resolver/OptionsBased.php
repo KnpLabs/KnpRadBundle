@@ -34,14 +34,18 @@ class OptionsBased implements ResourceResolver
 
         $arguments = array();
         foreach ($options['arguments'] as $i => $argument) {
-            try {
-                $arguments[] = $this->argumentResolver->resolveArgument($request, $argument);
-            } catch (\Exception $e) {
-                throw new \RuntimeException(
-                    sprintf('Failed to resolve resource argument[%s].', $i),
-                    0,
-                    $e
-                );
+            if (is_string($argument)) {
+                $arguments[] = $this->argumentResolver->resolveName($request, $argument);
+            } else {
+                try {
+                    $arguments[] = $this->argumentResolver->resolveArgument($request, $argument);
+                } catch (\Exception $e) {
+                    throw new \RuntimeException(
+                        sprintf('Failed to resolve resource argument[%s].', $i),
+                        0,
+                        $e
+                    );
+                }
             }
         }
 
