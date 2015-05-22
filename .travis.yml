@@ -24,8 +24,7 @@ before_script:
     - phantomjs --version
     - phantomjs --webdriver=4444 &
     - php -S localhost:8080 -t features/Context/fixtures &
-    - 'curl -H "Accept: text/plain" https://security.sensiolabs.org/check_lock -F lock=@composer.lock -s | grep "No known"'
-
+    
 script:
     - ./bin/phpspec run -fpretty
     - ./bin/behat --verbose
