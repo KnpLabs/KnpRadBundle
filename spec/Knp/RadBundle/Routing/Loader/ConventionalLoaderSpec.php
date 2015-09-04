@@ -446,7 +446,7 @@ class ConventionalLoaderSpec extends ObjectBehavior
         ));
 
         $this->shouldThrow(new InvalidArgumentException(
-            '`unsopported_key` parameter is not supported by `App:Admin\Cheeses:show` action route. Use one of [pattern, defaults, requirements, options].'
+            '`unsopported_key` parameter is not supported by `App:Admin\Cheeses:show` action route. Use one of [pattern, defaults, requirements, options, methods].'
         ))->duringLoad('routing.yml');
     }
 
