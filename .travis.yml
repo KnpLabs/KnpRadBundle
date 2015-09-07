@@ -6,7 +6,7 @@ matrix:
     fast_finish: true
     allow_failures:
         - php: hhvm
-        - env: SYMFONY_VERSION='2.7.*@dev'
+        - env: SYMFONY_VERSION='2.8.*@dev'
         - php: 7.0
     include:
         - php: 5.4
@@ -16,7 +16,9 @@ matrix:
         - php: 5.4
           env: SYMFONY_VERSION='2.6.*'
         - php: 5.4
-          env: SYMFONY_VERSION='2.7.*@dev'
+          env: SYMFONY_VERSION='2.7.*'
+        - php: 5.4
+          env: SYMFONY_VERSION='2.8.*@dev'
 
 before_script:
     - composer selfupdate
@@ -24,7 +26,7 @@ before_script:
     - phantomjs --version
     - phantomjs --webdriver=4444 &
     - php -S localhost:8080 -t features/Context/fixtures &
-    
+
 script:
     - ./bin/phpspec run -fpretty
     - ./bin/behat --verbose

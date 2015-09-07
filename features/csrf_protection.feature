@@ -23,10 +23,10 @@ Feature: CSRF protection for unsafe requests
         App:Foo:show: ~
         App:Foo:delete:
             defaults: { _check_csrf: true }
-            requirements: { method: delete }
+            methods: GET|DELETE
         App:Foo:deleteUnsafe:
             defaults: { _check_csrf: false, _controller: App:Foo:delete }
-            requirements: { method: delete }
+            methods: DELETE
         """
         And I write in "App/Resources/views/Foo/show.html.twig":
         """

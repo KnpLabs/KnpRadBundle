@@ -11,7 +11,7 @@
     ],
     "require": {
         "php":                      ">=5.4",
-        "symfony/symfony":          "~2.4,<2.7",
+        "symfony/symfony":          "~2.4",
         "nelmio/alice":             "~1.5",
         "fzaninotto/faker":         "~1.2"
     },

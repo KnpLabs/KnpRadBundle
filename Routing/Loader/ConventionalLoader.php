@@ -14,7 +14,7 @@ class ConventionalLoader extends YamlFileLoader
         'prefix', 'defaults', 'requirements', 'options', 'collections', 'resources'
     );
     private static $supportedActionKeys = array(
-        'pattern', 'defaults', 'requirements', 'options'
+        'pattern', 'defaults', 'requirements', 'options', 'methods'
     );
     private $yaml;
 
@@ -369,6 +369,9 @@ class ConventionalLoader extends YamlFileLoader
             }
             if (isset($params['options'])) {
                 $route->setOptions($params['options']);
+            }
+            if (isset($params['methods'])) {
+                $route->setMethods($params['methods']);
             }
         }
     }
