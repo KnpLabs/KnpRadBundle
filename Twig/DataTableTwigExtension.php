@@ -15,16 +15,16 @@ class DataTableTwigExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'bootstrap_datatable'       => new \Twig_Function_Method($this, 'getDataTableRender', array('is_safe' => array('html'))),
-            'bootstrap_datatable_row'   => new \Twig_Function_Method($this, 'getDataTableRowRender', array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('bootstrap_datatable', array($this, 'getDataTableRender'), array('is_safe' => array('html'))),
+            new \Twig_SimpleFunction('bootstrap_datatable_row', array($this, 'getDataTableRowRender'), array('is_safe' => array('html'))),
         );
     }
 
     public function getFilters()
     {
         return array(
-            'toArray'           => new \Twig_Filter_Method($this, 'toArrayFilter'),
-            'toHeadersArray'    => new \Twig_Filter_Method($this, 'toHeadersFilter'),
+            new \Twig_SimpleFilter('toArray', array($this, 'toArrayFilter')),
+            new \Twig_SimpleFilter('toHeadersArray', array($this, 'toHeadersFilter')),
         );
     }
 
