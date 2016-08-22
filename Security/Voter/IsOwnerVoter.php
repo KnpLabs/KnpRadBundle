@@ -20,13 +20,7 @@ class IsOwnerVoter implements VoterInterface
 
     public function supportsClass($class)
     {
-        if (is_object($class)) {
-            $refl = new \ReflectionObject($class);
-
-            return $refl->implementsInterface('Knp\RadBundle\Security\OwnableInterface');
-        }
-
-        return false;
+        return is_subclass_of($class, 'Knp\RadBundle\Security\OwnableInterface');
     }
 
     public function vote(TokenInterface $token, $object, array $attributes)
