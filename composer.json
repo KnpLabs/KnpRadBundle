@@ -1,6 +1,7 @@
 {
     "name": "knplabs/rad-bundle",
     "description": "The \"KnpLabs Rad Edition\" bundle",
+    "type": "project",
     "license":     "MIT",
     "homepage": "http://rad.knplabs.com",
     "authors": [
