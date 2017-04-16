@@ -8,6 +8,9 @@ use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Config\FileLocatorInterface;
 
+/**
+ * @deprecated
+ */
 class ConventionalLoader extends YamlFileLoader
 {
     private static $supportedControllerKeys = array(

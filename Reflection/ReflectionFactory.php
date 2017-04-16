@@ -11,6 +11,9 @@ class ReflectionFactory
 
     public function getParameters($controller)
     {
+        if (is_object($controller)) {
+            $controller = array($controller, '__invoke');
+        }
         if (is_array($controller)) {
             $r = new \ReflectionMethod($controller[0], $controller[1]);
         } else {

@@ -53,8 +53,14 @@ class KnpRadExtension extends Extension
         if ($config['listener']['exception_rethrow']) {
             $loader->load('exception_rethrow_listener.xml');
         }
-        if ($config['routing_loader']) {
-            $loader->load('routing_loader.xml');
+        if ($config['routing_loader']['old']) {
+            $loader->load('routing_loader/old.xml');
+        }
+        if ($config['routing_loader']['conventional']) {
+            $loader->load('routing_loader/conventional.xml');
+        }
+        if ($config['routing_loader']['service_based']) {
+            $loader->load('routing_loader/service_based.xml');
         }
         if ($config['form_manager']) {
             $loader->load('form_manager.xml');
