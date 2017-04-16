@@ -10,9 +10,10 @@ default:
                 - FeatureContext
                 - Behat\MinkExtension\Context\MinkContext
     extensions:
-        Behat\MinkExtension:
+        Behat\MinkExtension\ServiceContainer\MinkExtension:
             base_url:    'http://localhost:8080/app_test.php'
             selenium2:   ~
             goutte: ~
             default_session: goutte
             javascript_session: selenium2
+            files_path: %paths.base%/features/Context/fixtures

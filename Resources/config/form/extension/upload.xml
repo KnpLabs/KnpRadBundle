@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="knp_rad.form.extension.upload.file.class">Knp\RadBundle\Form\Extension\Upload\FileExtension</parameter>
+        <parameter key="knp_rad.form.extension.upload.form.class">Knp\RadBundle\Form\Extension\Upload\FormExtension</parameter>
+        <parameter key="knp_rad.form.extension.upload.web_path">%kernel.root_dir%/../web</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="knp_rad.form.extension.upload.file" class="%knp_rad.form.extension.upload.file.class%">
+            <tag name="remove-when-missing" service="form.factory" />
+            <tag name="form.type_extension" alias="file" />
+        </service>
+
+        <service id="knp_rad.form.extension.upload.form" class="%knp_rad.form.extension.upload.form.class%">
+            <argument type="string">%knp_rad.form.extension.upload.web_path%</argument>
+            <tag name="remove-when-missing" service="form.factory" />
+            <tag name="form.type_extension" alias="form" />
+        </service>
+
+    </services>
+
+</container>

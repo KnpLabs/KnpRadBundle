@@ -8,6 +8,6 @@ class YamlParser
 {
     public function parse($file)
     {
-        return Yaml::parse($file);
+        return Yaml::parse(file_get_contents($file));
     }
 }

@@ -1,12 +1,18 @@
 <?php
 
+use Behat\Behat\Context\ContextInterface;
+use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
-use Symfony\Component\Filesystem\Filesystem;
-use Behat\MinkExtension\Context\RawMinkContext;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Behat\Exception\BehaviorException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Route;
+use Behat\MinkExtension\Context\MinkAwareInterface;
+use Symfony\Component\Yaml\Yaml;
+use Behat\MinkExtension\Context\RawMinkContext;
 
-class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
+class FeatureContext extends RawMinkContext
 {
     private $tmpDir;
     private $fs;
@@ -24,6 +30,7 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
         $this->fs->remove($this->tmpDir);
         $this->writeContent($this->tmpDir.'/App/Resources/config/rad.yml');
         $this->writeContent($this->tmpDir.'/App/Resources/config/rad_convention.yml');
+        $this->writeContent($this->tmpDir.'/App/Resources/config/routing.yml');
         $this->fs->mkdir($this->tmpDir.'/App/Entity');
         $this->app = new \fixtures\AppKernel;
     }
@@ -137,7 +144,6 @@ class FeatureContext extends RawMinkContext implements SnippetAcceptingContext
     public function visitRoute($route, TableNode $params = null)
     {
         $this->createSchema();
-        $this->app->boot();
         $url = $this
             ->app
             ->getContainer()
