@@ -2,6 +2,7 @@
 
 namespace Knp\RadBundle\AppBundle;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -22,7 +23,10 @@ class ContainerExtension extends Extension
 
     public function getAlias()
     {
-        return strtolower(str_replace('Bundle', '', $this->bundle->getName()));
+        $className = get_class($this->bundle);
+        $classBaseName = substr(strrchr($className, '\\'), 1, -6);
+
+        return Container::underscore($classBaseName);
     }
 
     /**
