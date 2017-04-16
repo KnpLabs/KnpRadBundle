@@ -11,10 +11,11 @@
         <parameter key="knp_rad.domain_event.dispatcher.doctrine.class">Knp\RadBundle\DomainEvent\Dispatcher\Doctrine</parameter>
         <parameter key="knp_rad.domain_event.dispatcher.delayed.class">Knp\RadBundle\DomainEvent\Dispatcher\Delayed</parameter>
         <parameter key="knp_rad.domain_event.dispatcher.queued.class">Knp\RadBundle\DomainEvent\Dispatcher\Queued</parameter>
+        <parameter key="doctrine.orm.default_entity_manager.event_manager.class">Doctrine\Common\EventManager</parameter>
     </parameters>
 
     <services>
-
+        <service id="doctrine.orm.default_entity_manager.event_manager" class="%doctrine.orm.default_entity_manager.event_manager.class%"/>
         <service id="knp_rad.domain_event.dispatcher.doctrine" class="%knp_rad.domain_event.dispatcher.doctrine.class%">
             <argument type="service" id="event_dispatcher" />
             <tag name="doctrine.event_listener" event="postPersist" />
